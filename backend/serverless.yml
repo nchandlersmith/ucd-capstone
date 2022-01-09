@@ -60,7 +60,7 @@ package:
   exclude:
     - node_modules/**/*
   include:
-    - handler.ts
+    - hello.ts
 
 functions:
   Hello:
