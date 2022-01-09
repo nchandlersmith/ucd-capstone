@@ -13,8 +13,8 @@ service: backend
 frameworkVersion: '2'
 
 plugins:
-  - serverless-plugin-typescript
   - serverless-offline
+  - serverless-webpack
 
 provider:
   name: aws
