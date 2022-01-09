@@ -63,7 +63,7 @@ package:
 
 functions:
   Hello:
-    handler: hello.handler
+    handler: src/hello.handler
     events:
       - http:
           method: get

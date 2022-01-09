@@ -2,7 +2,7 @@
   "exclude": [
     "node_modules"
   ],
-  "include": [ "hello.ts"  ],
+  "include": [ "src/"  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
