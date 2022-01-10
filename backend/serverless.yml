@@ -62,8 +62,8 @@ package:
     - hello.ts
 
 functions:
-  Hello:
-    handler: src/hello.handler
+  CreateAccount:
+    handler: src/createAccount.handler
     events:
       - http:
           method: get
