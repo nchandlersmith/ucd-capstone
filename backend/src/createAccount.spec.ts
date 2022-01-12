@@ -1,8 +1,21 @@
+import AWSMock from 'aws-sdk-mock'
+import AWS from 'aws-sdk'
+import sinon from 'ts-sinon'
+import { PutItemInput } from 'aws-sdk/clients/dynamodb'
 import { APIGatewayEventDefaultAuthorizerContext, APIGatewayEventIdentity, APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } from "aws-lambda"
 import { handler } from "./createAccount"
-import { CreateAccountRequest, CreateAccountResponse } from "./createAccountModels"
+import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "./createAccountModels"
 
 describe('createAccount', () => {
+
+    beforeEach(() => {
+      AWSMock.setSDKInstance(AWS)
+    })
+
+    afterEach(() => {
+      AWSMock.restore('DynamoDB.DocumentClient')
+    })
+
     it('should return account information', async () => {
       const accountType = 'Checking'
       const initialDeposit = 1000
@@ -16,7 +29,17 @@ describe('createAccount', () => {
       expect(accountInfo.accountType).toEqual(accountType)
       expect(accountInfo.balance).toEqual(initialDeposit)
     })
-})
+
+    it('should do something with the mock', async () => {
+      AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateAccountDao, callback: Function) => {
+      console.log(' Doc client called!!!')
+      callback(null, {Foo: 'bar'})
+      })
+
+      const input: PutItemInput = {TableName: '', Item: {'Foo': {S: 'bar'}}}
+      const client = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
+      expect(await client.put(input).promise()).toStrictEqual({Foo: 'bar'})
+    })
 
 function buildRequestBody(accountType: string, initialDeposit: number): CreateAccountRequest {
   return {

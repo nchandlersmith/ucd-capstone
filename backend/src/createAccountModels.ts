@@ -8,3 +8,10 @@ export interface CreateAccountResponse {
   accountType: string,
   balance: number
 }
+
+export interface CreateAccountDao {
+  accountId: string,
+  accountType: string,
+  initialDeposit: number,
+  createdOn: string
+}
