@@ -34,11 +34,12 @@ describe('createAccount', () => {
     console.log(' Doc client called!!!')
     callback(null, {Foo: 'bar'})
     })
-
+    
     const input: PutItemInput = {TableName: '', Item: {'Foo': {S: 'bar'}}}
     const client = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
     expect(await client.put(input).promise()).toStrictEqual({Foo: 'bar'})
   })
+})
 
 function buildRequestBody(accountType: string, initialDeposit: number): CreateAccountRequest {
   return {
