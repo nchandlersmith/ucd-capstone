@@ -15,6 +15,7 @@ frameworkVersion: '2'
 plugins:
   - serverless-offline
   - serverless-webpack
+  - serverless-dynamodb-local
 
 provider:
   name: aws
@@ -60,6 +61,20 @@ package:
     - node_modules/**/*
   include:
     - hello.ts
+
+custom:
+  # Create local instance of dynamodb
+  dynamodb:
+    stages:
+      - dev
+    start:
+      migrate: true
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      seed: true
+      convertEmptyValues: true
 
 functions:
   CreateAccount:
