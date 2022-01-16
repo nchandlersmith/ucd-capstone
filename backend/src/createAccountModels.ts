@@ -6,12 +6,14 @@ export interface CreateAccountRequest {
 export interface CreateAccountResponse {
   accountId: string,
   accountType: string,
-  balance: number
+  balance: number,
+  createdOn: string
 }
 
 export interface CreateAccountDao {
+  userId: string,
   accountId: string,
   accountType: string,
-  initialDeposit: number,
+  balance: number,
   createdOn: string
 }

@@ -16,6 +16,7 @@ plugins:
   - serverless-offline
   - serverless-webpack
   - serverless-dynamodb-local
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -25,6 +26,10 @@ provider:
 # you can overwrite defaults here
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
+  environment:
+    ACCOUNTS_TABLE_NAME: Accounts-${self:provider.stage}
+  logs:
+    restApi: true
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -59,8 +64,6 @@ package:
   individually: true
   exclude:
     - node_modules/**/*
-  include:
-    - hello.ts
 
 custom:
   # Create local instance of dynamodb
@@ -81,9 +84,15 @@ functions:
     handler: src/createAccount.handler
     events:
       - http:
-          method: get
+          method: post
           path: accounts
           cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: !GetAtt AccountTable.Arn
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -127,19 +136,19 @@ functions:
 # you can add CloudFormation resource templates here
 resources:
  Resources:
-  accountTable:
+  AccountTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: accountTable
+      TableName: ${self:provider.environment.ACCOUNTS_TABLE_NAME}
       AttributeDefinitions:
-        - AttributeName: accountId
-          AttributeType: S
         - AttributeName: userId
+          AttributeType: S
+        - AttributeName: accountId
           AttributeType: S
       KeySchema:
-        - AttributeName: accountId
-          KeyType: HASH
         - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: accountId
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 #    NewResource:
