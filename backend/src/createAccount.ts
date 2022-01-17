@@ -5,6 +5,7 @@ import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from '.
 import * as uuid from 'uuid'
 import * as AWS from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { createDynamoDBClient } from './utils/dynamodbUtilities'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
@@ -12,7 +13,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const item = buildCreateAccountItem(request)
   console.log(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
 
-  const result: DocumentClient.PutItemOutput = await new AWS.DynamoDB.DocumentClient().put({
+  const result: DocumentClient.PutItemOutput = await createDynamoDBClient().put({
     TableName: tableName,
     Item: item
   }).promise()

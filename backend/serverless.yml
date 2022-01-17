@@ -13,10 +13,10 @@ service: backend
 frameworkVersion: '2'
 
 plugins:
-  - serverless-offline
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-iam-roles-per-function
+  - serverless-offline # should be last in list
 
 provider:
   name: aws
