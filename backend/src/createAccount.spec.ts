@@ -19,25 +19,20 @@ describe('createAccount', () => {
     const accountType = 'Checking'
     const initialDeposit = 1000
     const request = buildRequestBody(accountType, initialDeposit)
-
-    const response = await handler(buildEvent(JSON.stringify(request)))
-    
-    expect(response.statusCode).toEqual(201)
-    const accountInfo: CreateAccountResponse = JSON.parse(response.body)?.accountInfo
-    expect(accountInfo.accountId).not.toBeNull()
-    expect(accountInfo.accountType).toEqual(accountType)
-    expect(accountInfo.balance).toEqual(initialDeposit)
-  })
-
-  it('should do something with the mock', async () => {
     AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateAccountDao, callback: Function) => {
     console.log(' Doc client called!!!')
     callback(null, {Foo: 'bar'})
     })
+
+    const response = await handler(buildEvent(JSON.stringify(request)))
     
-    const input: PutItemInput = {TableName: '', Item: {'Foo': {S: 'bar'}}}
-    const client = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
-    expect(await client.put(input).promise()).toStrictEqual({Foo: 'bar'})
+    expect(response.statusCode).toEqual(201)
+    const account: CreateAccountResponse = JSON.parse(response.body)
+    expect(account.accountId).not.toBeNull()
+    expect(account.accountId).toContain('-')
+    expect(account.accountType).toEqual(accountType)
+    expect(account.balance).toEqual(initialDeposit)
+    expect(account.createdOn).not.toBeNull()
   })
 })
 
