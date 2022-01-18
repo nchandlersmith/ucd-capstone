@@ -1,4 +1,13 @@
+const AWS = require('aws-sdk')
 const axios = require('axios')
+
+const docClient = new AWS.DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000',
+    accessKeyId: 'some access key',
+    secretAccessKey: 'some secret'
+  })
+const tableName = 'Accounts-dev'
 
 describe('create account', () => {
     it('should create an account', async () => {
@@ -9,11 +18,27 @@ describe('create account', () => {
         }
 
         const result = await axios.post(url, createAccountData)
-        console.log(`result ${JSON.stringify(result.data)}`)
+        const dynamoItems = await docClient.query({
+            TableName: tableName,
+            ExpressionAttributeValues: {
+                ':userId': 'Ghost Rider'
+            },
+            KeyConditionExpression: 'userId = :userId'
+        }).promise()
+
+        console.log(`items: ${JSON.stringify(dynamoItems.Items)}`)
+        console.log(`the thing: ${dynamoItems.Items[0].userId}`)
+        console.log(`number of things: ${dynamoItems.Items.length}`)
 
         expect(result.status).toEqual(201)
-        expect(result.data.accountId).not.toBeNull()
-        expect(result.data.accountType).toEqual('Integration Test Account')
-        expect(result.data.createdAt).not.toBeNull()
+        
+        await docClient.delete({
+            TableName: tableName,
+            Key: {
+                "userId": dynamoItems.Items[0].userId,
+                "accountId": dynamoItems.Items[0].accountId
+            }
+        }).promise()
+
     })
 })
