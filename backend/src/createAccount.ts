@@ -3,7 +3,6 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from './createAccountModels'
 import * as uuid from 'uuid'
-import * as AWS from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createDynamoDBClient } from './utils/dynamodbUtilities'
 
@@ -11,24 +10,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
 
-  if (request.accountType === undefined) {
+  try {
+    validateAccountType(request)
+  } catch(err) {
+    const error = err as Error
     return {
       statusCode: 400,
-      body: JSON.stringify({error: 'Missing from body: accountType'})
-    }
-  }
-
-  if (request.accountType === '') {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({error: 'accountType cannot be empty'})
-    }
-  }
-
-  if (request.accountType === ' ') {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({error: 'accountType cannot be blank'})
+      body: JSON.stringify({error: error.message})
     }
   }
 
@@ -52,6 +40,20 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   return {
     statusCode: 201,
     body: JSON.stringify(response)
+  }
+}
+
+function validateAccountType(request: CreateAccountRequest) {
+  if (request.accountType === undefined) {
+    throw new Error('Missing from body: accountType')
+  }
+
+  if (request.accountType === '') {
+    throw new Error('accountType cannot be empty')
+  }
+
+  if (request.accountType === ' ') {
+    throw new Error('accountType cannot be blank')
   }
 }
 
