@@ -11,10 +11,24 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
 
-  if (!request.accountType) {
+  if (request.accountType === undefined) {
     return {
       statusCode: 400,
       body: JSON.stringify({error: 'Missing from body: accountType'})
+    }
+  }
+
+  if (request.accountType === '') {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({error: 'accountType cannot be empty'})
+    }
+  }
+
+  if (request.accountType === ' ') {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({error: 'accountType cannot be blank'})
     }
   }
 

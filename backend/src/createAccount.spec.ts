@@ -15,7 +15,7 @@ describe('createAccount', () => {
   })
 
   it('should return account information', async () => {
-    const accountType = 'Checking'
+    const accountType = 'Free Checking'
     const initialDeposit = 1000
     const request = buildRequestBody(accountType, initialDeposit)
     buildCreateAccountMock()
@@ -31,7 +31,7 @@ describe('createAccount', () => {
     expect(account.createdOn).not.toBeNull()
   })
 
-  it('should return 404 when the account type is missing from request', async () => {
+  it('should fail when the account type is missing from request', async () => {
     const initialDeposit = 1234
     const {accountType: _a, ...requestMissingAccountType } = buildRequestBody('', initialDeposit)
     const expectedErrorResponse = JSON.stringify({
@@ -41,6 +41,36 @@ describe('createAccount', () => {
 
     const response = await handler(buildEvent(JSON.stringify(requestMissingAccountType)))
 
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(expectedErrorResponse)
+  })
+
+  it('should fail when the account type is empty', async () => {
+    const accountType = ''
+    const initialDeposit = 1234
+    const request = buildRequestBody(accountType, initialDeposit)
+    const expectedErrorResponse = JSON.stringify({
+      error: 'accountType cannot be empty'
+    })
+    buildCreateAccountMock()
+  
+    const response = await handler(buildEvent(JSON.stringify(request)))
+  
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(expectedErrorResponse)
+  })
+
+  it('should fail when the account type is blank', async () => {
+    const accountType = ' '
+    const initialDeposit = 1234
+    const request = buildRequestBody(accountType, initialDeposit)
+    const expectedErrorResponse = JSON.stringify({
+      error: 'accountType cannot be blank'
+    })
+    buildCreateAccountMock()
+  
+    const response = await handler(buildEvent(JSON.stringify(request)))
+  
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
   })
