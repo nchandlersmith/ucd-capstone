@@ -30,8 +30,8 @@ describe('create account', () => {
         }
         
         const result = await axios.post(url, createAccountData)
-        const dynamoResponse = await findAllAccountsForUserId()
         
+        const dynamoResponse = await findAllAccountsForUserId()
         expect(result.status).toEqual(201)
         console.log(`dynamo items: ${JSON.stringify(dynamoResponse.Items)}`)
         expect(dynamoResponse.Items.length).toEqual(1)
@@ -45,12 +45,28 @@ describe('create account', () => {
     const createAccountData = {
         'initialDeposit': 3145
     }
+    const expectedErrorMessage = 'Missing from body: accountType'
 
     const result =  await axios.post(url, createAccountData).catch(error => error)
-    const dynamoResponse = await findAllAccountsForUserId()
-        
+    
+    const dynamoResponse = await findAllAccountsForUserId()   
     expect(result.response.status).toEqual(400)
-    console.log(`dynamo items: ${JSON.stringify(dynamoResponse.Items)}`)
+    expect(result.response.data.error).toEqual(expectedErrorMessage)
+    expect(dynamoResponse.Items.length).toEqual(0)
+    })
+    
+    it('should reject requests when initialDeposit is missing', async () => {
+    const url = 'http://localhost:3000/dev/accounts'
+    const createAccountData = {
+        'accountType': 'Another integration test'
+    }
+    const expectedErrorMessage = 'Missing from body: initialDeposit'
+    
+    const result =  await axios.post(url, createAccountData).catch(error => error)
+    
+    const dynamoResponse = await findAllAccountsForUserId()    
+    expect(result.response.status).toEqual(400)
+    expect(result.response.data.error).toEqual(expectedErrorMessage)
     expect(dynamoResponse.Items.length).toEqual(0)
     })
 })
