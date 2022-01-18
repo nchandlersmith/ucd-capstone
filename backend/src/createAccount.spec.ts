@@ -34,6 +34,23 @@ describe('createAccount', () => {
     expect(account.balance).toEqual(initialDeposit)
     expect(account.createdOn).not.toBeNull()
   })
+
+  it('should return 404 when the account type is missing from request', async () => {
+    const initialDeposit = 1234
+    const {accountType: _a, ...requestMissingAccountType } = buildRequestBody('', initialDeposit)
+    AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateAccountDao, callback: Function) => {
+    console.log(' Doc client called!!!')
+    callback(null, {Foo: 'bar'})
+    })
+    const errorResponse = JSON.stringify({
+      error: 'Missing from body: accountType'
+    })
+
+    const response = await handler(buildEvent(JSON.stringify(requestMissingAccountType)))
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(errorResponse)
+  })
 })
 
 function buildRequestBody(accountType: string, initialDeposit: number): CreateAccountRequest {

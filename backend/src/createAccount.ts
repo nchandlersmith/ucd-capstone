@@ -10,6 +10,14 @@ import { createDynamoDBClient } from './utils/dynamodbUtilities'
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
+
+  if (!request.accountType) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({error: 'Missing from body: accountType'})
+    }
+  }
+
   const item = buildCreateAccountItem(request)
   console.log(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
 
