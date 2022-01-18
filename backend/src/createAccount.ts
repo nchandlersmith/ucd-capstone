@@ -12,8 +12,10 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   try {
     validateAccountType(request)
+    validateInitialDeposit(request)
   } catch(err) {
     const error = err as Error
+    console.log(`Request to create account invalid. ${error.message}`)
     return {
       statusCode: 400,
       body: JSON.stringify({error: error.message})
@@ -54,6 +56,12 @@ function validateAccountType(request: CreateAccountRequest) {
 
   if (request.accountType === ' ') {
     throw new Error('accountType cannot be blank')
+  }
+}
+
+function validateInitialDeposit(request: CreateAccountRequest) {
+  if (request.initialDeposit === undefined) {
+    throw new Error('Missing from body: initialDeposit')
   }
 }
 

@@ -74,6 +74,20 @@ describe('createAccount', () => {
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
   })
+
+  it('should fail when the initial deposit is missing from request', async () => {
+    const accountType = 'Free Checking'
+    const {initialDeposit: _a, ...requestMissingInitialDeposit } = buildRequestBody(accountType, 0)
+    const expectedErrorResponse = JSON.stringify({
+      error: 'Missing from body: initialDeposit'
+    })
+    buildCreateAccountMock()
+
+    const response = await handler(buildEvent(JSON.stringify(requestMissingInitialDeposit)))
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body).toEqual(expectedErrorResponse)
+  })
 })
 
 function buildCreateAccountMock() {
