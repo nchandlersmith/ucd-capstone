@@ -25,13 +25,19 @@ describe('create account', () => {
     it('should create an account', async () => {
         const url = 'http://localhost:3000/dev/accounts'
         const createAccountData = {
-            'accountType': 'Integration Test Account',
+            'accountType': 'Integration Test',
             'initialDeposit': 3145
         }
         
         const result = await axios.post(url, createAccountData)
+        const dynamoResponse = await findAllAccountsForUserId()
         
         expect(result.status).toEqual(201)
+        console.log(`dynamo items: ${JSON.stringify(dynamoResponse.Items)}`)
+        expect(dynamoResponse.Items.length).toEqual(1)
+        expect(dynamoResponse.Items[0].accountId).toBeTruthy()
+        expect(dynamoResponse.Items[0].accountType).toBe(createAccountData.accountType)
+        expect(dynamoResponse.Items[0].balance).toBe(createAccountData.initialDeposit)
     })
     
     it('should reject requests when accountType is missing', async () => {
@@ -41,8 +47,11 @@ describe('create account', () => {
     }
 
     const result =  await axios.post(url, createAccountData).catch(error => error)
+    const dynamoResponse = await findAllAccountsForUserId()
         
     expect(result.response.status).toEqual(400)
+    console.log(`dynamo items: ${JSON.stringify(dynamoResponse.Items)}`)
+    expect(dynamoResponse.Items.length).toEqual(0)
     })
 })
 
