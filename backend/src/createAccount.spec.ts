@@ -1,6 +1,5 @@
 import AWSMock from 'aws-sdk-mock'
 import AWS from 'aws-sdk'
-import { PutItemInput } from 'aws-sdk/clients/dynamodb'
 import { APIGatewayEventDefaultAuthorizerContext, APIGatewayEventIdentity, APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } from "aws-lambda"
 import { handler } from "./createAccount"
 import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "./createAccountModels"
