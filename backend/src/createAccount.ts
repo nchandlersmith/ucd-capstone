@@ -5,6 +5,9 @@ import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from '.
 import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createDynamoDBClient } from './utils/dynamodbUtilities'
+import { createLogger } from './utils/logger'
+
+const logger = createLogger('Create Account')
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
@@ -15,7 +18,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     validateInitialDeposit(request)
   } catch(err) {
     const error = err as Error
-    console.log(`Request to create account invalid. ${error.message}`)
+    logger.error(`Request to create account invalid. ${error.message}`)
     return {
       statusCode: 400,
       body: JSON.stringify({error: error.message})
@@ -23,14 +26,14 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   }
 
   const item = buildCreateAccountItem(request)
-  console.log(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
+  logger.info(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
 
   const result: DocumentClient.PutItemOutput = await createDynamoDBClient().put({
     TableName: tableName,
     Item: item
   }).promise()
 
-  console.log(`result from dynamo ${JSON.stringify(result)}`)
+  logger.info(`result from dynamo ${JSON.stringify(result)}`)
 
   const response: CreateAccountResponse = {
     accountId: item.accountId,
