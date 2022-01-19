@@ -1,4 +1,7 @@
-import AWS from "aws-sdk"
+import * as AWS from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
+
+const XAWS = AWSXRay.captureAWS(AWS)
 
 export function createDynamoDBClient() {
   const isDynamoDBLocal = process.env.LOCAL_DYNAMODB
@@ -13,5 +16,5 @@ export function createDynamoDBClient() {
     })
   }
 
-  return new AWS.DynamoDB.DocumentClient()
+  return new XAWS.DynamoDB.DocumentClient()
 }

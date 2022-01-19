@@ -16,20 +16,23 @@ plugins:
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-iam-roles-per-function
+  - serverless-plugin-tracing
   - serverless-offline # should be last in list
 
 provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
-
-# you can overwrite defaults here
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   environment:
     ACCOUNTS_TABLE_NAME: Accounts-${self:provider.stage}
   logs:
     restApi: true
+  tracing:
+    apiGateway: true
+    lambda: true
+
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -93,6 +96,11 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: !GetAtt AccountTable.Arn
+      - Effect: Allow
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

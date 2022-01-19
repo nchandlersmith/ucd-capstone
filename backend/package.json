@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/nchandlersmith/ucd-capstone#readme",
   "dependencies": {
+    "aws-xray-sdk": "^3.3.4",
+    "serverless-plugin-tracing": "^2.0.0",
     "source-map-support": "^0.5.21",
     "uuid": "^8.3.2",
     "winston": "^3.4.0"
