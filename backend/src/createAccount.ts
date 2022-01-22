@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from './createAccountModels'
 import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { createDynamoDBClient } from './utils/dynamodbUtilities'
+import { createDynamoDBClient } from './utils/dynamodbUtils'
 import { createLogger } from './utils/logger'
 
 const logger = createLogger('Create Account')

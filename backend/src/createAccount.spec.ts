@@ -1,8 +1,8 @@
-import AWSMock from 'aws-sdk-mock'
 import AWS from 'aws-sdk'
-import { APIGatewayEventDefaultAuthorizerContext, APIGatewayEventIdentity, APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } from "aws-lambda"
+import AWSMock from 'aws-sdk-mock'
 import { handler } from "./createAccount"
 import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "./createAccountModels"
+import { buildEvent } from './testUtils/eventUtils'
 
 describe('createAccount', () => {
   const expectedHeaders = {
@@ -109,63 +109,5 @@ function buildRequestBody(accountType: string, initialDeposit: number): CreateAc
   return {
     accountType,
     initialDeposit
-  }
-}
-
-function buildEvent(body: string): APIGatewayProxyEvent {
-  return {
-    resource: '',
-    path: '',
-    httpMethod: '',
-    headers: {},
-    multiValueHeaders: {},
-    queryStringParameters: null,
-    multiValueQueryStringParameters: null,
-    pathParameters: null,
-    stageVariables: null,
-    requestContext: buildRequestContext(),
-    body,
-    isBase64Encoded: false
-  }
-}
-
-function buildRequestContext(): APIGatewayEventRequestContextWithAuthorizer<APIGatewayEventDefaultAuthorizerContext> {
-  return {
-    accountId: '',
-    apiId: '',
-    authorizer: null,
-    domainName: '',
-    domainPrefix: '',
-    extendedRequestId: '',
-    httpMethod: '',
-    identity: buildAPIGatewayEventIdentity(),
-    path: '',
-    protocol: '',
-    resourceId: '',
-    resourcePath: '',
-    requestTime: '',
-    stage: '',
-    requestId: '',
-    requestTimeEpoch: 0
-  }
-}
-
-function buildAPIGatewayEventIdentity(): APIGatewayEventIdentity {
-  return {
-    accessKey: null,
-    accountId: null,
-    apiKey: '',
-    apiKeyId: '',
-    caller: null,
-    clientCert: null,
-    cognitoAuthenticationProvider: null,
-    cognitoAuthenticationType: null,
-    cognitoIdentityId: null,
-    cognitoIdentityPoolId: null,
-    principalOrgId: null,
-    sourceIp: '',
-    userArn: null,
-    userAgent: '',
-    user: null
   }
 }
