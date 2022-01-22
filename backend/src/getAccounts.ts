@@ -4,9 +4,7 @@ import { createDynamoDBClient } from "./utils/dynamodbUtils";
 export const handler = async function(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
 
   const dynamoClient = createDynamoDBClient()
-
   const dbResult = await dynamoClient.query({TableName: ''},).promise()
-
   const response = {
     accounts: dbResult.Items
   }
