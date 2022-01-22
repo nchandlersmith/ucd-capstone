@@ -5,9 +5,11 @@ Capstone project for udacity cloud developer
 As a Capstone Bank customer, I want an account, so that I can keep my money safe and access it when I need.
 
 ### Feature updates
-- Partial implementations on backend, client, and integration tests
-- Happy path finished
-- Needs sad path
+- User enters account type and initial deposit amount on client.
+- Account created in Dynamo
+- TODO:
+    - Get user ID from jwt
+    - After creation, get all accounts and display them on client
 
 ## Feature - Accounts Summary
 As a Capstone Bank customer, I want to see a summary of all my accounts, so that I know where my money is at a glance
