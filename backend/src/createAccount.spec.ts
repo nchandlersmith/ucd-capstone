@@ -20,10 +20,10 @@ describe('createAccount', () => {
   it('should return account information', async () => {
     const accountType = 'Free Checking'
     const initialDeposit = 1000
-    const request = buildRequestBody(accountType, initialDeposit)
+    const request = buildCreateAccountRequest(accountType, initialDeposit)
     buildCreateAccountMock()
 
-    const response = await handler(buildEvent(JSON.stringify(request)))
+    const response = await handler(buildEvent({body: JSON.stringify(request)}))
     
     expect(response.statusCode).toEqual(201)
     const account: CreateAccountResponse = JSON.parse(response.body)
@@ -37,13 +37,13 @@ describe('createAccount', () => {
 
   it('should fail when the account type is missing from request', async () => {
     const initialDeposit = 1234
-    const {accountType: _a, ...requestMissingAccountType } = buildRequestBody('', initialDeposit)
+    const {accountType: _a, ...requestMissingAccountType } = buildCreateAccountRequest('', initialDeposit)
     const expectedErrorResponse = JSON.stringify({
       error: 'Missing from body: accountType'
     })
     buildCreateAccountMock()
 
-    const response = await handler(buildEvent(JSON.stringify(requestMissingAccountType)))
+    const response = await handler(buildEvent({body: JSON.stringify(requestMissingAccountType)}))
 
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
@@ -53,13 +53,13 @@ describe('createAccount', () => {
   it('should fail when the account type is empty', async () => {
     const accountType = ''
     const initialDeposit = 1234
-    const request = buildRequestBody(accountType, initialDeposit)
+    const request = buildCreateAccountRequest(accountType, initialDeposit)
     const expectedErrorResponse = JSON.stringify({
       error: 'accountType cannot be empty'
     })
     buildCreateAccountMock()
   
-    const response = await handler(buildEvent(JSON.stringify(request)))
+    const response = await handler(buildEvent({body: JSON.stringify(request)}))
   
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
@@ -69,13 +69,13 @@ describe('createAccount', () => {
   it('should fail when the account type is blank', async () => {
     const accountType = ' '
     const initialDeposit = 1234
-    const request = buildRequestBody(accountType, initialDeposit)
+    const request = buildCreateAccountRequest(accountType, initialDeposit)
     const expectedErrorResponse = JSON.stringify({
       error: 'accountType cannot be blank'
     })
     buildCreateAccountMock()
   
-    const response = await handler(buildEvent(JSON.stringify(request)))
+    const response = await handler(buildEvent({body: JSON.stringify(request)}))
   
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
@@ -84,13 +84,13 @@ describe('createAccount', () => {
 
   it('should fail when the initial deposit is missing from request', async () => {
     const accountType = 'Free Checking'
-    const {initialDeposit: _a, ...requestMissingInitialDeposit } = buildRequestBody(accountType, 0)
+    const {initialDeposit: _a, ...requestMissingInitialDeposit } = buildCreateAccountRequest(accountType, 0)
     const expectedErrorResponse = JSON.stringify({
       error: 'Missing from body: initialDeposit'
     })
     buildCreateAccountMock()
 
-    const response = await handler(buildEvent(JSON.stringify(requestMissingInitialDeposit)))
+    const response = await handler(buildEvent({body: JSON.stringify(requestMissingInitialDeposit)}))
 
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
@@ -105,7 +105,7 @@ function buildCreateAccountMock() {
   })
 }
 
-function buildRequestBody(accountType: string, initialDeposit: number): CreateAccountRequest {
+function buildCreateAccountRequest(accountType: string, initialDeposit: number): CreateAccountRequest {
   return {
     accountType,
     initialDeposit

@@ -6,6 +6,10 @@ import { CapstoneAccount, GetAccountsResponse } from './getAccountsModels'
 import { buildEvent } from './testUtils/eventUtils'
 
 describe('getaccounts', function() {
+  const expectedHeaders = {
+    'access-control-allow-origin': '*'
+  }
+
   beforeEach(function() {
     AWSMock.setSDKInstance(AWS)
   })
@@ -29,7 +33,7 @@ describe('getaccounts', function() {
       callback(null, {Items: [expectedAccount]})
     })
 
-    const response = await handler(buildEvent(null))
+    const response = await handler(buildEvent({headers: {Authorization: `Bearer blarg-${userId}`}}))
 
     expect(response.statusCode).toEqual(200)
     const responseBody: GetAccountsResponse = JSON.parse(response.body)
@@ -39,5 +43,16 @@ describe('getaccounts', function() {
     expect(responseBody.accounts[0].accountType).toEqual(expectedAccount.accountType)
     expect(responseBody.accounts[0].balance).toEqual(expectedAccount.balance)
     expect(responseBody.accounts[0].createdOn).toEqual(expectedAccount.createdOn)
+    expect(response.headers).toStrictEqual(expectedHeaders)
+  })
+
+  it('should reject requests missing auth header', async function() {
+    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+
+    const response = await handler(buildEvent({headers:{}}))
+
+    expect(response.statusCode).toEqual(403)
+    expect(response.body).toEqual(expectedErrorMessage)
+    expect(response.headers).toStrictEqual(expectedHeaders)
   })
 })
