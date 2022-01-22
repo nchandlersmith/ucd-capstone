@@ -5,6 +5,9 @@ import { handler } from "./createAccount"
 import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "./createAccountModels"
 
 describe('createAccount', () => {
+  const expectedHeaders = {
+    'access-control-allow-origin': '*'
+  }
 
   beforeEach(() => {
     AWSMock.setSDKInstance(AWS)
@@ -29,6 +32,7 @@ describe('createAccount', () => {
     expect(account.accountType).toEqual(accountType)
     expect(account.balance).toEqual(initialDeposit)
     expect(account.createdOn).not.toBeNull()
+    expect(response.headers).toEqual(expectedHeaders)
   })
 
   it('should fail when the account type is missing from request', async () => {
@@ -43,6 +47,7 @@ describe('createAccount', () => {
 
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
+    expect(response.headers).toEqual(expectedHeaders)
   })
 
   it('should fail when the account type is empty', async () => {
@@ -58,6 +63,7 @@ describe('createAccount', () => {
   
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
+    expect(response.headers).toEqual(expectedHeaders)
   })
 
   it('should fail when the account type is blank', async () => {
@@ -73,6 +79,7 @@ describe('createAccount', () => {
   
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
+    expect(response.headers).toEqual(expectedHeaders)
   })
 
   it('should fail when the initial deposit is missing from request', async () => {
@@ -87,6 +94,7 @@ describe('createAccount', () => {
 
     expect(response.statusCode).toEqual(400)
     expect(response.body).toEqual(expectedErrorResponse)
+    expect(response.headers).toEqual(expectedHeaders)
   })
 })
 

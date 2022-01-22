@@ -21,6 +21,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     logger.error(`Request to create account invalid. ${error.message}`)
     return {
       statusCode: 400,
+      headers: {
+        'access-control-allow-origin': '*'
+      },
       body: JSON.stringify({error: error.message})
     }
   }
@@ -44,6 +47,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   return {
     statusCode: 201,
+    headers: {
+      'access-control-allow-origin': '*'
+    },
     body: JSON.stringify(response)
   }
 }
