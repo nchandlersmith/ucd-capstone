@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayEventRequestContextWithAuthorizer, APIGatewayEventDefaultAuthorizerContext, APIGatewayEventIdentity } from "aws-lambda"
 
-export function buildEvent(body: string): APIGatewayProxyEvent {
+export function buildEvent(body: string | null): APIGatewayProxyEvent {
   return {
     resource: '',
     path: '',
