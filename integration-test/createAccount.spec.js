@@ -1,12 +1,16 @@
-const AWS = require('aws-sdk')
 const axios = require('axios')
+const AWS = require('aws-sdk')
 
-const docClient = new AWS.DynamoDB.DocumentClient({
-  region: 'localhost',
-  endpoint: 'http://localhost:8000',
-  accessKeyId: 'some access key',
-  secretAccessKey: 'some secret'
-})
+function createDocumentClient() {
+  return new AWS.DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000',
+    accessKeyId: 'some access key',
+    secretAccessKey: 'some secret'
+  });
+}
+
+const docClient = createDocumentClient()
 const tableName = 'Accounts-dev'
 const userId = 'Ghost Rider'
 
