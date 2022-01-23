@@ -55,7 +55,7 @@ describe('getAccounts.handler', function() {
     expect(response.headers).toStrictEqual(expectedHeaders)
   })
 
-  it('should reject unauthorized requests', async function () {
+  it('should reject unauthorized users', async function () {
     const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
 
     const response = await handler(buildEvent({headers: {Authorization: `Bearer ${userId}`}}))
