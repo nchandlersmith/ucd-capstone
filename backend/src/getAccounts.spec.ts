@@ -1,11 +1,10 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
-import { QueryInput } from 'aws-sdk/clients/dynamodb'
 import { handler } from './getAccounts'
 import { CapstoneAccount, GetAccountsResponse } from './getAccountsModels'
 import { buildEvent } from './testUtils/eventUtils'
 
-describe('getaccounts', function() {
+describe('getAccounts.handler', function() {
   const expectedHeaders = {
     'access-control-allow-origin': '*'
   }
