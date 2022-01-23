@@ -2,3 +2,5 @@
 **/.build/
 backend/.serverless
 **/.webpack
+**/.vscode/
+**/.idea/
