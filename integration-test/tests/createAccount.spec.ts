@@ -1,14 +1,5 @@
 const axios = require('axios')
-const AWS = require('aws-sdk')
-
-function createDocumentClient() {
-  return new AWS.DynamoDB.DocumentClient({
-    region: 'localhost',
-    endpoint: 'http://localhost:8000',
-    accessKeyId: 'some access key',
-    secretAccessKey: 'some secret'
-  });
-}
+const {createDocumentClient} = require("../utils/dynamoUtils");
 
 const docClient = createDocumentClient()
 const tableName = 'Accounts-dev'
@@ -26,7 +17,7 @@ describe('create account', () => {
 
     for (const item of dynamoResponse.Items) {
       await deleteAllAccountsByAccountIdForUserId(item.accountId)
-        .catch(error => console.log`Error occured while cleaning up dynamo: ${error.message}`)
+        .catch((error: any) => console.log`Error occured while cleaning up dynamo: ${error.message}`)
     }
 
   })
@@ -56,7 +47,7 @@ describe('create account', () => {
     }
     const expectedErrorMessage = 'Missing from body: accountType'
 
-    const result =  await axios.post(url, createAccountData, {headers}).catch(error => error)
+    const result =  await axios.post(url, createAccountData, {headers}).catch((error: any) => error)
 
     const dynamoResponse = await findAllAccountsForUserId()
     expect(result.response.status).toEqual(400)
@@ -71,7 +62,7 @@ describe('create account', () => {
     }
     const expectedErrorMessage = 'Missing from body: initialDeposit'
 
-    const result =  await axios.post(url, createAccountData, {headers}).catch(error => error)
+    const result =  await axios.post(url, createAccountData, {headers}).catch((error: any) => error)
 
     const dynamoResponse = await findAllAccountsForUserId()
     expect(result.response.status).toEqual(400)
@@ -80,7 +71,7 @@ describe('create account', () => {
   })
 })
 
-function deleteAllAccountsByAccountIdForUserId(accountId) {
+function deleteAllAccountsByAccountIdForUserId(accountId: string) {
   return docClient.delete({
     TableName: tableName,
     Key: {
