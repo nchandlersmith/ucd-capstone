@@ -14,7 +14,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
 
   const authHeader = event.headers.Authorization
-  if (authHeader === undefined) {
+  if (authHeader === undefined || !authHeader.includes('blarg')) {
     return {
       statusCode: 403,
       headers: {'access-control-allow-origin': '*'},

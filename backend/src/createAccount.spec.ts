@@ -51,8 +51,8 @@ describe('createAccount', () => {
     const response = await handler(buildEvent({body, headers}))
 
     expect(response.statusCode).toEqual(400)
-    expect(response.body).toEqual(expectedErrorResponse)
-    expect(response.headers).toEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorResponse)
+    expect(response.headers).toStrictEqual(expectedHeaders)
   })
 
   it('should fail when the account type is empty', async () => {
@@ -68,8 +68,8 @@ describe('createAccount', () => {
     const response = await handler(buildEvent({body, headers}))
   
     expect(response.statusCode).toEqual(400)
-    expect(response.body).toEqual(expectedErrorResponse)
-    expect(response.headers).toEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorResponse)
+    expect(response.headers).toStrictEqual(expectedHeaders)
   })
 
   it('should fail when the account type is blank', async () => {
@@ -85,8 +85,8 @@ describe('createAccount', () => {
     const response = await handler(buildEvent({body, headers}))
   
     expect(response.statusCode).toEqual(400)
-    expect(response.body).toEqual(expectedErrorResponse)
-    expect(response.headers).toEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorResponse)
+    expect(response.headers).toStrictEqual(expectedHeaders)
   })
 
   it('should fail when the initial deposit is missing from request', async () => {
@@ -102,18 +102,27 @@ describe('createAccount', () => {
     const response = await handler(buildEvent({body, headers}))
 
     expect(response.statusCode).toEqual(400)
-    expect(response.body).toEqual(expectedErrorResponse)
-    expect(response.headers).toEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorResponse)
+    expect(response.headers).toStrictEqual(expectedHeaders)
   })
 
   it('should reject requests missing the auth header', async function() {
     const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
-
     const response = await handler(buildEvent({headers: {}}))
 
     expect(response.statusCode).toEqual(403)
-    expect(response.headers).toEqual(expectedHeaders)
-    expect(response.body).toEqual(expectedErrorMessage)
+    expect(response.headers).toStrictEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorMessage)
+  })
+
+  it('should reject unauthorized users', async () => {
+    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+
+    const response = await handler(buildEvent({headers: {Authorization: `Bearer ${userId}`}}))
+
+    expect(response.statusCode).toEqual(403)
+    expect(response.headers).toStrictEqual(expectedHeaders)
+    expect(response.body).toStrictEqual(expectedErrorMessage)
   })
 })
 
