@@ -55,9 +55,27 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: !GetAtt AccountTable.Arn
-      - Effect: Allow
+      - Effect: "Allow"
         Action:
           - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
+  GetAccounts:
+    handler: src/getAccounts.handler
+    events:
+      - http:
+          method: get
+          path: accounts
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: !GetAtt AccountTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemtryRecords
           - xray:PutTraceSegments
         Resource: "*"
 
