@@ -13,6 +13,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
 
+  const authHeader = event.headers.Authorization
+  if (authHeader === undefined) {
+    return {
+      statusCode: 403,
+      headers: {'access-control-allow-origin': '*'},
+      body:JSON.stringify({error: 'User not authorized'})
+    }
+  }
+
   try {
     validateAccountType(request)
     validateInitialDeposit(request)
