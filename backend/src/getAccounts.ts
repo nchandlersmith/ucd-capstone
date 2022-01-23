@@ -7,7 +7,7 @@ const requiredHeaders = {
 
 export const handler = async function(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const authHeader = event.headers.Authorization
-  if (authHeader === undefined) {
+  if (authHeader === undefined || !authHeader.includes('blarg')) {
     return {
       statusCode: 403,
       headers: requiredHeaders,

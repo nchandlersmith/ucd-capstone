@@ -9,6 +9,7 @@ describe('getaccounts', function() {
   const expectedHeaders = {
     'access-control-allow-origin': '*'
   }
+  const userId = 'Ghost Rider'
 
   beforeEach(function() {
     AWSMock.setSDKInstance(AWS)
@@ -19,7 +20,6 @@ describe('getaccounts', function() {
   })
 
   it('should return all accounts for the given userId', async function() {
-    const userId = 'Ghost Rider'
     const expectedAccount: CapstoneAccount = {
       userId,
       accountId: 'abc-123-zyxw-0987',
@@ -50,6 +50,16 @@ describe('getaccounts', function() {
     const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
 
     const response = await handler(buildEvent({headers:{}}))
+
+    expect(response.statusCode).toEqual(403)
+    expect(response.body).toEqual(expectedErrorMessage)
+    expect(response.headers).toStrictEqual(expectedHeaders)
+  })
+
+  it('should reject unauthorized requests', async function () {
+    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+
+    const response = await handler(buildEvent({headers: {Authorization: `Bearer ${userId}`}}))
 
     expect(response.statusCode).toEqual(403)
     expect(response.body).toEqual(expectedErrorMessage)
