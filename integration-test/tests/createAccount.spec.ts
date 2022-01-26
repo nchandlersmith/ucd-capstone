@@ -45,7 +45,7 @@ describe('create account', () => {
     }
     const expectedErrorMessage = 'Missing from body: accountType'
 
-    const result =  await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
+    const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 
     const dynamoResponse = await findAllAccountsForUserId()
     expect(result.response.status).toEqual(400)
@@ -59,13 +59,26 @@ describe('create account', () => {
     }
     const expectedErrorMessage = 'Missing from body: initialDeposit'
 
-    const result =  await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
+    const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 
     const dynamoResponse = await findAllAccountsForUserId()
     expect(result.response.status).toEqual(400)
     expect(result.response.data.error).toEqual(expectedErrorMessage)
     expect(dynamoResponse.Items.length).toEqual(0)
   })
+
+  it('should reject requests when auth header is missing', async () => {
+    const expectedErrorMessage = 'User not authorized'
+
+    const result = await axios.post(accountsUrl, {}, {}).catch((error: any) => error)
+
+    const dynamoResponse = await findAllAccountsForUserId()
+    expect(result.response.status).toEqual(403)
+    expect(result.response.data.error).toEqual(expectedErrorMessage)
+  })
+
+
+
 })
 
 function deleteAllAccountsByAccountIdForUserId(accountId: string) {

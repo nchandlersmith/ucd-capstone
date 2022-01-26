@@ -15,10 +15,12 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   const authHeader = event.headers.Authorization
   if (authHeader === undefined || !authHeader.includes('blarg')) {
+    const errorMessage = 'User not authorized'
+    logger.error(errorMessage)
     return {
       statusCode: 403,
       headers: {'access-control-allow-origin': '*'},
-      body:JSON.stringify({error: 'User not authorized'})
+      body:JSON.stringify({error: errorMessage})
     }
   }
 
