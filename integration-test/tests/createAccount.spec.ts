@@ -32,7 +32,6 @@ describe('create account', () => {
 
     const dynamoResponse = await findAllAccountsForUserId()
     expect(result.status).toEqual(201)
-    console.log(`dynamo items: ${JSON.stringify(dynamoResponse.Items)}`)
     expect(dynamoResponse.Items.length).toEqual(1)
     expect(dynamoResponse.Items[0].accountId).toBeTruthy()
     expect(dynamoResponse.Items[0].accountType).toBe(createAccountData.accountType)

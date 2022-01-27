@@ -6,6 +6,8 @@ const requiredHeaders = {
 }
 
 export const handler = async function(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
+  console.log(`table name: ${tableName}`)
   const authHeader = event.headers.Authorization
   if (authHeader === undefined || !authHeader.includes('blarg')) {
     return {
@@ -16,7 +18,13 @@ export const handler = async function(event: APIGatewayProxyEvent): Promise<APIG
   }
 
   const dynamoClient = createDynamoDBClient()
-  const dbResult = await dynamoClient.query({TableName: ''},).promise()
+  const params = {
+    TableName: tableName,
+    ExpressionAttributeValues: { ':userId': 'Ghost Rider' },
+    KeyConditionExpression: 'userId = :userId'
+  }
+  const dbResult = await dynamoClient.query(params).promise()
+  console.log(`Number of items returned from DynamoDB: ${dbResult.Items?.length}`)
   const response = {
     accounts: dbResult.Items
   }
