@@ -8,7 +8,7 @@ describe('createAccount', () => {
   const expectedHeaders = {
     'access-control-allow-origin': '*'
   }
-  const userId = 'Authorized User'
+  const userId = 'Authorized Unit Test User'
   const validAuthHeader = {Authorization: `Bearer blarg-${userId}`}
 
   beforeEach(() => {
@@ -128,7 +128,6 @@ describe('createAccount', () => {
 
 function buildCreateAccountMock() {
   AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateAccountDao, callback: Function) => {
-    console.log(' Doc client called!!!')
     callback(null, { Foo: 'bar' })
   })
 }

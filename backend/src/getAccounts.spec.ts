@@ -8,7 +8,7 @@ describe('getAccounts.handler', function() {
   const expectedHeaders = {
     'access-control-allow-origin': '*'
   }
-  const userId = 'Ghost Rider'
+  const userId = 'Authorized Unit Test User'
 
   beforeEach(function() {
     AWSMock.setSDKInstance(AWS)
@@ -28,7 +28,6 @@ describe('getAccounts.handler', function() {
     }
 
     AWSMock.mock('DynamoDB.DocumentClient', 'query', (params, callback: Function) => {
-      console.log('Query Dynamo mock called')
       callback(null, {Items: [expectedAccount]})
     })
 
