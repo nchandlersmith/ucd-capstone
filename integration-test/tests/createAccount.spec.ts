@@ -19,7 +19,6 @@ describe('create account', () => {
       await deleteAllAccountsByAccountIdForUserId(item.accountId)
         .catch((error: any) => console.log`Error occured while cleaning up dynamo: ${error.message}`)
     }
-
   })
 
   it('should create an account', async () => {
@@ -71,7 +70,6 @@ describe('create account', () => {
 
     const result = await axios.post(accountsUrl, {}, {}).catch((error: any) => error)
 
-    const dynamoResponse = await findAllAccountsForUserId()
     expect(result.response.status).toEqual(403)
     expect(result.response.data.error).toEqual(expectedErrorMessage)
   })

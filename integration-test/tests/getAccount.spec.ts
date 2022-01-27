@@ -25,8 +25,11 @@ describe('get account ', () => {
     }
     await putAccountInDynamo(userAccount);
     await putAccountInDynamo(alienAccount);
+
     const result = await axios.get(accountsUrl, {headers})
 
+    await deleteAllAccountsByAccountIdForUserId(userAccount.accountId, userAccount.userId)
+    await deleteAllAccountsByAccountIdForUserId(alienAccount.accountId, alienAccount.userId)
     expect(result.status).toEqual(200)
     expect(result.data.accounts.length).toEqual(1)
     expect(result.data.accounts[0]).toStrictEqual(userAccount)
@@ -35,4 +38,14 @@ describe('get account ', () => {
 
 function putAccountInDynamo(account: CapstoneAccount) {
   createDocumentClient().put({TableName: tableName, Item: account}).promise()
+}
+
+function deleteAllAccountsByAccountIdForUserId(accountId: string, userId: string) {
+  return createDocumentClient().delete({
+    TableName: tableName,
+    Key: {
+      "userId": userId,
+      "accountId": accountId
+    }
+  }).promise()
 }
