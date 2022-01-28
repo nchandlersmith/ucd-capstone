@@ -66,7 +66,7 @@ describe('create account', () => {
   })
 
   it('should reject requests when auth header is missing', async () => {
-    const expectedErrorMessage = 'User not authorized'
+    const expectedErrorMessage = 'Unauthorized user'
 
     const result = await axios.post(accountsUrl, {}, {}).catch((error: any) => error)
 
