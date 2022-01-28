@@ -1,3 +1,4 @@
+import {AuthError} from "../exceptions/exceptions";
 import {authorize} from "./authUtils";
 
 describe('authorize', () => {
@@ -28,5 +29,9 @@ describe('authorize', () => {
 
   it('should refuse null auth header', () => {
     expect(() => authorize(null)).toThrow(/^Unauthorized user$/)
+  })
+
+  it('should throw AuthError', () => {
+    expect(() => authorize('invalid token')).toThrow(AuthError)
   })
 })
