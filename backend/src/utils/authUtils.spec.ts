@@ -21,4 +21,12 @@ describe('authorize', () => {
     const authToken = 'Bearer user'
     expect(() => authorize(authToken)).toThrow(/^Unauthorized user$/)
   })
+
+  it('should refuse missing auth header', () => {
+    expect(() => authorize(undefined)).toThrow(/^Unauthorized user$/)
+  })
+
+  it('should refuse null auth header', () => {
+    expect(() => authorize(null)).toThrow(/^Unauthorized user$/)
+  })
 })

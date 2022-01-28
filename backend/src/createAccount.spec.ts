@@ -107,7 +107,7 @@ describe('createAccount', () => {
   })
 
   it('should reject requests missing the auth header', async function() {
-    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+    const expectedErrorMessage = JSON.stringify({error: 'Unauthorized user'})
     const response = await handler(buildEvent({headers: {}}))
 
     expect(response.statusCode).toEqual(403)
@@ -116,7 +116,7 @@ describe('createAccount', () => {
   })
 
   it('should reject unauthorized users', async () => {
-    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+    const expectedErrorMessage = JSON.stringify({error: 'Unauthorized user'})
 
     const response = await handler(buildEvent({headers: {Authorization: `Bearer ${userId}`}}))
 
