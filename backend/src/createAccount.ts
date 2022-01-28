@@ -8,6 +8,9 @@ import { createDynamoDBClient } from './utils/dynamodbUtils'
 import { createLogger } from './utils/logger'
 
 const logger = createLogger('Create Account')
+const requiredResponseHeaders = {
+  'access-control-allow-origin': '*'
+}
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
@@ -32,9 +35,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     logger.error(`Request to create account invalid. ${error.message}`)
     return {
       statusCode: 400,
-      headers: {
-        'access-control-allow-origin': '*'
-      },
+      headers: requiredResponseHeaders,
       body: JSON.stringify({error: error.message})
     }
   }
@@ -58,9 +59,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   return {
     statusCode: 201,
-    headers: {
-      'access-control-allow-origin': '*'
-    },
+    headers: requiredResponseHeaders,
     body: JSON.stringify(response)
   }
 }
