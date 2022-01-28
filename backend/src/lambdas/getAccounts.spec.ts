@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
 import { handler } from './getAccounts'
-import { CapstoneAccount, GetAccountsResponse } from './getAccountsModels'
-import { buildEvent } from './testUtils/eventUtils'
+import { CapstoneAccount, GetAccountsResponse } from '../models/getAccountsModels'
+import { buildEvent } from '../testUtils/eventUtils'
 
 describe('getAccounts.handler', function() {
   const expectedHeaders = {

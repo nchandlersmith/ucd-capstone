@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
 import { handler } from "./createAccount"
-import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "./createAccountModels"
-import { buildEvent } from './testUtils/eventUtils'
+import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "../models/createAccountModels"
+import { buildEvent } from '../testUtils/eventUtils'
 
 describe('createAccount', () => {
   const expectedHeaders = {

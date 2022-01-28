@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { createDynamoDBClient } from "./utils/dynamodbUtils";
-import {createLogger} from "./utils/logger";
-import {authorize} from "./utils/authUtils";
+import { createDynamoDBClient } from "../utils/dynamodbUtils";
+import {createLogger} from "../utils/logger";
+import {authorize} from "../utils/authUtils";
 
 const logger = createLogger('Get Account')
 

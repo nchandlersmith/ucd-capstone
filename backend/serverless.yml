@@ -43,7 +43,7 @@ custom:
 
 functions:
   CreateAccount:
-    handler: src/createAccount.handler
+    handler: src/lambdas/createAccount.handler
     events:
       - http:
           method: post
@@ -61,7 +61,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
   GetAccounts:
-    handler: src/getAccounts.handler
+    handler: src/lambdas/getAccounts.handler
     events:
       - http:
           method: get

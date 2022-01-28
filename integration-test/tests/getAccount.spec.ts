@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {createDocumentClient} from '../utils/dynamoUtils';
-import { CapstoneAccount } from '../../backend/src/getAccountsModels'
+import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 
 const userId = 'Ghost Rider'
 const tableName = 'Accounts-dev'

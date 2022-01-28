@@ -1,13 +1,13 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from './createAccountModels'
+import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from '../models/createAccountModels'
 import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { createDynamoDBClient } from './utils/dynamodbUtils'
-import { createLogger } from './utils/logger'
-import {authorize} from "./utils/authUtils";
-import {AuthError} from "./exceptions/exceptions";
+import { createDynamoDBClient } from '../utils/dynamodbUtils'
+import { createLogger } from '../utils/logger'
+import {authorize} from "../utils/authUtils";
+import {AuthError} from "../exceptions/exceptions";
 
 const logger = createLogger('Create Account')
 const requiredResponseHeaders = {
