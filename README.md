@@ -1,29 +1,32 @@
-# Capstone Bank
-Capstone project for udacity cloud developer
+# Capstone Photos
 
-## Feature - Create Account
-As a Capstone Bank customer, I want an account, so that I can keep my money safe and access it when I need.
+## Photo Management Epic
 
-### Feature updates
-- User enters account type and initial deposit amount on client.
-- Account created in Dynamo
-- TODO:
-    - Get user ID from jwt
-    - After creation, get all accounts and display them on client
+### Feature - Add Photo
 
-## Feature - Accounts Summary
-As a Capstone Bank customer, I want to see a summary of all my accounts, so that I know where my money is at a glance
-## Feature - Update Account
-As a Capstone Bank customer, I want to make updates to my account, so that I can apply different investment strategies
+As a member of Capstone Photo, I want to upload photos, so that I can get my photos processed at participating vendors.
 
-## Feature - Close Account
-As a Capstone Bank customer, I want to close an account, so that I can get my money back when my needs change
+### Feature - Receive Processing Updates
 
-## Feature - Deposit
-As a Capstone Bank customer, I want to add money to my account, so that I can make additional purchases or save/invest additional money
+As a member of Capstone Photo, I want to receive notifications when my vendor starts or finishes work on my photo.
 
-## Feature - Withdrawal
-As a Capstone Bank customer, I want to withdraw money from my account, so that I have more money on hand
+## Vendor Management Epic
+__Summary:__ Vendors will download photos for processing.
 
-## Feature - Point of Sale
-As a Capstone Bank customer, I want to use my debit or credit chards, so that I can make purchases
+### Feature - Vendor Signup
+
+As a photo processing vendor, I want to sign up to Capstone Photos, so that I can process photos from my customers.
+
+### Feature - Vendor Receives Notifications
+
+As a photo processing vendor, I want to receive notifications when someone wants me to process their photos, so that I
+don't have to notify them directly.
+
+## Techy Stuff
+
+- Frontend: React app in S3
+- Backend: Node Lambdas
+- Database: DynamoDB - vendor, customer, and photo details
+- S3: Photo store
+- SNS: Send notifications
+- Auth0: implements auth. _Should_ be able to embed customer/vendor in the JWTs and manage permissions appropriately. See [Add User Roles To Tokens](https://auth0.com/docs/manage-users/access-control/sample-use-cases-rules-with-authorization)
