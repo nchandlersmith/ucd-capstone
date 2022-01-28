@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { createDynamoDBClient } from "./utils/dynamodbUtils";
 import {createLogger} from "./utils/logger";
+import {authorize} from "./utils/authUtils";
 
 const logger = createLogger('Get Account')
 
@@ -11,7 +12,11 @@ const requiredHeaders = {
 export const handler = async function(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
   const authHeader = event.headers.Authorization
-  if (authHeader === undefined || !authHeader.includes('blarg')) {
+
+  try {
+    authorize(authHeader)
+  } catch {
+    logger.info(`Auth error with Authorization header: ${authHeader}`)
     return {
       statusCode: 403,
       headers: requiredHeaders,
