@@ -6,6 +6,8 @@ import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createDynamoDBClient } from './utils/dynamodbUtils'
 import { createLogger } from './utils/logger'
+import {authorize} from "./utils/authUtils";
+import {AuthError} from "./exceptions/exceptions";
 
 const logger = createLogger('Create Account')
 const requiredResponseHeaders = {
@@ -17,20 +19,18 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
 
   const authHeader = event.headers.Authorization
-  if (authHeader === undefined || !authHeader.includes('blarg')) {
-    const errorMessage = 'Unauthorized user'
-    logger.error(errorMessage)
-    return {
-      statusCode: 403,
-      headers: {'access-control-allow-origin': '*'},
-      body:JSON.stringify({error: errorMessage})
-    }
-  }
-
   try {
+    authorize(authHeader)
     validateAccountType(request)
     validateInitialDeposit(request)
   } catch(err) {
+    if (err instanceof AuthError) {
+      return {
+        statusCode: 403,
+        headers: {'access-control-allow-origin': '*'},
+        body:JSON.stringify({error: err.message})
+      }
+    }
     const error = err as Error
     logger.error(`Request to create account invalid. ${error.message}`)
     return {
