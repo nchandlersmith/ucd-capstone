@@ -10,25 +10,6 @@ import {AuthError, ModelValidationError} from "../exceptions/exceptions";
 import {validateCreateCapstoneAccountRequest} from "../services/createAccountService";
 
 const logger = createLogger('Create Account')
-const requiredResponseHeaders = {
-  'access-control-allow-origin': '*'
-}
-
-const buildAuthErrorResponse = (errorMessage: string): APIGatewayProxyResult => {
-  return {
-    statusCode: 403,
-    headers: {'access-control-allow-origin': '*'},
-    body: JSON.stringify({error: errorMessage})
-  }
-}
-
-function buildValidationErrorResponse(error: Error) {
-  return {
-    statusCode: 400,
-    headers: requiredResponseHeaders,
-    body: JSON.stringify({error: error.message})
-  };
-}
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
@@ -36,42 +17,28 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   const authHeader = event.headers.Authorization
   try {
-    authorize(authHeader)
+    const userId = authorize(authHeader)
     validateCreateCapstoneAccountRequest(request)
+    const item = buildCreateAccountItem(request, userId)
+    logger.info(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
+    await storeCapstoneAccount(item)
+    return buildResponse(201, {message: 'Success'})
   } catch(err: unknown) {
     const error = err as Error // TODO: could also be a string
     logger.error(`Error creating Capstone Account. ${error.message}`)
     if (error instanceof AuthError) {
-      return buildAuthErrorResponse(error.message)
+      return buildAuthErrorResponse(error)
     }
     if (error instanceof ModelValidationError) {
-      return buildValidationErrorResponse(error)
+      return buildRequestValidationErrorResponse(error)
     }
-    return {
-      statusCode: 500,
-      headers: requiredResponseHeaders,
-      body: JSON.stringify({error: error.message})
-    }
-  }
-
-  const item = buildCreateAccountItem(request)
-  logger.info(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
-
-  await storeCapstoneAccount(item)
-  const response: CreateCapstoneAccountResponse = {
-    message: 'Success'
-  }
-
-  return {
-    statusCode: 201,
-    headers: requiredResponseHeaders,
-    body: JSON.stringify(response)
+    return buildServerErrorResponse(error)
   }
 }
 
-function buildCreateAccountItem(request: CreateCapstoneAccountRequest): CreateCapstoneAccountDao {
+function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
   return {
-    userId: getUserId(),
+    userId,
     accountId: uuid.v4(),
     accountType: request.accountType,
     balance: request.initialDeposit,
@@ -79,6 +46,28 @@ function buildCreateAccountItem(request: CreateCapstoneAccountRequest): CreateCa
   }
 }
 
-function getUserId() {
-  return 'Ghost Rider'
+const buildAuthErrorResponse = (error: Error): APIGatewayProxyResult => {
+  return buildErrorResponse(403, error)
+}
+
+function buildRequestValidationErrorResponse(error: Error) {
+  return buildErrorResponse(400, error)
+}
+
+function buildServerErrorResponse(error: Error) {
+  return buildErrorResponse(500, error)
+}
+
+function buildErrorResponse(statusCode: number, error: Error) {
+  return buildResponse(statusCode, {error: error.message})
+}
+
+function buildResponse(statusCode: number, body: any) {
+  return {
+    statusCode,
+    headers: {
+      'access-control-allow-origin': '*'
+    },
+    body: JSON.stringify(body)
+  }
 }
