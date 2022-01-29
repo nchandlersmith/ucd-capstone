@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 
-const accountsTableName = 'Accounts-dev'
+const accountsTableName = 'CapstoneAccounts-dev'
 
 export function deleteAccountByUserAndAccountIds(accountId: string, userId: string) {
   return createDocumentClient().delete({

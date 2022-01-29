@@ -15,7 +15,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   environment:
-    ACCOUNTS_TABLE_NAME: Accounts-${self:provider.stage}
+    CAPSTONE_ACCOUNTS_TABLE_NAME: CapstoneAccounts-${self:provider.stage}
   logs:
     restApi: true
   tracing:
@@ -84,7 +84,7 @@ resources:
   AccountTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:provider.environment.ACCOUNTS_TABLE_NAME}
+      TableName: ${self:provider.environment.CAPSTONE_ACCOUNTS_TABLE_NAME}
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S

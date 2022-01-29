@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateCapstoneAccountRequest, CreateCapstoneAccountDao, CreateCapstoneAccountResponse } from '../models/createAccountModels'
 import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { createDynamoDBClient } from '../utils/dynamodbUtils'
+import {createDynamoDBClient, storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
 import {AuthError} from "../exceptions/exceptions";
@@ -15,7 +15,7 @@ const requiredResponseHeaders = {
 }
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
+  const tableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
   const request: CreateCapstoneAccountRequest = event.body ? JSON.parse(event.body) : {}
 
   const authHeader = event.headers.Authorization
@@ -43,13 +43,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const item = buildCreateAccountItem(request)
   logger.info(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
 
-  const result: DocumentClient.PutItemOutput = await createDynamoDBClient().put({
-    TableName: tableName,
-    Item: item
-  }).promise()
-
-  logger.info(`result from dynamo ${JSON.stringify(result)}`)
-
+  await storeCapstoneAccount(item)
   const response: CreateCapstoneAccountResponse = {
     accountId: item.accountId,
     accountType: item.accountType,
@@ -60,7 +54,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   return {
     statusCode: 201,
     headers: requiredResponseHeaders,
-    body: JSON.stringify(response)
+    body: JSON.stringify(response) // TODO: return success message
   }
 }
 

@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { createDynamoDBClient } from "../utils/dynamodbUtils";
+import { createDynamoDBClient } from "../persistence/dbClient";
 import {createLogger} from "../utils/logger";
 import {authorize} from "../utils/authUtils";
 
@@ -10,7 +10,7 @@ const requiredHeaders = {
 }
 
 export const handler = async function(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
+  const tableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
   const authHeader = event.headers.Authorization
 
   try {
