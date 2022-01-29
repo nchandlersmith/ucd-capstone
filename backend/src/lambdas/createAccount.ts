@@ -22,7 +22,7 @@ const buildAuthErrorResponse = (errorMessage: string): APIGatewayProxyResult => 
   }
 }
 
-function buildValidaitonErrorResponse(error: Error) {
+function buildValidationErrorResponse(error: Error) {
   return {
     statusCode: 400,
     headers: requiredResponseHeaders,
@@ -45,7 +45,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       return buildAuthErrorResponse(error.message)
     }
     if (error instanceof ModelValidationError) {
-      return buildValidaitonErrorResponse(error)
+      return buildValidationErrorResponse(error)
     }
     return {
       statusCode: 500,
