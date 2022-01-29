@@ -3,3 +3,9 @@ export class AuthError extends Error {
     super(message);
   }
 }
+
+export class ModelValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
