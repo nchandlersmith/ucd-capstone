@@ -14,6 +14,6 @@ export const responseBuilder = (statusCode: number, body: any): APIGatewayProxyR
 
 export const errorResponseBuilder = (err: any): APIGatewayProxyResult => {
   const statusCode = 500
-  const body = err instanceof Error ? { error: err.message } : {error: err.toString()}
+  const body = err.constructor.name === 'Error' ? { error: err.message } : {error: err.toString()}
   return responseBuilder(statusCode, body)
 }
