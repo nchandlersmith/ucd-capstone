@@ -12,28 +12,20 @@ import {validateCreateCapstoneAccountRequest} from "../services/createAccountSer
 const logger = createLogger('Create Account')
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const tableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
   const request: CreateCapstoneAccountRequest = event.body ? JSON.parse(event.body) : {}
-
   const authHeader = event.headers.Authorization
+
+  let response: APIGatewayProxyResult;
   try {
     const userId = authorize(authHeader)
     validateCreateCapstoneAccountRequest(request)
     const item = buildCreateAccountItem(request, userId)
-    logger.info(`To table: ${tableName} adding item : ${JSON.stringify(item)}`)
     await storeCapstoneAccount(item)
-    return buildResponse(201, {message: 'Success'})
+    response = buildResponse(201, {message: 'Success'})
   } catch(err: unknown) {
-    const error = err as Error // TODO: could also be a string
-    logger.error(`Error creating Capstone Account. ${error.message}`)
-    if (error instanceof AuthError) {
-      return buildAuthErrorResponse(error)
-    }
-    if (error instanceof ModelValidationError) {
-      return buildRequestValidationErrorResponse(error)
-    }
-    return buildServerErrorResponse(error)
+    response = handleError(err);
   }
+  return response
 }
 
 function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
@@ -44,6 +36,18 @@ function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: s
     balance: request.initialDeposit,
     createdOn: Date().toString()
   }
+}
+
+function handleError(err: any): APIGatewayProxyResult {
+  const error = err as Error // TODO: could also be a string
+  logger.error(`Error creating Capstone Account. ${error.message}`)
+  if (error instanceof AuthError) {
+    return buildAuthErrorResponse(error)
+  }
+  if (error instanceof ModelValidationError) {
+    return buildRequestValidationErrorResponse(error)
+  }
+  return buildServerErrorResponse(error)
 }
 
 const buildAuthErrorResponse = (error: Error): APIGatewayProxyResult => {
