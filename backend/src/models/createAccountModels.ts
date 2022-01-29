@@ -1,16 +1,16 @@
-export interface CreateAccountRequest {
+export interface CreateCapstoneAccountRequest {
   accountType: string,
   initialDeposit: number
 }
 
-export interface CreateAccountResponse {
+export interface CreateCapstoneAccountResponse {
   accountId: string,
   accountType: string,
   balance: number,
   createdOn: string
 }
 
-export interface CreateAccountDao {
+export interface CreateCapstoneAccountDao {
   userId: string,
   accountId: string,
   accountType: string,

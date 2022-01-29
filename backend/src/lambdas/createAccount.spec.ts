@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
 import { handler } from "./createAccount"
-import { CreateAccountRequest, CreateAccountResponse, CreateAccountDao } from "../models/createAccountModels"
+import { CreateCapstoneAccountRequest, CreateCapstoneAccountResponse, CreateCapstoneAccountDao } from "../models/createAccountModels"
 import { buildEvent } from '../testUtils/eventUtils'
 
 describe('createAccount', () => {
@@ -29,7 +29,7 @@ describe('createAccount', () => {
     const response = await handler(buildEvent({body, headers}))
     
     expect(response.statusCode).toEqual(201)
-    const account: CreateAccountResponse = JSON.parse(response.body)
+    const account: CreateCapstoneAccountResponse = JSON.parse(response.body)
     expect(account.accountId).not.toBeNull()
     expect(account.accountId).toContain('-')
     expect(account.accountType).toEqual(accountType)
@@ -127,12 +127,12 @@ describe('createAccount', () => {
 })
 
 function buildCreateAccountMock() {
-  AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateAccountDao, callback: Function) => {
+  AWSMock.mock('DynamoDB.DocumentClient', 'put', (params: CreateCapstoneAccountDao, callback: Function) => {
     callback(null, { Foo: 'bar' })
   })
 }
 
-function buildCreateAccountRequest(accountType: string, initialDeposit: number): CreateAccountRequest {
+function buildCreateAccountRequest(accountType: string, initialDeposit: number): CreateCapstoneAccountRequest {
   return {
     accountType,
     initialDeposit

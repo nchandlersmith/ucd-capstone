@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { CreateAccountRequest, CreateAccountDao, CreateAccountResponse } from '../models/createAccountModels'
+import { CreateCapstoneAccountRequest, CreateCapstoneAccountDao, CreateCapstoneAccountResponse } from '../models/createAccountModels'
 import * as uuid from 'uuid'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createDynamoDBClient } from '../utils/dynamodbUtils'
@@ -16,7 +16,7 @@ const requiredResponseHeaders = {
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const tableName = process.env.ACCOUNTS_TABLE_NAME || 'Accounts'
-  const request: CreateAccountRequest = event.body ? JSON.parse(event.body) : {}
+  const request: CreateCapstoneAccountRequest = event.body ? JSON.parse(event.body) : {}
 
   const authHeader = event.headers.Authorization
   try {
@@ -50,7 +50,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   logger.info(`result from dynamo ${JSON.stringify(result)}`)
 
-  const response: CreateAccountResponse = {
+  const response: CreateCapstoneAccountResponse = {
     accountId: item.accountId,
     accountType: item.accountType,
     balance: item.balance,
@@ -64,7 +64,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   }
 }
 
-function validateAccountType(request: CreateAccountRequest) {
+function validateAccountType(request: CreateCapstoneAccountRequest) {
   if (request.accountType === undefined) {
     throw new Error('Missing from body: accountType')
   }
@@ -78,13 +78,13 @@ function validateAccountType(request: CreateAccountRequest) {
   }
 }
 
-function validateInitialDeposit(request: CreateAccountRequest) {
+function validateInitialDeposit(request: CreateCapstoneAccountRequest) {
   if (request.initialDeposit === undefined) {
     throw new Error('Missing from body: initialDeposit')
   }
 }
 
-function buildCreateAccountItem(request: CreateAccountRequest): CreateAccountDao {
+function buildCreateAccountItem(request: CreateCapstoneAccountRequest): CreateCapstoneAccountDao {
   return {
     userId: getUserId(),
     accountId: uuid.v4(),

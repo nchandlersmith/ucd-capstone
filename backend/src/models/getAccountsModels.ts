@@ -6,6 +6,6 @@ export interface CapstoneAccount {
   createdOn: string
 }
 
-export interface GetAccountsResponse {
+export interface GetCapstoneAccountsResponse {
   accounts: CapstoneAccount[]
 }

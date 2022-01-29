@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
 import { handler } from './getAccounts'
-import { CapstoneAccount, GetAccountsResponse } from '../models/getAccountsModels'
+import { CapstoneAccount, GetCapstoneAccountsResponse } from '../models/getAccountsModels'
 import { buildEvent } from '../testUtils/eventUtils'
 
 describe('getAccounts.handler', function() {
@@ -34,7 +34,7 @@ describe('getAccounts.handler', function() {
     const response = await handler(buildEvent({headers: {Authorization: `Bearer blarg-${userId}`}}))
 
     expect(response.statusCode).toEqual(200)
-    const responseBody: GetAccountsResponse = JSON.parse(response.body)
+    const responseBody: GetCapstoneAccountsResponse = JSON.parse(response.body)
     expect(responseBody.accounts).toHaveLength(1)
     expect(responseBody.accounts[0].userId).toEqual(expectedAccount.userId)
     expect(responseBody.accounts[0].accountId).toEqual(expectedAccount.accountId)
