@@ -7,6 +7,7 @@ import {storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
 import {AuthError} from "../exceptions/exceptions";
+import {validateCreateCapstoneAccountRequest} from "../services/createAccountService";
 
 const logger = createLogger('Create Account')
 const requiredResponseHeaders = {
@@ -20,8 +21,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const authHeader = event.headers.Authorization
   try {
     authorize(authHeader)
-    validateAccountType(request)
-    validateInitialDeposit(request)
+    validateCreateCapstoneAccountRequest(request)
   } catch(err) {
     if (err instanceof AuthError) {
       return {
@@ -51,26 +51,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     statusCode: 201,
     headers: requiredResponseHeaders,
     body: JSON.stringify(response)
-  }
-}
-
-function validateAccountType(request: CreateCapstoneAccountRequest) {
-  if (request.accountType === undefined) {
-    throw new Error('Missing from body: accountType')
-  }
-
-  if (request.accountType === '') {
-    throw new Error('accountType cannot be empty')
-  }
-
-  if (request.accountType === ' ') {
-    throw new Error('accountType cannot be blank')
-  }
-}
-
-function validateInitialDeposit(request: CreateCapstoneAccountRequest) {
-  if (request.initialDeposit === undefined) {
-    throw new Error('Missing from body: initialDeposit')
   }
 }
 

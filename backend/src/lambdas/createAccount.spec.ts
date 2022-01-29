@@ -10,6 +10,8 @@ describe('createAccount', () => {
   }
   const userId = 'Authorized Unit Test User'
   const validAuthHeader = {Authorization: `Bearer blarg-${userId}`}
+  const invalidAccountTypeErrorMessage = 'Invalid account type on account create request. Request denied.'
+  const invalidInitialDepositErrorMessage = 'Invalid initial deposit on account create request. Request denied.'
 
   beforeEach(() => {
     AWSMock.setSDKInstance(AWS)
@@ -40,7 +42,7 @@ describe('createAccount', () => {
     const body = JSON.stringify(requestMissingAccountType)
     const headers = validAuthHeader
     const expectedErrorResponse = JSON.stringify({
-      error: 'Missing from body: accountType'
+      error: invalidAccountTypeErrorMessage
     })
     buildCreateAccountMock()
 
@@ -57,7 +59,7 @@ describe('createAccount', () => {
     const body = JSON.stringify(buildCreateAccountRequest(accountType, initialDeposit))
     const headers = validAuthHeader
     const expectedErrorResponse = JSON.stringify({
-      error: 'accountType cannot be empty'
+      error: invalidAccountTypeErrorMessage
     })
     buildCreateAccountMock()
   
@@ -74,7 +76,7 @@ describe('createAccount', () => {
     const body = JSON.stringify(buildCreateAccountRequest(accountType, initialDeposit))
     const headers = validAuthHeader
     const expectedErrorResponse = JSON.stringify({
-      error: 'accountType cannot be blank'
+      error: invalidAccountTypeErrorMessage
     })
     buildCreateAccountMock()
   
@@ -91,7 +93,7 @@ describe('createAccount', () => {
     const body = JSON.stringify(requestMissingInitialDeposit)
     const headers = validAuthHeader
     const expectedErrorResponse = JSON.stringify({
-      error: 'Missing from body: initialDeposit'
+      error: invalidInitialDepositErrorMessage
     })
     buildCreateAccountMock()
 
