@@ -38,7 +38,7 @@ describe('create account', () => {
     const createAccountData = {
       'initialDeposit': 3145
     }
-    const expectedErrorMessage = 'Missing from body: accountType'
+    const expectedErrorMessage = 'Invalid account type on account create request. Request denied.'
 
     const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 
@@ -52,7 +52,7 @@ describe('create account', () => {
     const createAccountData = {
       'accountType': 'Another integration test'
     }
-    const expectedErrorMessage = 'Missing from body: initialDeposit'
+    const expectedErrorMessage = 'Invalid initial deposit on account create request. Request denied.'
 
     const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 

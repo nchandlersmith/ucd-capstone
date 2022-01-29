@@ -6,12 +6,28 @@ import * as uuid from 'uuid'
 import {storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
-import {AuthError} from "../exceptions/exceptions";
+import {AuthError, ModelValidationError} from "../exceptions/exceptions";
 import {validateCreateCapstoneAccountRequest} from "../services/createAccountService";
 
 const logger = createLogger('Create Account')
 const requiredResponseHeaders = {
   'access-control-allow-origin': '*'
+}
+
+const buildAuthErrorResponse = (errorMessage: string): APIGatewayProxyResult => {
+  return {
+    statusCode: 403,
+    headers: {'access-control-allow-origin': '*'},
+    body: JSON.stringify({error: errorMessage})
+  }
+}
+
+function buildValidaitonErrorResponse(error: Error) {
+  return {
+    statusCode: 400,
+    headers: requiredResponseHeaders,
+    body: JSON.stringify({error: error.message})
+  };
 }
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -22,18 +38,17 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   try {
     authorize(authHeader)
     validateCreateCapstoneAccountRequest(request)
-  } catch(err) {
-    if (err instanceof AuthError) {
-      return {
-        statusCode: 403,
-        headers: {'access-control-allow-origin': '*'},
-        body:JSON.stringify({error: err.message})
-      }
+  } catch(err: unknown) {
+    const error = err as Error // TODO: could also be a string
+    logger.error(`Error creating Capstone Account. ${error.message}`)
+    if (error instanceof AuthError) {
+      return buildAuthErrorResponse(error.message)
     }
-    const error = err as Error
-    logger.error(`Request to create account invalid. ${error.message}`)
+    if (error instanceof ModelValidationError) {
+      return buildValidaitonErrorResponse(error)
+    }
     return {
-      statusCode: 400,
+      statusCode: 500,
       headers: requiredResponseHeaders,
       body: JSON.stringify({error: error.message})
     }
