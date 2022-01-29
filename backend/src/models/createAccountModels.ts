@@ -4,10 +4,7 @@ export interface CreateCapstoneAccountRequest {
 }
 
 export interface CreateCapstoneAccountResponse {
-  accountId: string,
-  accountType: string,
-  balance: number,
-  createdOn: string
+  message: string
 }
 
 export interface CreateCapstoneAccountDao {

@@ -45,16 +45,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   await storeCapstoneAccount(item)
   const response: CreateCapstoneAccountResponse = {
-    accountId: item.accountId,
-    accountType: item.accountType,
-    balance: item.balance,
-    createdOn: item.createdOn
+    message: 'Success'
   }
 
   return {
     statusCode: 201,
     headers: requiredResponseHeaders,
-    body: JSON.stringify(response) // TODO: return success message
+    body: JSON.stringify(response)
   }
 }
 

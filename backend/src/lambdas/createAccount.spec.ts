@@ -19,22 +19,18 @@ describe('createAccount', () => {
     AWSMock.restore('DynamoDB.DocumentClient')
   })
 
-  it('should return account information', async () => {
+  it('should return success', async () => {
     const accountType = 'Free Checking'
     const initialDeposit = 1000
-    const body = JSON.stringify(buildCreateAccountRequest(accountType, initialDeposit))
+    const requestBody = JSON.stringify(buildCreateAccountRequest(accountType, initialDeposit))
     const headers = validAuthHeader
+    const expectedResponseBody = JSON.stringify({message: 'Success'})
     buildCreateAccountMock()
 
-    const response = await handler(buildEvent({body, headers}))
+    const response = await handler(buildEvent({body: requestBody, headers}))
     
     expect(response.statusCode).toEqual(201)
-    const account: CreateCapstoneAccountResponse = JSON.parse(response.body)
-    expect(account.accountId).not.toBeNull()
-    expect(account.accountId).toContain('-')
-    expect(account.accountType).toEqual(accountType)
-    expect(account.balance).toEqual(initialDeposit)
-    expect(account.createdOn).not.toBeNull()
+    expect(response.body).toEqual(expectedResponseBody)
     expect(response.headers).toEqual(expectedHeaders)
   })
 
