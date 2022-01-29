@@ -1,9 +1,8 @@
 import axios from 'axios'
-import {createDocumentClient} from '../utils/dynamoUtils';
+import {deleteAccountByUserAndAccountIds, putAccountInDynamo} from '../utils/dynamoUtils';
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 
 const userId = 'Ghost Rider'
-const tableName = 'Accounts-dev'
 const accountsUrl = 'http://localhost:3000/dev/accounts'
 
 describe('get account ', () => {
@@ -28,24 +27,10 @@ describe('get account ', () => {
 
     const result = await axios.get(accountsUrl, {headers})
 
-    await deleteAllAccountsByAccountIdForUserId(userAccount.accountId, userAccount.userId)
-    await deleteAllAccountsByAccountIdForUserId(alienAccount.accountId, alienAccount.userId)
+    await deleteAccountByUserAndAccountIds(userAccount.accountId, userAccount.userId)
+    await deleteAccountByUserAndAccountIds(alienAccount.accountId, alienAccount.userId)
     expect(result.status).toEqual(200)
     expect(result.data.accounts.length).toEqual(1)
     expect(result.data.accounts[0]).toStrictEqual(userAccount)
   })
 });
-
-function putAccountInDynamo(account: CapstoneAccount) {
-  createDocumentClient().put({TableName: tableName, Item: account}).promise()
-}
-
-function deleteAllAccountsByAccountIdForUserId(accountId: string, userId: string) {
-  return createDocumentClient().delete({
-    TableName: tableName,
-    Key: {
-      "userId": userId,
-      "accountId": accountId
-    }
-  }).promise()
-}

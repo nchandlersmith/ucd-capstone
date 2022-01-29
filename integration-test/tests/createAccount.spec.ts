@@ -1,9 +1,6 @@
-const axios = require('axios')
-const {createDocumentClient} = require("../utils/dynamoUtils");
+import {deleteAccountByUserAndAccountIds, findAllAccountsForUserId} from "../utils/dynamoUtils";
 
-const docClient = createDocumentClient()
-const tableName = 'Accounts-dev'
-const userId = 'Ghost Rider'
+const axios = require('axios')
 
 describe('create account', () => {
   const userId = 'Ghost Rider'
@@ -13,11 +10,11 @@ describe('create account', () => {
   const accountsUrl = 'http://localhost:3000/dev/accounts'
 
   afterEach(async () => {
-    const dynamoResponse = await findAllAccountsForUserId()
+    const dynamoResponse = await findAllAccountsForUserId(userId)
 
     for (const item of dynamoResponse.Items) {
-      await deleteAllAccountsByAccountIdForUserId(item.accountId)
-        .catch((error: any) => console.log`Error occured while cleaning up dynamo: ${error.message}`)
+      await deleteAccountByUserAndAccountIds(item.accountId, userId)
+        .catch((error: any) => console.log`Error occurred while cleaning up dynamo: ${error.message}`)
     }
   })
 
@@ -29,9 +26,9 @@ describe('create account', () => {
 
     const result = await axios.post(accountsUrl, createAccountData, {headers})
 
-    const dynamoResponse = await findAllAccountsForUserId()
+    const dynamoResponse = await findAllAccountsForUserId(userId)
     expect(result.status).toEqual(201)
-    expect(dynamoResponse.Items.length).toEqual(1)
+    expect(dynamoResponse.Items?.length).toEqual(1)
     expect(dynamoResponse.Items[0].accountId).toBeTruthy()
     expect(dynamoResponse.Items[0].accountType).toBe(createAccountData.accountType)
     expect(dynamoResponse.Items[0].balance).toBe(createAccountData.initialDeposit)
@@ -45,10 +42,10 @@ describe('create account', () => {
 
     const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 
-    const dynamoResponse = await findAllAccountsForUserId()
+    const dynamoResponse = await findAllAccountsForUserId(userId)
     expect(result.response.status).toEqual(400)
     expect(result.response.data.error).toEqual(expectedErrorMessage)
-    expect(dynamoResponse.Items.length).toEqual(0)
+    expect(dynamoResponse.Items?.length).toEqual(0)
   })
 
   it('should reject requests when initialDeposit is missing', async () => {
@@ -59,10 +56,10 @@ describe('create account', () => {
 
     const result = await axios.post(accountsUrl, createAccountData, {headers}).catch((error: any) => error)
 
-    const dynamoResponse = await findAllAccountsForUserId()
+    const dynamoResponse = await findAllAccountsForUserId(userId)
     expect(result.response.status).toEqual(400)
     expect(result.response.data.error).toEqual(expectedErrorMessage)
-    expect(dynamoResponse.Items.length).toEqual(0)
+    expect(dynamoResponse.Items?.length).toEqual(0)
   })
 
   it('should reject requests when auth header is missing', async () => {
@@ -73,27 +70,5 @@ describe('create account', () => {
     expect(result.response.status).toEqual(403)
     expect(result.response.data.error).toEqual(expectedErrorMessage)
   })
-
-
-
 })
 
-function deleteAllAccountsByAccountIdForUserId(accountId: string) {
-  return docClient.delete({
-    TableName: tableName,
-    Key: {
-      "userId": userId,
-      "accountId": accountId
-    }
-  }).promise()
-}
-
-function findAllAccountsForUserId() {
-  return docClient.query({
-    TableName: tableName,
-    ExpressionAttributeValues: {
-      ':userId': userId
-    },
-    KeyConditionExpression: 'userId = :userId'
-  }).promise()
-}
