@@ -1,4 +1,5 @@
 import {errorResponseBuilder, responseBuilder} from "./responseUtils";
+import {AuthError} from "../exceptions/exceptions";
 
 describe('responseUtils', () => {
   const requiredHeaders = {
@@ -66,5 +67,25 @@ describe('responseUtils', () => {
         expect(result.body).toEqual(expectedBody)
       })
     });
+
+    describe('input authError', () => {
+      const error = new AuthError('some auth error message')
+
+      it('should return statusCode 403', () => {
+        const result = errorResponseBuilder(error)
+        expect(result.statusCode).toEqual(403)
+      })
+
+      it('should return required headers', () => {
+        const result = errorResponseBuilder(error)
+        expect(result.headers).toStrictEqual(requiredHeaders)
+      })
+
+      it('should return body', () => {
+        const expectedBody = JSON.stringify({error: error.message})
+        const result = errorResponseBuilder(error)
+        expect(result.body).toEqual(expectedBody)
+      })
+    })
   })
 });
