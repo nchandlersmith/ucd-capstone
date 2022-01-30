@@ -1,5 +1,5 @@
 import {errorResponseBuilder, responseBuilder} from "./responseUtils";
-import {AuthError} from "../exceptions/exceptions";
+import {AuthError, ModelValidationError} from "../exceptions/exceptions";
 
 describe('responseUtils', () => {
   const requiredHeaders = {
@@ -68,7 +68,7 @@ describe('responseUtils', () => {
       })
     });
 
-    describe('input authError', () => {
+    describe('input AuthError', () => {
       const error = new AuthError('some auth error message')
 
       it('should return statusCode 403', () => {
@@ -87,5 +87,25 @@ describe('responseUtils', () => {
         expect(result.body).toEqual(expectedBody)
       })
     })
+
+    describe('input ModelValidationError', () => {
+      const error = new ModelValidationError('some validation error')
+
+      it('should return statusCode 400', () => {
+        const result = errorResponseBuilder(error)
+        expect(result.statusCode).toEqual(400)
+      })
+
+      it('should return required headers', () => {
+        const result = errorResponseBuilder(error)
+        expect(result.headers).toStrictEqual(requiredHeaders)
+      })
+
+      it('should return body', () => {
+        const expectedBody = JSON.stringify({error: error.message})
+        const result = errorResponseBuilder(error)
+        expect(result.body).toStrictEqual(expectedBody)
+      })
+    });
   })
 });

@@ -13,8 +13,14 @@ export const responseBuilder = (statusCode: number, body: any): APIGatewayProxyR
   }
 }
 
-export const errorResponseBuilder = (err: any): APIGatewayProxyResult => {
-  const statusCode = err instanceof AuthError ? 403 : 500
+export const errorResponseBuilder = (err: Error | string): APIGatewayProxyResult => {
+  // @ts-ignore
+  const statusCode = errorMap[err.constructor.name] || 500
   const body = err instanceof Error ? { error: err.message } : {error: err.toString()}
   return responseBuilder(statusCode, body)
+}
+
+const errorMap = {
+  "AuthError": 403,
+  "ModelValidationError": 400
 }
