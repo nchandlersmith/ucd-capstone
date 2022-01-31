@@ -1,17 +1,17 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { CreateCapstoneAccountRequest, CreateCapstoneAccountDao } from '../models/createAccountModels'
-import * as uuid from 'uuid'
+import { CreateCapstoneAccountRequest } from '../models/createAccountModels'
 import {storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
-import {validateCreateCapstoneAccountRequest} from "../services/createAccountService";
-import {responseBuilder} from "../utils/responseUtils";
+import {buildCreateAccountItem, validateCreateCapstoneAccountRequest} from "../services/createAccountService";
+import {errorResponseBuilder, responseBuilder} from "../utils/responseUtils";
 
 const logger = createLogger('Create Account')
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  logger.info('Received request to create account.')
   const request: CreateCapstoneAccountRequest = event.body ? JSON.parse(event.body) : {}
   const authHeader = event.headers.Authorization
 
@@ -23,30 +23,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     await storeCapstoneAccount(item)
     response = responseBuilder(201, {message: 'Success'})
   } catch(err: unknown) {
-    response = handleError(err);
+    const error = err as Error
+    response = errorResponseBuilder(error);
   }
   return response
 }
 
-function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
-  return {
-    userId,
-    accountId: uuid.v4(),
-    accountType: request.accountType,
-    balance: request.initialDeposit,
-    createdOn: Date().toString()
-  }
-}
-function handleError(err: any): APIGatewayProxyResult {
-  const error = err as Error // TODO: could also be a string
-  logger.error(`Error creating Capstone Account. ${error.message}`)
-  return buildErrorResponse(error)
-}
-
-function buildErrorResponse(error: any ) {
-  const errorBody = {error: error.message}
-  if (!error.statusCode) {
-    return responseBuilder(500, errorBody) // TODO: test me
-  }
-  return responseBuilder(error.statusCode, errorBody)
-}
