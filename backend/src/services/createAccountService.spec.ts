@@ -1,5 +1,10 @@
-import {validateCreateCapstoneAccountRequest} from "./createAccountService";
+import {buildCreateAccountItem, validateCreateCapstoneAccountRequest} from "./createAccountService";
 import {ModelValidationError} from "../exceptions/exceptions";
+import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
+import {v4 as uuidv4} from 'uuid'
+
+const expectedAccountId = 'abc123'
+jest.mock('uuid', () => ({ v4: () => expectedAccountId}))
 
 describe('createAccountService', () => {
   describe('validateCreateCapstoneAccountRequest', () => {
@@ -54,6 +59,25 @@ describe('createAccountService', () => {
       const request = { accountType: 'Free Checking', initialDeposit: 0 }
       expect(() => validateCreateCapstoneAccountRequest(request)).toThrow(ModelValidationError)
       expect(() => validateCreateCapstoneAccountRequest(request)).toThrow(invalidInitialDepositErrorMessage)
-    });
+    })
+  })
+
+  describe('buildCreateAccountItem', () => {
+    it('should build an create account item', () => {
+      const request: CreateCapstoneAccountRequest = {
+        accountType: 'some account type',
+        initialDeposit: 12345
+      }
+      const expectedCreateAccountItem: CreateCapstoneAccountDao = {
+        userId: 'some user id',
+        accountId: expectedAccountId,
+        accountType: request.accountType,
+        createdOn: '',
+        balance: request.initialDeposit
+      }
+
+      const result = buildCreateAccountItem(request, expectedCreateAccountItem.userId)
+      expect(result).toEqual(expectedCreateAccountItem)
+    })
   })
 })

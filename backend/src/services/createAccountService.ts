@@ -1,5 +1,6 @@
-import {CreateCapstoneAccountRequest} from "../models/createAccountModels";
+import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
 import {ModelValidationError} from "../exceptions/exceptions";
+import {v4 as uuidv4} from 'uuid'
 
 export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAccountRequest) {
   if(!request.accountType || request.accountType === ' ') {
@@ -7,5 +8,15 @@ export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAcco
   }
   if(!request.initialDeposit) {
     throw new ModelValidationError('Invalid initial deposit on account create request. Request denied.')
+  }
+}
+
+export function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
+  return {
+    userId,
+    accountId: uuidv4(),
+    accountType: request.accountType,
+    balance: request.initialDeposit,
+    createdOn: ''
   }
 }
