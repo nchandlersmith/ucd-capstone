@@ -43,7 +43,7 @@ custom:
 
 functions:
   CreateAccount:
-    handler: src/lambdas/createAccount.handler
+    handler: src/lambdas/createAccountLambda.handler
     events:
       - http:
           method: post

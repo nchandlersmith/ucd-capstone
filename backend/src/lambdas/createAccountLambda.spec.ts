@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
-import { handler } from "./createAccount"
-import { CreateCapstoneAccountRequest, CreateCapstoneAccountResponse, CreateCapstoneAccountDao } from "../models/createAccountModels"
+import { handler } from "./createAccountLambda"
+import { CreateCapstoneAccountRequest, CreateCapstoneAccountDao } from "../models/createAccountModels"
 import { buildEvent } from '../testUtils/eventUtils'
 
 describe('createAccount', () => {
