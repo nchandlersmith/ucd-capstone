@@ -1,7 +1,6 @@
 import {buildCreateAccountItem, validateCreateCapstoneAccountRequest} from "./createAccountService";
 import {ModelValidationError} from "../exceptions/exceptions";
 import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
-import {v4 as uuidv4} from 'uuid'
 
 const expectedAccountId = 'abc123'
 jest.mock('uuid', () => ({ v4: () => expectedAccountId}))
@@ -63,6 +62,14 @@ describe('createAccountService', () => {
   })
 
   describe('buildCreateAccountItem', () => {
+    beforeAll(() => {
+      const timestamp = 1643593211687
+      jest.useFakeTimers('modern')
+      jest.setSystemTime(timestamp)
+    })
+    afterAll(() => {
+      jest.useRealTimers()
+    })
     it('should build an create account item', () => {
       const request: CreateCapstoneAccountRequest = {
         accountType: 'some account type',
@@ -72,12 +79,12 @@ describe('createAccountService', () => {
         userId: 'some user id',
         accountId: expectedAccountId,
         accountType: request.accountType,
-        createdOn: '',
+        createdOn: '1/30/2022 7:40:11 PM',
         balance: request.initialDeposit
       }
 
       const result = buildCreateAccountItem(request, expectedCreateAccountItem.userId)
-      expect(result).toEqual(expectedCreateAccountItem)
+      expect(result).toStrictEqual(expectedCreateAccountItem)
     })
   })
 })

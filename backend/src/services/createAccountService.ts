@@ -12,11 +12,12 @@ export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAcco
 }
 
 export function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
+  const date = new Date()
   return {
     userId,
     accountId: uuidv4(),
     accountType: request.accountType,
     balance: request.initialDeposit,
-    createdOn: ''
+    createdOn: `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
   }
 }
