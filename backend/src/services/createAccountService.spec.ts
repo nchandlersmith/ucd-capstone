@@ -67,9 +67,11 @@ describe('createAccountService', () => {
       jest.useFakeTimers('modern')
       jest.setSystemTime(timestamp)
     })
+
     afterAll(() => {
       jest.useRealTimers()
     })
+
     it('should build an create account item', () => {
       const request: CreateCapstoneAccountRequest = {
         accountType: 'some account type',
@@ -84,6 +86,7 @@ describe('createAccountService', () => {
       }
 
       const result = buildCreateAccountItem(request, expectedCreateAccountItem.userId)
+
       expect(result).toStrictEqual(expectedCreateAccountItem)
     })
   })
