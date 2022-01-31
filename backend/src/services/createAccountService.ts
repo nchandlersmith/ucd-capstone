@@ -11,7 +11,7 @@ export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAcco
   }
 }
 
-export function buildCreateAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
+export function buildCreateCapstoneAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
   const date = new Date()
   return {
     userId,

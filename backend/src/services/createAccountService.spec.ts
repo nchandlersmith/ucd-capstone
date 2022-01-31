@@ -1,4 +1,4 @@
-import {buildCreateAccountItem, validateCreateCapstoneAccountRequest} from "./createAccountService";
+import {buildCreateCapstoneAccountItem, validateCreateCapstoneAccountRequest} from "./createAccountService";
 import {ModelValidationError} from "../exceptions/exceptions";
 import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
 
@@ -85,7 +85,7 @@ describe('createAccountService', () => {
         balance: request.initialDeposit
       }
 
-      const result = buildCreateAccountItem(request, expectedCreateAccountItem.userId)
+      const result = buildCreateCapstoneAccountItem(request, expectedCreateAccountItem.userId)
 
       expect(result).toStrictEqual(expectedCreateAccountItem)
     })

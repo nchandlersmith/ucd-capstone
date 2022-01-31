@@ -5,7 +5,7 @@ import { CreateCapstoneAccountRequest } from '../models/createAccountModels'
 import {storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
-import {buildCreateAccountItem, validateCreateCapstoneAccountRequest} from "../services/createAccountService";
+import {buildCreateCapstoneAccountItem, validateCreateCapstoneAccountRequest} from "../services/createAccountService";
 import {errorResponseBuilder, responseBuilder} from "../utils/responseUtils";
 
 const logger = createLogger('Create Account')
@@ -19,7 +19,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   try {
     const userId = authorize(authHeader)
     validateCreateCapstoneAccountRequest(request)
-    const item = buildCreateAccountItem(request, userId)
+    const item = buildCreateCapstoneAccountItem(request, userId)
     await storeCapstoneAccount(item)
     response = responseBuilder(201, {message: 'Success'})
   } catch(err: unknown) {
