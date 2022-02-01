@@ -1,6 +1,7 @@
 import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
 import {ModelValidationError} from "../exceptions/exceptions";
 import {v4 as uuidv4} from 'uuid'
+import { DateTime } from 'luxon'
 
 export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAccountRequest) {
   if(!request.accountType || request.accountType === ' ') {
@@ -12,12 +13,11 @@ export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAcco
 }
 
 export function buildCreateCapstoneAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
-  const date = new Date()
   return {
     userId,
     accountId: uuidv4(),
     accountType: request.accountType,
     balance: request.initialDeposit,
-    createdOn: `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+    createdOn: `${DateTime.now().toISO()}`
   }
 }

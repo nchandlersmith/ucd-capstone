@@ -1,5 +1,6 @@
 import {deleteAccountByUserAndAccountIds, findAllAccountsForUserId} from '../utils/dynamoUtils';
 import { CreateCapstoneAccountDao } from '../../backend/src/models/createAccountModels'
+import { DateTime } from 'luxon'
 
 const axios = require('axios')
 
@@ -25,6 +26,7 @@ describe('create account', () => {
       'initialDeposit': 12345
     }
     const uuidv4RegEx = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+    const now = DateTime.now().toMillis()
 
     const result = await axios.post(accountsUrl, createAccountData, {headers})
 
@@ -37,7 +39,10 @@ describe('create account', () => {
     expect(newAccount.accountId).toMatch(uuidv4RegEx)
     expect(newAccount.accountType).toBe(createAccountData.accountType)
     expect(newAccount.balance).toBe(createAccountData.initialDeposit)
-    expect(newAccount.createdOn).toBeTruthy()
+    const accountTimestamp = DateTime.fromISO(newAccount.createdOn).toMillis()
+    const timestampsDeltaTolerance = 1000 //milliseconds
+    const timestampDelta = Math.abs(accountTimestamp - now)
+    expect(timestampDelta).toBeLessThan(timestampsDeltaTolerance)
   })
 
   it('should reject requests when accountType is missing', async () => {

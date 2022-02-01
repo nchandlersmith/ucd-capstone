@@ -1,6 +1,7 @@
 import {buildCreateCapstoneAccountItem, validateCreateCapstoneAccountRequest} from "./createAccountService";
 import {ModelValidationError} from "../exceptions/exceptions";
 import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/createAccountModels";
+import {DateTime} from "luxon";
 
 const expectedAccountId = 'abc123'
 jest.mock('uuid', () => ({ v4: () => expectedAccountId}))
@@ -81,13 +82,21 @@ describe('createAccountService', () => {
         userId: 'some user id',
         accountId: expectedAccountId,
         accountType: request.accountType,
-        createdOn: '1/30/2022 7:40:11 PM',
+        createdOn: DateTime.now().toISO(),
         balance: request.initialDeposit
       }
 
       const result = buildCreateCapstoneAccountItem(request, expectedCreateAccountItem.userId)
 
-      expect(result).toStrictEqual(expectedCreateAccountItem)
+      expect(result.userId).toEqual(expectedCreateAccountItem.userId)
+      expect(result.accountId).toEqual(expectedCreateAccountItem.accountId)
+      expect(result.accountType).toEqual(expectedCreateAccountItem.accountType)
+      expect(result.balance).toEqual(expectedCreateAccountItem.balance)
+      const timestampDifference =
+        Math.abs(
+        DateTime.fromISO(result.createdOn).toMillis()
+           - DateTime.fromISO(expectedCreateAccountItem.createdOn).toMillis())
+      expect(timestampDifference).toBeLessThan(100)
     })
   })
 })
