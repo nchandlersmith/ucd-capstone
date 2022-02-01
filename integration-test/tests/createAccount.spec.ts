@@ -1,4 +1,5 @@
-import {deleteAccountByUserAndAccountIds, findAllAccountsForUserId} from "../utils/dynamoUtils";
+import {deleteAccountByUserAndAccountIds, findAllAccountsForUserId} from '../utils/dynamoUtils';
+import { CreateCapstoneAccountDao } from '../../backend/src/models/createAccountModels'
 
 const axios = require('axios')
 
@@ -21,17 +22,22 @@ describe('create account', () => {
   it('should create an account', async () => {
     const createAccountData = {
       'accountType': 'Integration Test',
-      'initialDeposit': 3145
+      'initialDeposit': 12345
     }
+    const uuidv4RegEx = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
 
     const result = await axios.post(accountsUrl, createAccountData, {headers})
 
     const dynamoResponse = await findAllAccountsForUserId(userId)
     expect(result.status).toEqual(201)
     expect(dynamoResponse.Items?.length).toEqual(1)
-    expect(dynamoResponse.Items[0].accountId).toBeTruthy()
-    expect(dynamoResponse.Items[0].accountType).toBe(createAccountData.accountType)
-    expect(dynamoResponse.Items[0].balance).toBe(createAccountData.initialDeposit)
+    const newAccount: CreateCapstoneAccountDao = dynamoResponse.Items[0]
+    expect(newAccount.userId).toEqual(userId)
+    expect(newAccount.accountId.length).toEqual(36)
+    expect(newAccount.accountId).toMatch(uuidv4RegEx)
+    expect(newAccount.accountType).toBe(createAccountData.accountType)
+    expect(newAccount.balance).toBe(createAccountData.initialDeposit)
+    expect(newAccount.createdOn).toBeTruthy()
   })
 
   it('should reject requests when accountType is missing', async () => {
