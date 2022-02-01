@@ -18,14 +18,17 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   let response: APIGatewayProxyResult;
   try {
     const userId = authorize(authHeader)
-    validateCreateCapstoneAccountRequest(request)
-    const item = buildCreateCapstoneAccountItem(request, userId)
-    await storeCapstoneAccount(item)
+    await createCapstoneAccount(request, userId)
     response = responseBuilder(201, {message: 'Success'})
   } catch(err: unknown) {
     const error = err as Error
     response = errorResponseBuilder(error);
   }
   return response
+}
+
+async function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string) {
+  validateCreateCapstoneAccountRequest(request)
+  storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
 }
 
