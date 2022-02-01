@@ -92,11 +92,8 @@ describe('createAccountService', () => {
       expect(result.accountId).toEqual(expectedCreateAccountItem.accountId)
       expect(result.accountType).toEqual(expectedCreateAccountItem.accountType)
       expect(result.balance).toEqual(expectedCreateAccountItem.balance)
-      const timestampDifference =
-        Math.abs(
-        DateTime.fromISO(result.createdOn).toMillis()
-           - DateTime.fromISO(expectedCreateAccountItem.createdOn).toMillis())
-      expect(timestampDifference).toBeLessThan(100)
+      // Freezing the system time above allows checking equality of time stamps.
+      expect(result.createdOn).toEqual(expectedCreateAccountItem.createdOn)
     })
   })
 })
