@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nchandlersmith/ucd-capstone#readme",
   "dependencies": {
     "aws-xray-sdk": "^3.3.4",
+    "luxon": "^2.3.0",
     "serverless-plugin-tracing": "^2.0.0",
     "source-map-support": "^0.5.21",
     "uuid": "^8.3.2",
@@ -31,7 +32,7 @@
     "aws-sdk": "^2.1053.0",
     "aws-sdk-mock": "^5.5.1",
     "jest": "^27.4.7",
-    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-dynamodb-local": "^1.0.2",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-offline": "^8.3.1",
     "serverless-webpack": "^5.6.0",
