@@ -8,6 +8,7 @@ describe('createAccountService', () => {
   describe('createCapstoneAccount', () => {
     const invalidAccountTypeErrorMessage = /^Invalid account type on account create request. Request denied.$/
     const invalidInitialDepositErrorMessage = /^Invalid initial deposit on account create request. Request denied.$/
+    const invalidUserIdErrorMessage = /^User authorized. Userid not recognized. Request denied.$/
     const userId = 'some user'
 
     it('should throw error when accountType is null', () => {
@@ -60,5 +61,22 @@ describe('createAccountService', () => {
       expect(() => createCapstoneAccount(request, userId)).toThrow(invalidInitialDepositErrorMessage)
     })
 
+    it('should throw error when userId is null', () => {
+      const validRequest = {accountType: 'Test Checking', initialDeposit: 12345}
+      expect(() => createCapstoneAccount(validRequest, null)).toThrow(Error)
+      expect(() => createCapstoneAccount(validRequest, null)).toThrow(invalidUserIdErrorMessage)
+    })
+
+    it('should throw error when userId is undefined', () => {
+      const validRequest = {accountType: 'Test Checking', initialDeposit: 12345}
+      expect(() => createCapstoneAccount(validRequest, undefined)).toThrow(Error)
+      expect(() => createCapstoneAccount(validRequest, undefined)).toThrow(invalidUserIdErrorMessage)
+    })
+
+    it('should throw error when userId is empty string', () => {
+      const validRequest = {accountType: 'Test Checking', initialDeposit: 12345}
+      expect(() => createCapstoneAccount(validRequest, undefined)).toThrow(Error)
+      expect(() => createCapstoneAccount(validRequest, undefined)).toThrow(invalidUserIdErrorMessage)
+    })
   })
 })

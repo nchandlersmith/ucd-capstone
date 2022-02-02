@@ -4,8 +4,12 @@ import {v4 as uuidv4} from 'uuid'
 import { DateTime } from 'luxon'
 import {storeCapstoneAccount} from "../persistence/dbClient";
 
-export function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string) {
+export function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string | null | undefined) {
   validateCreateCapstoneAccountRequest(request)
+  if (!userId) {
+    throw new Error('User authorized. Userid not recognized. Request denied.')
+  }
+
   storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
 }
 
