@@ -2,8 +2,14 @@ import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/
 import {ModelValidationError} from "../exceptions/exceptions";
 import {v4 as uuidv4} from 'uuid'
 import { DateTime } from 'luxon'
+import {storeCapstoneAccount} from "../persistence/dbClient";
 
-export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAccountRequest) {
+export function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string) {
+  validateCreateCapstoneAccountRequest(request)
+  storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
+}
+
+function validateCreateCapstoneAccountRequest(request: CreateCapstoneAccountRequest) {
   if(!request.accountType || request.accountType === ' ') {
     throw new ModelValidationError('Invalid account type on account create request. Request denied.')
   }
@@ -12,7 +18,7 @@ export function validateCreateCapstoneAccountRequest(request: CreateCapstoneAcco
   }
 }
 
-export function buildCreateCapstoneAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
+function buildCreateCapstoneAccountItem(request: CreateCapstoneAccountRequest, userId: string): CreateCapstoneAccountDao {
   return {
     userId,
     accountId: uuidv4(),

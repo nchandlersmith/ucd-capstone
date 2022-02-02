@@ -2,10 +2,9 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateCapstoneAccountRequest } from '../models/createAccountModels'
-import {storeCapstoneAccount} from '../persistence/dbClient'
 import { createLogger } from '../utils/logger'
 import {authorize} from "../utils/authUtils";
-import {buildCreateCapstoneAccountItem, validateCreateCapstoneAccountRequest} from "../services/createAccountService";
+import {createCapstoneAccount} from "../services/createAccountService";
 import {errorResponseBuilder, responseBuilder} from "../utils/responseUtils";
 
 const logger = createLogger('Create Account')
@@ -25,10 +24,5 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     response = errorResponseBuilder(error);
   }
   return response
-}
-
-async function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string) {
-  validateCreateCapstoneAccountRequest(request)
-  storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
 }
 
