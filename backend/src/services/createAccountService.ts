@@ -5,10 +5,10 @@ import { DateTime } from 'luxon'
 import {storeCapstoneAccount} from "../persistence/dbClient";
 
 export function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string | null | undefined) {
-  validateCreateCapstoneAccountRequest(request)
   if (!userId) {
     throw new Error('User authorized. Userid not recognized. Request denied.')
   }
+  validateCreateCapstoneAccountRequest(request)
 
   storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
 }
