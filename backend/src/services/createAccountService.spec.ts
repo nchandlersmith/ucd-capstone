@@ -10,16 +10,6 @@ describe('createAccountService', () => {
     const invalidInitialDepositErrorMessage = /^Invalid initial deposit on account create request. Request denied.$/
     const userId = 'some user'
 
-    beforeAll(() => {
-      const timestamp = 1643593211687
-      jest.useFakeTimers('modern')
-      jest.setSystemTime(timestamp)
-    })
-
-    afterAll(() => {
-      jest.useRealTimers()
-    })
-
     it('should throw error when accountType is null', () => {
       const request = {accountType: null, initialDeposit: 0}
       // @ts-ignore
