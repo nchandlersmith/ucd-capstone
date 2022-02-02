@@ -27,7 +27,7 @@ describe('getAccounts.handler', function() {
       createdOn: 'some time date stamp'
     }
 
-    AWSMock.mock('DynamoDB.DocumentClient', 'query', (params, callback: Function) => {
+    AWSMock.mock('DynamoDB.DocumentClient', 'query', (params: any, callback: Function) => {
       callback(null, {Items: [expectedAccount]})
     })
 
