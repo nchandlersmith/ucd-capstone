@@ -4,7 +4,8 @@
   "description": "Lambda backend for Udacity Cloud Developer capstone project",
   "main": "handler.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "offline": "sls offline start"
   },
   "repository": {
     "type": "git",
