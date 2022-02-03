@@ -9,6 +9,7 @@ describe('getAccounts.handler', function() {
     'access-control-allow-origin': '*'
   }
   const userId = 'Authorized Unit Test User'
+  const unauthorizedUserErrorMessage = "Unauthorized user"
 
   beforeEach(function() {
     AWSMock.setSDKInstance(AWS)
@@ -45,7 +46,7 @@ describe('getAccounts.handler', function() {
   })
 
   it('should reject requests missing auth header', async function() {
-    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+    const expectedErrorMessage = JSON.stringify({error: unauthorizedUserErrorMessage})
 
     const response = await handler(buildEvent({headers:{}}))
 
@@ -55,7 +56,7 @@ describe('getAccounts.handler', function() {
   })
 
   it('should reject unauthorized users', async function () {
-    const expectedErrorMessage = JSON.stringify({error: 'User not authorized'})
+    const expectedErrorMessage = JSON.stringify({error: unauthorizedUserErrorMessage})
 
     const response = await handler(buildEvent({headers: {Authorization: `Bearer ${userId}`}}))
 
