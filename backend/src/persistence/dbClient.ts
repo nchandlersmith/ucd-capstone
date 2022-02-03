@@ -23,10 +23,22 @@ export function createDynamoDBClient() {
   return new XAWS.DynamoDB.DocumentClient()
 }
 
-export function storeCapstoneAccount(item: CreateCapstoneAccountDao) {
+export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   logger.info(`Adding item to ${capstoneAccountsTableName}`)
   createDynamoDBClient().put({
     TableName: capstoneAccountsTableName,
     Item: item
   }).promise()
+}
+
+export async function getAccountsByUser(userId: string) {
+  const dynamoClient = createDynamoDBClient()
+  const params = {
+    TableName: capstoneAccountsTableName,
+    ExpressionAttributeValues: {':userId': userId},
+    KeyConditionExpression: 'userId = :userId'
+  }
+  const dbResult = await dynamoClient.query(params).promise()
+  logger.info(`Number of items returned from DynamoDB: ${dbResult.Items?.length}`)
+  return dbResult;
 }

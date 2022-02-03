@@ -2,7 +2,7 @@ import {CreateCapstoneAccountDao, CreateCapstoneAccountRequest} from "../models/
 import {ModelValidationError} from "../exceptions/exceptions";
 import {v4 as uuidv4} from 'uuid'
 import { DateTime } from 'luxon'
-import {storeCapstoneAccount} from "../persistence/dbClient";
+import {insertCapstoneAccount} from "../persistence/dbClient";
 
 export function createCapstoneAccount(request: CreateCapstoneAccountRequest, userId: string | null | undefined) {
   if (!userId) {
@@ -10,7 +10,7 @@ export function createCapstoneAccount(request: CreateCapstoneAccountRequest, use
   }
   validateCreateCapstoneAccountRequest(request)
 
-  storeCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
+  insertCapstoneAccount(buildCreateCapstoneAccountItem(request, userId))
 }
 
 function validateCreateCapstoneAccountRequest(request: CreateCapstoneAccountRequest) {
