@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock'
-import { handler } from './getAccounts'
+import { handler } from './getAccountsLambda'
 import { CapstoneAccount, GetCapstoneAccountsResponse } from '../models/getAccountsModels'
 import { buildEvent } from '../testUtils/eventUtils'
 

@@ -61,7 +61,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
   GetAccounts:
-    handler: src/lambdas/getAccounts.handler
+    handler: src/lambdas/getAccountsLambda.handler
     events:
       - http:
           method: get
