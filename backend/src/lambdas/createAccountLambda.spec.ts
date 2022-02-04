@@ -2,16 +2,14 @@ import { handler } from "./createAccountLambda"
 import { CreateCapstoneAccountRequest } from "../models/createAccountModels"
 import { buildEvent } from '../testUtils/eventUtils'
 
-const createAccountServiceMock = (mock: any) => {
-  jest.mock('../services/CreateAccountService', () => {
-    return {
-      createCapstoneAccount: mock
-    }
-  })
-}
+
+jest.mock('../services/CreateAccountService', () => {
+  return {
+    createCapstoneAccount: () => {}
+  }
+})
 
 describe('createAccount', () => {
-  createAccountServiceMock(() => {})
   const expectedHeaders = {
     'access-control-allow-origin': '*'
   }
