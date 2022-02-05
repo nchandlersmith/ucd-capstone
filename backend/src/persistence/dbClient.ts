@@ -2,6 +2,7 @@ import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import {createLogger} from "../utils/logger";
 import {CreateCapstoneAccountDao} from "../models/createAccountModels";
+import {DocumentClient} from "aws-sdk/clients/dynamodb";
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('DynamoDB Utils')
@@ -31,7 +32,7 @@ export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   }).promise()
 }
 
-export async function getAccountsByUser(userId: string) {
+export async function getAccountsByUser(userId: string): Promise<DocumentClient.QueryOutput> {
   const dynamoClient = createDynamoDBClient()
   const params = {
     TableName: capstoneAccountsTableName,
