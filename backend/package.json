@@ -5,7 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "test": "jest",
-    "offline": "sls offline start"
+    "start": "sls offline start"
   },
   "repository": {
     "type": "git",
