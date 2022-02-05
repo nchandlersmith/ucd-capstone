@@ -2,7 +2,7 @@ import {createCapstoneAccount} from "./createAccountService";
 import {ModelValidationError} from "../exceptions/exceptions";
 
 const expectedAccountId = 'abc123'
-jest.mock('uuid', () => ({v4: () => expectedAccountId}))
+jest.mock('uuid', () => ({v4: jest.fn(() => expectedAccountId)}))
 
 describe('createAccountService', () => {
   describe('createCapstoneAccount', () => {

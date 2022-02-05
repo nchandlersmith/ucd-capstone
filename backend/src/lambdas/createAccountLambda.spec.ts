@@ -5,7 +5,7 @@ import { buildEvent } from '../testUtils/eventUtils'
 
 jest.mock('../services/CreateAccountService', () => {
   return {
-    createCapstoneAccount: () => {}
+    createCapstoneAccount: jest.fn(() => {})
   }
 })
 

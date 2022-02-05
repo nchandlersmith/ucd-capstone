@@ -12,9 +12,11 @@ const expectedAccountsList: CapstoneAccount[] = [{
 
   jest.mock("../persistence/dbClient", () => {
     return {
-      getAccountsByUser: jest.fn(() => {return {Items: expectedAccountsList}})
+      getAccountsByUser: jest.fn(() => {return Promise.resolve({Items: expectedAccountsList})})
     }
   })
+
+Promise.resolve()
 
 describe('getAccountsService.ts', () => {
   it('should return a list of accounts', async () => {
