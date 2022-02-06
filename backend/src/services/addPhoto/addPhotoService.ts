@@ -8,18 +8,19 @@ export function addPhoto(request: AddPhotoRequest) {
 }
 
 function isRequiredFieldsPresent(request: AddPhotoRequest) {
-  const fields: (keyof AddPhotoRequest)[] = ["emailAddress", "label", "vendor"]
-  fields.forEach((field) => {
+  const requiredFields: (keyof AddPhotoRequest)[] = ["emailAddress", "label", "vendor", "service"]
+  requiredFields.forEach((field) => {
     if(!request[field]) {
-      throw new ModelValidationError(`${errorTranslations[field]} invalid. Request denied.`)
+      throw new ModelValidationError(`${requiredFieldsErrorTranslations[field]} invalid. Request denied.`)
     }
   })
 }
 
-const errorTranslations: AddPhotoRequest = {
+const requiredFieldsErrorTranslations: AddPhotoRequest = {
   emailAddress: "Email address",
   label: "Label",
-  service: "", vendor: "Vendor"
+  service: "Service",
+  vendor: "Vendor"
 }
 
 function validateEmailAddress(request: AddPhotoRequest) {

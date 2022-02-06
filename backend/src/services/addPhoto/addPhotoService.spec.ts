@@ -134,5 +134,31 @@ describe("addPhotosService", () => {
         expect(() => addPhoto(requestWithBadVendor)).toThrow(/^Vendor invalid. Request denied.$/)
       })
     })
+
+    describe("vendor service validation", () => {
+      it("should throw error when service is null", () => {
+        const requestWithBadService = {...request, service: null}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadService)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadService)).toThrow(/^Service invalid. Request denied.$/)
+      })
+    })
+
+    it("should throw error when service is undefined", () => {
+      const requestWithBadService = {...request, service: undefined}
+      // @ts-ignore
+      expect(() => addPhoto(requestWithBadService)).toThrow(ModelValidationError)
+      // @ts-ignore
+      expect(() => addPhoto(requestWithBadService)).toThrow(/^Service invalid. Request denied.$/)
+    })
+
+    it("should throw error when service is empty", () => {
+      const requestWithBadService = {...request, service: ""}
+      // @ts-ignore
+      expect(() => addPhoto(requestWithBadService)).toThrow(ModelValidationError)
+      // @ts-ignore
+      expect(() => addPhoto(requestWithBadService)).toThrow(/^Service invalid. Request denied.$/)
+    })
   })
 })
