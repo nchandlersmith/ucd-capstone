@@ -3,10 +3,12 @@ import * as AWSXRay from 'aws-xray-sdk'
 import {createLogger} from "../utils/logger";
 import {CreateCapstoneAccountDao} from "../models/createAccountModels";
 import {DocumentClient} from "aws-sdk/clients/dynamodb";
+import {AddPhotoDao} from "../models/addPhotoModels";
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('DynamoDB Utils')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
+const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
 
 export function createDynamoDBClient() {
   const isDynamoDBLocal = process.env.LOCAL_DYNAMODB
@@ -42,4 +44,9 @@ export async function getAccountsByUser(userId: string): Promise<DocumentClient.
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Number of items returned from DynamoDB: ${dbResult.Items?.length}`)
   return dbResult;
+}
+
+export async function insertPhoto(item: AddPhotoDao) {
+  logger.info(`Adding photo to ${photosTableName}`)
+  return {}
 }
