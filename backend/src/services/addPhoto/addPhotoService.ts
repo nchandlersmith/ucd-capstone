@@ -2,17 +2,13 @@ import {AddPhotoRequest } from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 
 export function addPhoto(request: AddPhotoRequest) {
-  simpleFieldValidation(request)
+  isRequiredFieldsPresent(request)
   validateEmailAddress(request)
-  validateLabel(request);
-  if(request.vendor === null || request.vendor === undefined || request.vendor === "") {
-    throw new ModelValidationError("Vendor invalid. Request denied.")
-  }
   return ""
 }
 
-function simpleFieldValidation(request: AddPhotoRequest) {
-  const fields: (keyof AddPhotoRequest)[] = ["emailAddress", "label"]
+function isRequiredFieldsPresent(request: AddPhotoRequest) {
+  const fields: (keyof AddPhotoRequest)[] = ["emailAddress", "label", "vendor"]
   fields.forEach((field) => {
     if(!request[field]) {
       throw new ModelValidationError(`${errorTranslations[field]} invalid. Request denied.`)
@@ -23,12 +19,12 @@ function simpleFieldValidation(request: AddPhotoRequest) {
 const errorTranslations: AddPhotoRequest = {
   emailAddress: "Email address",
   label: "Label",
-  service: "", vendor: ""
+  service: "", vendor: "Vendor"
 }
 
 function validateEmailAddress(request: AddPhotoRequest) {
-  if (!request.emailAddress
-    || isMissingUsername(request.emailAddress)
+  if (
+    isMissingUsername(request.emailAddress)
     || isMissingAt(request.emailAddress)
     || isMissingDomainName(request.emailAddress)
     || isMissingDot(request.emailAddress)
@@ -55,10 +51,4 @@ function isMissingDot(emailAddress: string) {
 
 function isMissingDomain(emailAddress: string) {
   return emailAddress.split("@")[1].split(".")[1].length === 0
-}
-
-function validateLabel(request: AddPhotoRequest) {
-  if (!request.label) {
-    throw new ModelValidationError("Label invalid. Request denied.")
-  }
 }
