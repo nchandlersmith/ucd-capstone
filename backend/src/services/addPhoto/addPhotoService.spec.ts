@@ -108,5 +108,15 @@ describe("addPhotosService", () => {
         expect(() => addPhoto(requestWithBadLabel)).toThrow(/^Label invalid. Request denied.$/)
       })
     })
+
+    describe("vendor validation", () => {
+      it("should throw error when vendor is null", () => {
+        const requestWithBadVendor = {...request, vendor: null}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(/^Vendor invalid. Request denied.$/)
+      })
+    })
   })
 })

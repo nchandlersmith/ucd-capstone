@@ -1,10 +1,29 @@
-import {AddPhotoRequest} from "../../models/addPhotoModels"
+import {AddPhotoRequest } from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 
 export function addPhoto(request: AddPhotoRequest) {
+  simpleFieldValidation(request)
   validateEmailAddress(request)
   validateLabel(request);
+  if(request.vendor === null) {
+    throw new ModelValidationError("Vendor invalid. Request denied.")
+  }
   return ""
+}
+
+function simpleFieldValidation(request: AddPhotoRequest) {
+  const fields: (keyof AddPhotoRequest)[] = ["emailAddress", "label"]
+  fields.forEach((field) => {
+    if(!request[field]) {
+      throw new ModelValidationError(`${errorTranslations[field]} invalid. Request denied.`)
+    }
+  })
+}
+
+const errorTranslations: AddPhotoRequest = {
+  emailAddress: "Email address",
+  label: "Label",
+  service: "", vendor: ""
 }
 
 function validateEmailAddress(request: AddPhotoRequest) {
