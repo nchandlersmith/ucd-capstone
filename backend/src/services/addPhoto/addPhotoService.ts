@@ -12,7 +12,7 @@ function validateRequest(request: AddPhotoRequest) {
 }
 
 function isRequiredFieldsPresent(request: AddPhotoRequest) {
-  const requiredFields: (keyof AddPhotoRequest)[] = ["emailAddress", "label", "vendor", "service"]
+  const requiredFields = Object.keys(request) as (keyof AddPhotoRequest)[]
   requiredFields.forEach((field) => {
     if(!request[field]) {
       throw new ModelValidationError(`${requiredFieldsErrorTranslations[field]} invalid. Request denied.`)
