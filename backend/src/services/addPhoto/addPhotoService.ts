@@ -1,16 +1,20 @@
-import {AddPhotoRequest} from "../../models/addPhotoModels";
-import {ModelValidationError} from "../../exceptions/exceptions";
+import {AddPhotoRequest} from "../../models/addPhotoModels"
+import {ModelValidationError} from "../../exceptions/exceptions"
 
 export function addPhoto(request: AddPhotoRequest) {
+  validateEmailAddress(request);
+  return ""
+}
+
+function validateEmailAddress(request: AddPhotoRequest) {
   if (!request.emailAddress
-      || isMissingUsername(request.emailAddress)
-      || isMissingAt(request.emailAddress)
-      || isMissingDomainName(request.emailAddress)
-      || isMissingDot(request.emailAddress)
-      || isMissingDomain(request.emailAddress)) {
+    || isMissingUsername(request.emailAddress)
+    || isMissingAt(request.emailAddress)
+    || isMissingDomainName(request.emailAddress)
+    || isMissingDot(request.emailAddress)
+    || isMissingDomain(request.emailAddress)) {
     throw new ModelValidationError("Email address invalid. Request denied.")
   }
-  return ""
 }
 
 function isMissingUsername(emailAddress: string) {
