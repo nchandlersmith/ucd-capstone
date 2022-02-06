@@ -82,5 +82,31 @@ describe("addPhotosService", () => {
       // @ts-ignore
       expect(() => addPhoto(requestWithBadEmail)).toThrow(/^Email address invalid. Request denied.$/)
     })
+
+    describe("label validation", () => {
+      it("should throw error when label is null", () => {
+        const requestWithBadLabel = {...request, label: null}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(/^Label invalid. Request denied.$/)
+      })
+
+      it("should throw error when label is undefined", () => {
+        const requestWithBadLabel = {...request, label: undefined}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(/^Label invalid. Request denied.$/)
+      })
+
+      it("should throw error when label is empty", () => {
+        const requestWithBadLabel = {...request, label: ""}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadLabel)).toThrow(/^Label invalid. Request denied.$/)
+      })
+    })
   })
 })

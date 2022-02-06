@@ -2,7 +2,8 @@ import {AddPhotoRequest} from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 
 export function addPhoto(request: AddPhotoRequest) {
-  validateEmailAddress(request);
+  validateEmailAddress(request)
+  validateLabel(request);
   return ""
 }
 
@@ -22,7 +23,7 @@ function isMissingUsername(emailAddress: string) {
 }
 
 function isMissingAt(emailAddress: string) {
-  return !emailAddress.includes("@");
+  return !emailAddress.includes("@")
 }
 
 function isMissingDomainName(emailAddress: string) {
@@ -35,4 +36,10 @@ function isMissingDot(emailAddress: string) {
 
 function isMissingDomain(emailAddress: string) {
   return emailAddress.split("@")[1].split(".")[1].length === 0
+}
+
+function validateLabel(request: AddPhotoRequest) {
+  if (!request.label) {
+    throw new ModelValidationError("Label invalid. Request denied.")
+  }
 }
