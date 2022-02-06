@@ -14,7 +14,7 @@ const s3 = new XAWS.S3({
 const logger = createLogger('S3Client')
 
 // I took this from project 4
-export function createdPutSignedUrl(photoId: string): string {
+export function createPutSignedUrl(photoId: string): string {
   logger.info(`Creating putObject signed url for ${photoId}`)
   return s3.getSignedUrl('putObject' ,{
     Bucket: photoBucketName,
@@ -23,7 +23,7 @@ export function createdPutSignedUrl(photoId: string): string {
   })
 }
 
-export function createdGetSignedUrl(photoId: string): string {
+export function createGetSignedUrl(photoId: string): string {
   logger.info(`Creating getObject signed url for ${photoId}`)
   return s3.getSignedUrl('getObject' ,{
     Bucket: photoBucketName,

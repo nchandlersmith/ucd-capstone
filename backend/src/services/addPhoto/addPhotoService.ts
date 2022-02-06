@@ -1,9 +1,13 @@
 import {AddPhotoRequest } from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
+import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client";
+import {v4 as uuidv4} from "uuid"
 
 export function addPhoto(request: AddPhotoRequest) {
   validateRequest(request);
-  return ""
+  const photoId = uuidv4()
+  createPutSignedUrl(photoId)
+  createGetSignedUrl(photoId)
 }
 
 function validateRequest(request: AddPhotoRequest) {

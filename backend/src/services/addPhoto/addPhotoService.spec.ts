@@ -1,6 +1,22 @@
 import {addPhoto} from "./addPhotoService"
 import {AddPhotoRequest} from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
+import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
+
+const uuid = "some valid uuid"
+
+jest.mock("uuid", () => {
+  return {
+    v4: () => uuid
+  }
+ })
+
+jest.mock("../../persistence/s3Client", () => {
+  return {
+    createPutSignedUrl: jest.fn(() => {}),
+    createGetSignedUrl: jest.fn(() => {})
+  }
+})
 
 describe("addPhotosService", () => {
   const request: AddPhotoRequest = {
@@ -9,6 +25,19 @@ describe("addPhotosService", () => {
     service: "selected service",
     vendor: "selected vendor"
   }
+
+  describe("add photo feature", () => {
+
+    it("should create pre-signed url to put photo in s3", () => {
+      addPhoto(request)
+      expect(createPutSignedUrl).toHaveBeenCalledWith(uuid)
+    })
+
+    it("should create pre-signed url to get photo from s3", () => {
+      addPhoto(request)
+      expect(createGetSignedUrl).toHaveBeenCalledWith(uuid)
+    })
+  })
 
   describe("email validation", () => {
     it("should throw error when emailAddress is null", () => {
