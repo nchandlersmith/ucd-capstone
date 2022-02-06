@@ -2,9 +2,13 @@ import {AddPhotoRequest } from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 
 export function addPhoto(request: AddPhotoRequest) {
+  validateRequest(request);
+  return ""
+}
+
+function validateRequest(request: AddPhotoRequest) {
   isRequiredFieldsPresent(request)
   validateEmailAddress(request)
-  return ""
 }
 
 function isRequiredFieldsPresent(request: AddPhotoRequest) {
