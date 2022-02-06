@@ -5,7 +5,7 @@ export function addPhoto(request: AddPhotoRequest) {
   simpleFieldValidation(request)
   validateEmailAddress(request)
   validateLabel(request);
-  if(request.vendor === null) {
+  if(request.vendor === null || request.vendor === undefined || request.vendor === "") {
     throw new ModelValidationError("Vendor invalid. Request denied.")
   }
   return ""

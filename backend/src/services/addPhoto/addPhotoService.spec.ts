@@ -117,6 +117,22 @@ describe("addPhotosService", () => {
         // @ts-ignore
         expect(() => addPhoto(requestWithBadVendor)).toThrow(/^Vendor invalid. Request denied.$/)
       })
+
+      it("should throw error when vendor is undefined", () => {
+        const requestWithBadVendor = {...request, vendor: undefined}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(/^Vendor invalid. Request denied.$/)
+      })
+
+      it("should throw error when vendor is empty", () => {
+        const requestWithBadVendor = {...request, vendor: ""}
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestWithBadVendor)).toThrow(/^Vendor invalid. Request denied.$/)
+      })
     })
   })
 })
