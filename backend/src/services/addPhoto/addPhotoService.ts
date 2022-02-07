@@ -1,13 +1,27 @@
-import {AddPhotoRequest } from "../../models/addPhotoModels"
+import {AddPhotoDao, AddPhotoRequest} from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
-import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client";
+import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
 import {v4 as uuidv4} from "uuid"
+import {insertPhoto} from "../../persistence/dbClient"
+import {DateTime} from "luxon"
 
-export function addPhoto(request: AddPhotoRequest) {
+export function addPhoto(request: AddPhotoRequest, userId: string) {
   validateRequest(request);
+  const addedOn = DateTime.now().toISO()
   const photoId = uuidv4()
-  createPutSignedUrl(photoId)
-  createGetSignedUrl(photoId)
+  const putPhotoUrl = createPutSignedUrl(photoId)
+  const getPhotoUrl = createGetSignedUrl(photoId)
+  const photoItem: AddPhotoDao = {
+    addedOn,
+    getPhotoUrl,
+    photoId,
+    photoLabel: request.label,
+    putPhotoUrl,
+    userId,
+    vendorId: request.vendor,
+    vendorService: request.service
+  }
+  insertPhoto(photoItem)
 }
 
 function validateRequest(request: AddPhotoRequest) {

@@ -1,9 +1,13 @@
 import {addPhoto} from "./addPhotoService"
-import {AddPhotoRequest} from "../../models/addPhotoModels"
+import {AddPhotoDao, AddPhotoRequest} from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
+import {insertPhoto} from "../../persistence/dbClient";
+import {DateTime} from "luxon";
 
 const uuid = "some uuid"
+const getUrl = "https://get.com"
+const putUrl = "https://put.com"
 
 jest.mock("uuid", () => {
   return {
@@ -13,8 +17,14 @@ jest.mock("uuid", () => {
 
 jest.mock("../../persistence/s3Client", () => {
   return {
-    createPutSignedUrl: jest.fn(() => {}),
-    createGetSignedUrl: jest.fn(() => {})
+    createPutSignedUrl: jest.fn(() => putUrl),
+    createGetSignedUrl: jest.fn(() => getUrl)
+  }
+})
+
+jest.mock("../../persistence/dbClient", () => {
+  return {
+    insertPhoto: jest.fn(() => {})
   }
 })
 
@@ -25,17 +35,44 @@ describe("addPhotosService", () => {
     service: "selected service",
     vendor: "selected vendor"
   }
+  const userId = "Test User"
 
   describe("add photo feature", () => {
 
+    beforeAll(() => {
+      const timestamp = 1643593211687
+      jest.useFakeTimers('modern')
+      jest.setSystemTime(timestamp)
+    })
+
+    afterAll(() => {
+      jest.useRealTimers()
+    })
+
     it("should create pre-signed url to put photo in s3", () => {
-      addPhoto(request)
+      addPhoto(request, userId)
       expect(createPutSignedUrl).toHaveBeenCalledWith(uuid)
     })
 
     it("should create pre-signed url to get photo from s3", () => {
-      addPhoto(request)
+      addPhoto(request, userId)
       expect(createGetSignedUrl).toHaveBeenCalledWith(uuid)
+    })
+
+    it("should insert photo item ", () => {
+      const photoItem: AddPhotoDao = {
+        addedOn: DateTime.now().toISO(),
+        getPhotoUrl: getUrl,
+        photoId: uuid,
+        photoLabel: request.label,
+        putPhotoUrl: putUrl,
+        userId,
+        vendorId: request.vendor,
+        vendorService: request.service
+
+      }
+      addPhoto(request, userId)
+      expect(insertPhoto).toHaveBeenCalledWith(photoItem)
     })
   })
 
