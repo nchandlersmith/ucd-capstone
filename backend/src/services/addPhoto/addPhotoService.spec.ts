@@ -20,7 +20,7 @@ jest.mock("../../persistence/s3Client", () => {
 
 describe("addPhotosService", () => {
   const request: AddPhotoRequest = {
-    emailAddress: "string@string.string",
+    emailAddress: "test@example.com",
     label: "photo label",
     service: "selected service",
     vendor: "selected vendor"
