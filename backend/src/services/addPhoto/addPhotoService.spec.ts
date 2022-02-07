@@ -3,7 +3,7 @@ import {AddPhotoRequest} from "../../models/addPhotoModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
 
-const uuid = "some valid uuid"
+const uuid = "some uuid"
 
 jest.mock("uuid", () => {
   return {
