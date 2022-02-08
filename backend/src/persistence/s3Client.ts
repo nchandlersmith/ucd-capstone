@@ -5,7 +5,7 @@ import {createLogger} from "../utils/logger";
 const XAWS = AWSXRAY.captureAWS(AWS)
 
 // TODO: tests would be nice
-const photoBucketName = process.env.PHOTO_BUCKET_NAME  || ''
+const photosS3BucketName = process.env.PHOTOS_S3_BUCKET_NAME  || ''
 const urlExpirationInSeconds = parseInt(process.env.SIGNED_URL_EXPIRATION_IN_SECONDS || '300')
 
 const s3 = new XAWS.S3({
@@ -17,7 +17,7 @@ const logger = createLogger('S3Client')
 export function createPutSignedUrl(photoId: string): string {
   logger.info(`Creating putObject signed url for ${photoId}`)
   return s3.getSignedUrl('putObject' ,{
-    Bucket: photoBucketName,
+    Bucket: photosS3BucketName,
     Key: photoId,
     Expires: urlExpirationInSeconds
   })
@@ -26,7 +26,7 @@ export function createPutSignedUrl(photoId: string): string {
 export function createGetSignedUrl(photoId: string): string {
   logger.info(`Creating getObject signed url for ${photoId}`)
   return s3.getSignedUrl('getObject' ,{
-    Bucket: photoBucketName,
+    Bucket: photosS3BucketName,
     Key: photoId,
     Expires: urlExpirationInSeconds
   })

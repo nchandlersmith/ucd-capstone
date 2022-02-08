@@ -16,6 +16,8 @@ provider:
   region: ${opt:region, 'us-east-1'}
   environment:
     CAPSTONE_ACCOUNTS_TABLE_NAME: CapstoneAccounts-${self:provider.stage}
+    PHOTOS_TABLE_NAME: Photos-${self:provider.stage}
+    PHOTOS_S3_BUCKET_NAME: Photos-${self:provider.stage}
   logs:
     restApi: true
   tracing:
@@ -60,6 +62,21 @@ functions:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
+  AddPhoto:
+    handler: src/lambdas/addPhoto/addPhotoLambda.handler
+    events:
+      - http:
+          method: post
+          path: photos
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: !GetAtt PhotosTable.Arn
+    environment:
+      SIGNED_URL_EXPIRATION_IN_SECONDS: 300
   GetAccounts:
     handler: src/lambdas/getAccountsLambda.handler
     events:
@@ -96,3 +113,48 @@ resources:
         - AttributeName: accountId
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
+  PhotosTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.PHOTOS_TABLE_NAME}
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: photoId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: photoId
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+  PhotosBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:provider.environment.PHOTOS_S3_BUCKET_NAME}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+              - PUT
+            AllowedOrigins:
+              - "*"
+            MaxAge: 3000
+  PhotosBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: PhotosBucketPolicy
+        Version: "2012-10-17"
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+            Resource: !Join
+              - "/"
+              - - !GetAtt PhotosBucket.Arn
+                - "*"
+      Bucket: !Ref PhotosBucket
