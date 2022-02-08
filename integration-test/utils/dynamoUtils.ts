@@ -2,6 +2,27 @@ const AWS = require('aws-sdk')
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 
 const accountsTableName = 'CapstoneAccounts-dev'
+const photosTableName = "Photos-dev"
+
+export async function findAllPhotosByUserId(userId: string) {
+  return createDocumentClient().query({
+    TableName: photosTableName,
+    ExpressionAttributeValues: {
+      ":userId": userId
+    },
+    KeyConditionExpression: "userId = :userId"
+  }).promise()
+}
+
+export async function deletePhotosByUserAndPhotoIds(photoId: string, userId: string) {
+  return createDocumentClient().delete({
+    TableName: photosTableName,
+    Key: {
+      "photoId": photoId,
+      "userId": userId
+    }
+  }).promise()
+}
 
 export function deleteAccountByUserAndAccountIds(accountId: string, userId: string) {
   return createDocumentClient().delete({

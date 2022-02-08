@@ -59,7 +59,7 @@ describe("addPhotosService", () => {
       expect(createGetSignedUrl).toHaveBeenCalledWith(uuid)
     })
 
-    it("should insert photo item ", () => {
+    it("should insert photo item ", async () => {
       const photoItem: AddPhotoDao = {
         addedOn: DateTime.now().toISO(),
         getPhotoUrl: getUrl,
