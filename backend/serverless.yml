@@ -17,7 +17,7 @@ provider:
   environment:
     CAPSTONE_ACCOUNTS_TABLE_NAME: CapstoneAccounts-${self:provider.stage}
     PHOTOS_TABLE_NAME: Photos-${self:provider.stage}
-    PHOTOS_S3_BUCKET_NAME: Photos-${self:provider.stage}
+    PHOTOS_S3_BUCKET_NAME: photos-707863247739-${self:provider.stage}
   logs:
     restApi: true
   tracing:
@@ -75,6 +75,11 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: !GetAtt PhotosTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
     environment:
       SIGNED_URL_EXPIRATION_IN_SECONDS: 300
   GetAccounts:
