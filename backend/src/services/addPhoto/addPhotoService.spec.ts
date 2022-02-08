@@ -77,6 +77,14 @@ describe("addPhotosService", () => {
   })
 
   describe("email validation", () => {
+    it("should throw error when emailAddress is missing", () => {
+      const {emailAddress, ...requestMissingEmail} = request
+      // @ts-ignore
+      expect(() => addPhoto(requestMissingEmail)).toThrow(ModelValidationError)
+      // @ts-ignore
+      expect(() => addPhoto(requestMissingEmail)).toThrow(/^Email address missing. Request denied.$/)
+    })
+
     it("should throw error when emailAddress is null", () => {
       const requestWithBadEmail = {...request, emailAddress: null}
       // @ts-ignore
@@ -150,6 +158,13 @@ describe("addPhotosService", () => {
     })
 
     describe("label validation", () => {
+      it("should throw error when label is missing", () => {
+        const {label, ...requestMissingLabel} = request
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingLabel)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingLabel)).toThrow(/^Label missing. Request denied.$/)
+      })
       it("should throw error when label is null", () => {
         const requestWithBadLabel = {...request, label: null}
         // @ts-ignore
@@ -176,6 +191,13 @@ describe("addPhotosService", () => {
     })
 
     describe("vendor validation", () => {
+      it("should throw error when vendor is missing", () => {
+        const {vendor, ...requestMissingVendor} = request
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingVendor)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingVendor)).toThrow(/^Vendor missing. Request denied.$/)
+      })
       it("should throw error when vendor is null", () => {
         const requestWithBadVendor = {...request, vendor: null}
         // @ts-ignore
@@ -202,6 +224,13 @@ describe("addPhotosService", () => {
     })
 
     describe("vendor service validation", () => {
+      it("should throw error when vendor service is missing", () => {
+        const {service, ...requestMissingService} = request
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingService)).toThrow(ModelValidationError)
+        // @ts-ignore
+        expect(() => addPhoto(requestMissingService)).toThrow(/^Service missing. Request denied.$/)
+      })
       it("should throw error when service is null", () => {
         const requestWithBadService = {...request, service: null}
         // @ts-ignore

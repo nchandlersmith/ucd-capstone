@@ -4,8 +4,14 @@ import {AddPhotoRequest} from "../../backend/src/models/addPhotoModels"
 const axios = require("axios")
 
 describe("add photo", () => {
-  const userId = "Integration Test User"
+  const userId = "Ghost Rider"
   const photosUrl = "http://localhost:3000/dev/photos"
+  const request: AddPhotoRequest = {
+    label: "Integration Test Label",
+    vendor: "Integration Vendor",
+    service: "Integration Service",
+    emailAddress: "test@int.com"
+  }
 
   afterEach(async () => {
     const dynamoResponse = await findAllPhotosByUserId(userId)
@@ -14,19 +20,10 @@ describe("add photo", () => {
         .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
     }
   })
-  it("should create an account", async () => {
-    const photoData: AddPhotoRequest = {
-      label: "Integration Test Label",
-      vendor: "Integration Vendor",
-      service: "Integration Service",
-      emailAddress: "test@int.com"
-    }
+  it("should reject requests with missing email address", async () => {
+    const {emailAddress, ...requestWithMissingEmailAddress} = request
+    const result = await axios.post(photosUrl, JSON.stringify(requestWithMissingEmailAddress))
 
-    const result = await axios.post(photosUrl, JSON.stringify(photoData))
-
-    const dynamoResponse = await findAllPhotosByUserId(userId)
-
-    expect(result.status).toEqual(201)
-    expect(dynamoResponse.Items.length).toEqual(1)
+    expect(result.status).toEqual(400)
   })
 })
