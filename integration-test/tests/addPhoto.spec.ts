@@ -24,6 +24,7 @@ describe("add photo", () => {
     const {emailAddress, ...requestWithMissingEmailAddress} = request
     const result = await axios.post(photosUrl, JSON.stringify(requestWithMissingEmailAddress)).catch((error: any) => error)
 
+    // TODO: check the other things
     expect(result.response.status).toEqual(400)
   })
 })
