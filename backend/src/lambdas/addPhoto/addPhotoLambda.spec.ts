@@ -2,6 +2,12 @@ import {AddPhotoRequest} from "../../models/addPhotoModels";
 import {handler} from "./addPhotoLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
 
+jest.mock("../../services/addPhoto/addPhotoService", () => {
+  return {
+    addPhoto: () => {}
+  }
+})
+
 describe("getPhotoLambda", () => {
   const request: AddPhotoRequest = {
     emailAddress: "user@test.com",
@@ -18,16 +24,6 @@ describe("getPhotoLambda", () => {
 
     const response = await handler(buildEvent({body: JSON.stringify(request)}))
     expect(response.statusCode).toEqual(201)
-    expect(response.headers).toStrictEqual(expectedHeaders)
-    expect(response.body).toStrictEqual(expectedResponseBody)
-  })
-
-  it("should reject requests missing emailAddress in body", async () => {
-    const {emailAddress, ...requestMissingEmailAddress} = request
-    const expectedResponseBody = JSON.stringify({error: "Email address missing. Request denied."})
-
-    const response = await handler(buildEvent({body: JSON.stringify(requestMissingEmailAddress)}))
-    expect(response.statusCode).toEqual(400)
     expect(response.headers).toStrictEqual(expectedHeaders)
     expect(response.body).toStrictEqual(expectedResponseBody)
   })
