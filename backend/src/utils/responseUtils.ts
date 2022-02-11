@@ -1,5 +1,4 @@
 import {APIGatewayProxyResult} from "aws-lambda";
-import {AuthError} from "../exceptions/exceptions";
 
 const requiredHeaders = {
   'access-control-allow-origin': '*'
