@@ -9,7 +9,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   logger.info(`Received add photo request ${event.body}.`)
   try {
     const request = event.body ? JSON.parse(event.body) : {}
-    addPhoto(request, "Ghost Rider")
+    await addPhoto(request, "Ghost Rider")
   } catch(err: any) {
     const error  = err as Error
     return errorResponseBuilder(error)

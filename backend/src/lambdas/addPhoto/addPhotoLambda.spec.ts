@@ -25,6 +25,7 @@ describe("getPhotoLambda", () => {
     const response = await handler(buildEvent({body: JSON.stringify(request)}))
     expect(response.statusCode).toEqual(201)
     expect(response.headers).toStrictEqual(expectedHeaders)
+    // TODO: should return upload url
     expect(response.body).toStrictEqual(expectedResponseBody)
   })
 })

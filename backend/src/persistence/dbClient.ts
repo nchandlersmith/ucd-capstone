@@ -46,10 +46,10 @@ export async function getAccountsByUser(userId: string): Promise<DocumentClient.
   return dbResult;
 }
 
-export function insertPhoto(item: AddPhotoDao) {
+export async function insertPhoto(item: AddPhotoDao) {
   logger.info(`Adding photo item: ${JSON.stringify(item)} to ${photosTableName}`)
-  createDynamoDBClient().put({
+  await createDynamoDBClient().put({
     TableName: photosTableName,
     Item: item
-  }).promise()
+  }).promise().catch(error => logger.error(`Error adding item to Dynamo: ${JSON.stringify(error)}`))
 }
