@@ -20,7 +20,7 @@ describe('create account', () => {
     }
   })
 
-  it('should create an account', async () => {
+  it.skip('should create an account', async () => {
     const createAccountData = {
       'accountType': 'Integration Test',
       'initialDeposit': 12345
