@@ -44,6 +44,8 @@ describe("add photo", () => {
     expect(actualTimestampDelta).toBeLessThan(timestampDeltaTolerance)
     expect(actual.getPhotoUrl).toContain("https://photos-707863247739-dev.s3.amazonaws.com")
     expect(actual.getPhotoUrl).toContain(actual.photoId)
+    expect(actual.putPhotoUrl).toContain("https://photos-707863247739-dev.s3.amazonaws.com")
+    expect(actual.putPhotoUrl).toContain(actual.photoId)
     expect(result.status).toEqual(201)
   })
 
