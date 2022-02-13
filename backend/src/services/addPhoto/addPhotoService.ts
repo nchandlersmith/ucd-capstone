@@ -50,21 +50,14 @@ function verifyFieldsPopulated(request: AddPhotoRequest) {
     logger.info(`Testing ${field} on request gives ${request[field]}`)
     if(!request[field]) {
       logger.error(`Add photo request missing field: ${field}`)
-      throw new ModelValidationError(`${requiredFieldsErrorTranslations[field]} invalid. Request denied.`)
+      throw new ModelValidationError(`Add photo request contains invalid ${field}. Request denied.`)
     }
   })
-}
-
-const requiredFieldsErrorTranslations: AddPhotoRequest = {
-  emailAddress: "Email address",
-  label: "Label",
-  service: "Service",
-  vendor: "Vendor"
 }
 
 function validateEmailAddress(request: AddPhotoRequest) {
   const validEmail = /^\S+@\S+\.\S+$/
   if (!validEmail.test(request.emailAddress)) {
-    throw new ModelValidationError("Email address invalid. Request denied.")
+    throw new ModelValidationError("Add photo request contains invalid emailAddress. Request denied.")
   }
 }

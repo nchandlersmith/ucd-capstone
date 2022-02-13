@@ -78,6 +78,8 @@ describe("addPhotosService", () => {
   })
 
   describe("email validation", () => {
+    const emailAddressInvalidRegex = /^Add photo request contains invalid emailAddress. Request denied.$/
+
     it("should throw error when emailAddress is missing", async () => {
       const {emailAddress, ...requestMissingEmail} = request
       // @ts-ignore
@@ -91,7 +93,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when emailAddress is undefined", async () => {
@@ -99,7 +101,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when emailAddress is empty", async () => {
@@ -107,7 +109,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when emailAddress local part is missing", async () => {
@@ -115,7 +117,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when emailAddress username is missing", async () => {
@@ -123,7 +125,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when emailAddress @ is missing", async () => {
@@ -131,7 +133,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when domain name is missing", async () => {
@@ -139,7 +141,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when . is missing", async () => {
@@ -147,7 +149,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
 
     it("should throw error when domain is missing", async () => {
@@ -155,11 +157,13 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(emailAddressInvalidRegex)
     })
   })
 
   describe("vendor validation", () => {
+    const vendorInvalidRegex = /^Add photo request contains invalid vendor. Request denied.$/
+
     it("should throw error when vendor is missing", async () => {
       const {vendor, ...requestMissingVendor} = request
       // @ts-ignore
@@ -172,7 +176,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(vendorInvalidRegex)
     })
 
     it("should throw error when vendor is undefined", async () => {
@@ -180,7 +184,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(vendorInvalidRegex)
     })
 
     it("should throw error when vendor is empty", async () => {
@@ -188,11 +192,13 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(vendorInvalidRegex)
     })
   })
 
   describe("label validation", () => {
+    const labelInvalidRegex = /^Add photo request contains invalid label. Request denied.$/
+
     it("should throw error when label is missing", async () => {
       const {label, ...requestMissingLabel} = request
       // @ts-ignore
@@ -205,7 +211,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(labelInvalidRegex)
     })
 
     it("should throw error when label is undefined", async () => {
@@ -213,7 +219,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(labelInvalidRegex)
     })
 
     it("should throw error when label is empty", async () => {
@@ -221,11 +227,13 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(labelInvalidRegex)
     })
   })
 
   describe("vendor service validation", () => {
+    const invalidServiceRegex = /^Add photo request contains invalid service. Request denied.$/
+
     it("should throw error when vendor service is missing", async () => {
       const {service, ...requestMissingService} = request
       // @ts-ignore
@@ -238,7 +246,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
+      await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(invalidServiceRegex)
     })
 
   it("should throw error when service is undefined", async () => {
@@ -246,7 +254,7 @@ describe("addPhotosService", () => {
     // @ts-ignore
     await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
     // @ts-ignore
-    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(invalidServiceRegex)
   })
 
   it("should throw error when service is empty", async () => {
@@ -254,7 +262,7 @@ describe("addPhotosService", () => {
     // @ts-ignore
     await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
     // @ts-ignore
-    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(invalidServiceRegex)
   })
   })
 })
