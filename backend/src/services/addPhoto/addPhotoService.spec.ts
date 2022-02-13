@@ -157,104 +157,104 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadEmail)).rejects.toThrow(/^Email address invalid. Request denied.$/)
     })
+  })
 
-    describe("vendor validation", () => {
-      it("should throw error when vendor is missing", async () => {
-        const {vendor, ...requestMissingVendor} = request
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(/^Add photo request is missing vendor. Request denied.$/)
-      })
-      it("should throw error when vendor is null", async () => {
-        const requestWithBadVendor = {...request, vendor: null}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
-      })
-
-      it("should throw error when vendor is undefined", async () => {
-        const requestWithBadVendor = {...request, vendor: undefined}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
-      })
-
-      it("should throw error when vendor is empty", async () => {
-        const requestWithBadVendor = {...request, vendor: ""}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
-      })
+  describe("vendor validation", () => {
+    it("should throw error when vendor is missing", async () => {
+      const {vendor, ...requestMissingVendor} = request
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(/^Add photo request is missing vendor. Request denied.$/)
+    })
+    it("should throw error when vendor is null", async () => {
+      const requestWithBadVendor = {...request, vendor: null}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
     })
 
-    describe("label validation", () => {
-      it("should throw error when label is missing", async () => {
-        const {label, ...requestMissingLabel} = request
-        // @ts-ignore
-        await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(/^Add photo request is missing label. Request denied.$/)
-      })
-      it("should throw error when label is null", async () => {
-        const requestWithBadLabel = {...request, label: null}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
-      })
-
-      it("should throw error when label is undefined", async () => {
-        const requestWithBadLabel = {...request, label: undefined}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
-      })
-
-      it("should throw error when label is empty", async () => {
-        const requestWithBadLabel = {...request, label: ""}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
-      })
+    it("should throw error when vendor is undefined", async () => {
+      const requestWithBadVendor = {...request, vendor: undefined}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
     })
 
-    describe("vendor service validation", () => {
-      it("should throw error when vendor service is missing", async () => {
-        const {service, ...requestMissingService} = request
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(/^Add photo request is missing service. Request denied.$/)
-      })
-      it("should throw error when service is null", async () => {
-        const requestWithBadService = {...request, service: null}
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
-        // @ts-ignore
-        await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
-      })
+    it("should throw error when vendor is empty", async () => {
+      const requestWithBadVendor = {...request, vendor: ""}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadVendor)).rejects.toThrow(/^Vendor invalid. Request denied.$/)
+    })
+  })
+
+  describe("label validation", () => {
+    it("should throw error when label is missing", async () => {
+      const {label, ...requestMissingLabel} = request
+      // @ts-ignore
+      await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(/^Add photo request is missing label. Request denied.$/)
+    })
+    it("should throw error when label is null", async () => {
+      const requestWithBadLabel = {...request, label: null}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
     })
 
-    it("should throw error when service is undefined", async () => {
-      const requestWithBadService = {...request, service: undefined}
+    it("should throw error when label is undefined", async () => {
+      const requestWithBadLabel = {...request, label: undefined}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
+    })
+
+    it("should throw error when label is empty", async () => {
+      const requestWithBadLabel = {...request, label: ""}
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestWithBadLabel)).rejects.toThrow(/^Label invalid. Request denied.$/)
+    })
+  })
+
+  describe("vendor service validation", () => {
+    it("should throw error when vendor service is missing", async () => {
+      const {service, ...requestMissingService} = request
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(ModelValidationError)
+      // @ts-ignore
+      await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(/^Add photo request is missing service. Request denied.$/)
+    })
+    it("should throw error when service is null", async () => {
+      const requestWithBadService = {...request, service: null}
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
       await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
     })
 
-    it("should throw error when service is empty", async () => {
-      const requestWithBadService = {...request, service: ""}
-      // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
-      // @ts-ignore
-      await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
-    })
+  it("should throw error when service is undefined", async () => {
+    const requestWithBadService = {...request, service: undefined}
+    // @ts-ignore
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
+    // @ts-ignore
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
+  })
+
+  it("should throw error when service is empty", async () => {
+    const requestWithBadService = {...request, service: ""}
+    // @ts-ignore
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(ModelValidationError)
+    // @ts-ignore
+    await expect(async () => await addPhoto(requestWithBadService)).rejects.toThrow(/^Service invalid. Request denied.$/)
+  })
   })
 })
