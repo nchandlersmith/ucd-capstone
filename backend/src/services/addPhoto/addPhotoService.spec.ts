@@ -83,7 +83,7 @@ describe("addPhotosService", () => {
       // @ts-ignore
       await expect(async () => await addPhoto(requestMissingEmail)).rejects.toThrow(ModelValidationError)
       // @ts-ignore
-      await expect(async () => await addPhoto(requestMissingEmail)).rejects.toThrow(/^Email address missing. Request denied.$/)
+      await expect(async () => await addPhoto(requestMissingEmail)).rejects.toThrow(/^Add photo request is missing emailAddress. Request denied.$/)
     })
 
     it("should throw error when emailAddress is null", async () => {
@@ -164,7 +164,7 @@ describe("addPhotosService", () => {
         // @ts-ignore
         await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(ModelValidationError)
         // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(/^Vendor missing. Request denied.$/)
+        await expect(async () => await addPhoto(requestMissingVendor)).rejects.toThrow(/^Add photo request is missing vendor. Request denied.$/)
       })
       it("should throw error when vendor is null", async () => {
         const requestWithBadVendor = {...request, vendor: null}
@@ -197,7 +197,7 @@ describe("addPhotosService", () => {
         // @ts-ignore
         await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(ModelValidationError)
         // @ts-ignore
-        await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(/^Label missing. Request denied.$/)
+        await expect(async () => addPhoto(requestMissingLabel)).rejects.toThrow(/^Add photo request is missing label. Request denied.$/)
       })
       it("should throw error when label is null", async () => {
         const requestWithBadLabel = {...request, label: null}
@@ -230,7 +230,7 @@ describe("addPhotosService", () => {
         // @ts-ignore
         await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(ModelValidationError)
         // @ts-ignore
-        await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(/^Service missing. Request denied.$/)
+        await expect(async () => await addPhoto(requestMissingService)).rejects.toThrow(/^Add photo request is missing service. Request denied.$/)
       })
       it("should throw error when service is null", async () => {
         const requestWithBadService = {...request, service: null}

@@ -39,7 +39,7 @@ function verifyRequiredFieldsPresent(request: AddPhotoRequest) {
   const presentFields = Object.keys(request)
   requiredFields.forEach((field) => {
     if(!presentFields.includes(field)) {
-      throw new ModelValidationError(`${requiredFieldsErrorTranslations[field]} missing. Request denied.`)
+      throw new ModelValidationError(`Add photo request is missing ${field}. Request denied.`)
     }
   })
 }
