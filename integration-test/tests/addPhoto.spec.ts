@@ -28,7 +28,7 @@ describe("add photo", () => {
     const expectedAddedOn = DateTime.now().toMillis()
     const timestampDeltaTolerance = 2000
 
-    const  result = await axios.post(photosUrl, JSON.stringify(request))
+    await axios.post(photosUrl, JSON.stringify(request))
 
     const dynamoResponse = await findAllPhotosByUserId(userId)
     expect(dynamoResponse.Items?.length).toEqual(1)
@@ -46,7 +46,6 @@ describe("add photo", () => {
     expect(actual.getPhotoUrl).toContain(actual.photoId)
     expect(actual.putPhotoUrl).toContain("https://photos-707863247739-dev.s3.amazonaws.com")
     expect(actual.putPhotoUrl).toContain(actual.photoId)
-    expect(result.status).toEqual(201)
   })
 
   it("should reject requests with missing email address", async () => {
@@ -55,5 +54,6 @@ describe("add photo", () => {
 
     // TODO: check the other things
     expect(result.response.status).toEqual(400)
+    expect(result.response.data).toEqual({"error": "Add photo request is missing emailAddress. Request denied."})
   })
 })
