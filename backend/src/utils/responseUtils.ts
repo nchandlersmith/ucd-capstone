@@ -1,15 +1,20 @@
 import {APIGatewayProxyResult} from "aws-lambda";
+import {createLogger} from "./logger";
+
+const logger = createLogger("responseUtils")
 
 const requiredHeaders = {
   'access-control-allow-origin': '*'
 }
 
 export const responseBuilder = (statusCode: number, body: any): APIGatewayProxyResult => {
-  return {
+  const response: APIGatewayProxyResult = {
     statusCode: statusCode,
     headers: requiredHeaders,
     body: JSON.stringify(body)
   }
+  logger.info(`Building response: ${JSON.stringify(response)}`)
+  return response
 }
 
 export const errorResponseBuilder = (err: Error | string): APIGatewayProxyResult => {
