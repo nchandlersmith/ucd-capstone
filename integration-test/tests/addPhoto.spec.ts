@@ -14,6 +14,14 @@ describe("add photo", () => {
     emailAddress: "test@int.com"
   }
 
+  beforeAll(async () => {
+    const dynamoResponse = await findAllPhotosByUserId(userId)
+    for (const item of dynamoResponse.Items) {
+      await deletePhotosByUserAndPhotoIds(item.photoId, userId)
+        .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
+    }
+  })
+
   afterEach(async () => {
     const dynamoResponse = await findAllPhotosByUserId(userId)
     for (const item of dynamoResponse.Items) {
