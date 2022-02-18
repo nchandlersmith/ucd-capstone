@@ -2,9 +2,10 @@ import {AddPhotoRequest} from "../../models/addPhotoModels";
 import {handler} from "./addPhotoLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
 
+const putSignedUrl = "https://put.com"
 jest.mock("../../services/addPhoto/addPhotoService", () => {
   return {
-    addPhoto: () => {}
+    addPhoto: () => {return putSignedUrl}
   }
 })
 
@@ -20,12 +21,11 @@ describe("getPhotoLambda", () => {
   }
 
   it("should return success", async () => {
-    const expectedResponseBody = JSON.stringify({message: "Success"})
+    const expectedResponseBody = JSON.stringify({putPhotoSignedUrl: putSignedUrl})
 
     const response = await handler(buildEvent({body: JSON.stringify(request)}))
     expect(response.statusCode).toEqual(201)
     expect(response.headers).toStrictEqual(expectedHeaders)
-    // TODO: should return upload url
     expect(response.body).toStrictEqual(expectedResponseBody)
   })
 })

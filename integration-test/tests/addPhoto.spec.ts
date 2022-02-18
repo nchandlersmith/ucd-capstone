@@ -55,6 +55,8 @@ describe("add photo", () => {
     expect(actual.putPhotoUrl).toContain("https://photos-707863247739-dev.s3.amazonaws.com")
     expect(actual.putPhotoUrl).toContain(actual.photoId)
     expect(result.status).toEqual(201)
+    expect(result.data.putPhotoSignedUrl).not.toBeNull()
+    expect(result.data.putPhotoSignedUrl).toEqual(actual.putPhotoUrl)
   })
 
   it("should reject requests with missing email address", async () => {

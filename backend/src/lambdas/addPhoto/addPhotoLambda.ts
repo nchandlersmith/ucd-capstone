@@ -7,12 +7,14 @@ const logger = createLogger("addPhotoLambda")
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Received add photo request ${event.body}.`)
+
+  let putPhotoSignedUrl
   try {
     const request = event.body ? JSON.parse(event.body) : {}
-    await addPhoto(request, "Ghost Rider")
+    putPhotoSignedUrl = await addPhoto(request, "Ghost Rider")
   } catch(err: any) {
     const error  = err as Error
     return errorResponseBuilder(error)
   }
-  return responseBuilder(201, {message: "Success"})
+  return responseBuilder(201, {putPhotoSignedUrl})
 }
