@@ -8,7 +8,7 @@ import {createLogger} from "../../utils/logger";
 
 const logger = createLogger("addPhotoService")
 
-export async function addPhoto(request: AddPhotoRequest, userId: string) {
+export async function addPhoto(request: AddPhotoRequest, userId: string): Promise<string> {
   validateRequest(request);
   const addedOn = DateTime.now().toISO()
   const photoId = uuidv4()
@@ -25,6 +25,8 @@ export async function addPhoto(request: AddPhotoRequest, userId: string) {
     vendorService: request.service
   }
   await insertPhoto(photoItem)
+
+  return putPhotoUrl
 }
 
 function validateRequest(request: AddPhotoRequest) {

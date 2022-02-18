@@ -75,6 +75,13 @@ describe("addPhotosService", () => {
       await addPhoto(request, userId)
       expect(insertPhoto).toHaveBeenCalledWith(photoItem)
     })
+
+    it('should return put item url', async() => {
+
+      const result = await addPhoto(request, userId)
+
+      expect(result).toEqual(putUrl)
+    })
   })
 
   describe("email validation", () => {
