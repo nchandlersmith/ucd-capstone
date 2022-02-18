@@ -4,3 +4,4 @@ backend/.serverless
 **/.webpack
 **/.vscode/
 **/.idea/
+**/.DS_Store
