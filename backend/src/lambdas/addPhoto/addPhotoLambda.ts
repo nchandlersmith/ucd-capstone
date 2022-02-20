@@ -2,6 +2,7 @@ import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda"
 import {createLogger} from "../../utils/logger"
 import {errorResponseBuilder, responseBuilder} from "../../utils/responseUtils"
 import {addPhoto} from "../../services/addPhoto/addPhotoService";
+import {authorize} from "../../utils/authUtils";
 
 const logger = createLogger("addPhotoLambda")
 
@@ -11,7 +12,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   let putPhotoSignedUrl
   try {
     const request = event.body ? JSON.parse(event.body) : {}
-    putPhotoSignedUrl = await addPhoto(request, "Ghost Rider")
+    const userId = authorize(event.headers.Authorization)
+    putPhotoSignedUrl = await addPhoto(request, userId)
   } catch(err: any) {
     const error  = err as Error
     return errorResponseBuilder(error)

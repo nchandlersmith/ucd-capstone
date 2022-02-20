@@ -6,6 +6,7 @@ const axios = require("axios")
 
 describe("add photo persistence", () => {
   const userId = "Ghost Rider"
+  const headers = {Authorization: `Bearer blarg-${userId}`}
   const photosUrl = "http://localhost:3000/dev/photos"
   const request: AddPhotoRequest = {
     label: "Integration Test Label",
@@ -36,7 +37,7 @@ describe("add photo persistence", () => {
     const expectedAddedOn = DateTime.now().toMillis()
     const timestampDeltaTolerance = 2000
 
-    await axios.post(photosUrl, JSON.stringify(request))
+    await axios.post(photosUrl, JSON.stringify(request),{headers})
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items?.length).toEqual(1)
@@ -59,7 +60,7 @@ describe("add photo persistence", () => {
   it("should not add photo data to db when email address is missing", async () => {
     const {emailAddress, ...requestWithMissingEmailAddress} = request
 
-    await axios.post(photosUrl, JSON.stringify(requestWithMissingEmailAddress)).catch((error: any) => error)
+    await axios.post(photosUrl, JSON.stringify(requestWithMissingEmailAddress), {headers}).catch((error: any) => error)
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items.length).toEqual(0)
@@ -68,7 +69,7 @@ describe("add photo persistence", () => {
   it("should not add photo data to db when label is missing", async () => {
     const {label, ...requestWithMissingLabel} = request
 
-    await axios.post(photosUrl, JSON.stringify(requestWithMissingLabel)).catch((error: any) => error)
+    await axios.post(photosUrl, JSON.stringify(requestWithMissingLabel), {headers}).catch((error: any) => error)
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items.length).toEqual(0)
@@ -77,7 +78,7 @@ describe("add photo persistence", () => {
   it("should not add photo data to db when vendor is missing", async () => {
     const {vendor, ...requestWithMissingVendor} = request
 
-    await axios.post(photosUrl, JSON.stringify(requestWithMissingVendor)).catch((error: any) => error)
+    await axios.post(photosUrl, JSON.stringify(requestWithMissingVendor), {headers}).catch((error: any) => error)
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items.length).toEqual(0)
@@ -86,7 +87,7 @@ describe("add photo persistence", () => {
   it("should not add photo data to db when service is missing", async () => {
     const {service, ...requestWithMissingService} = request
 
-    await axios.post(photosUrl, JSON.stringify(requestWithMissingService)).catch((error: any) => error)
+    await axios.post(photosUrl, JSON.stringify(requestWithMissingService), {headers}).catch((error: any) => error)
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items.length).toEqual(0)
