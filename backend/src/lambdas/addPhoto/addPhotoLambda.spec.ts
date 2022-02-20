@@ -16,7 +16,7 @@ jest.mock("../../persistence/dbClient", () => {
   }
 })
 
-describe("getPhotoLambda", () => {
+describe("add photo lambda responses", () => {
   const request: AddPhotoRequest = {
     emailAddress: "user@test.com",
     label: "photo label",
