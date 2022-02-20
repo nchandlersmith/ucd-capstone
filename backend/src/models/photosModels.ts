@@ -5,7 +5,7 @@ export interface AddPhotoRequest {
   emailAddress: string
 }
 
-export interface AddPhotoDao {
+export interface PhotoDao {
   userId: string,
   photoId: string,
   vendorId: string,

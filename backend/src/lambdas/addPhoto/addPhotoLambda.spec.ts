@@ -1,4 +1,4 @@
-import {AddPhotoRequest} from "../../models/addPhotoModels";
+import {AddPhotoRequest} from "../../models/photosModels";
 import {handler} from "./addPhotoLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
 

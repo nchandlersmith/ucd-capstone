@@ -3,7 +3,7 @@ import * as AWSXRay from 'aws-xray-sdk'
 import {createLogger} from "../utils/logger";
 import {CreateCapstoneAccountDao} from "../models/createAccountModels";
 import {DocumentClient} from "aws-sdk/clients/dynamodb";
-import {AddPhotoDao} from "../models/addPhotoModels";
+import {PhotoDao} from "../models/photosModels";
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('DynamoDB Utils')
@@ -46,10 +46,22 @@ export async function getAccountsByUser(userId: string): Promise<DocumentClient.
   return dbResult;
 }
 
-export async function insertPhoto(item: AddPhotoDao) {
+export async function insertPhoto(item: PhotoDao) {
   logger.info(`Adding photo item: ${JSON.stringify(item)} to ${photosTableName}`)
   await createDynamoDBClient().put({
     TableName: photosTableName,
     Item: item
   }).promise().catch(error => logger.error(`Error adding item to Dynamo: ${JSON.stringify(error)}`))
+}
+
+export async function getPhotosByUser(userId: string): Promise<PhotoDao[] | undefined> {
+  const dynamoClient = createDynamoDBClient()
+  const params = {
+    TableName: capstoneAccountsTableName,
+    ExpressionAttributeValues: {":userId": userId},
+    KeyConditionExpression: "userId = :userId"
+  }
+  const dbResult = await dynamoClient.query(params).promise()
+  logger.info(`Number of photos returned from DynamoDB: ${dbResult.Items?.length}`)
+  return dbResult?.Items as PhotoDao[]
 }

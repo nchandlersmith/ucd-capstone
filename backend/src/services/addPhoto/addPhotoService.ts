@@ -1,4 +1,4 @@
-import {AddPhotoDao, AddPhotoRequest} from "../../models/addPhotoModels"
+import {PhotoDao, AddPhotoRequest} from "../../models/photosModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
 import {v4 as uuidv4} from "uuid"
@@ -14,7 +14,7 @@ export async function addPhoto(request: AddPhotoRequest, userId: string): Promis
   const photoId = uuidv4()
   const putPhotoUrl = createPutSignedUrl(photoId)
   const getPhotoUrl = createGetSignedUrl(photoId)
-  const photoItem: AddPhotoDao = {
+  const photoItem: PhotoDao = {
     addedOn,
     getPhotoUrl,
     photoId,
