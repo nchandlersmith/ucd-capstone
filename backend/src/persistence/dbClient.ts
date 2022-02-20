@@ -10,7 +10,7 @@ const logger = createLogger('DynamoDB Utils')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
 const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
 
-export function createDynamoDBClient() {
+function createDynamoDBClient() {
   const isDynamoDBLocal = process.env.LOCAL_DYNAMODB
 
   if (isDynamoDBLocal) {
