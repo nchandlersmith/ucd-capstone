@@ -31,7 +31,7 @@ export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   createDynamoDBClient().put({
     TableName: capstoneAccountsTableName,
     Item: item
-  }).promise()
+  })
 }
 
 export async function getAccountsByUser(userId: string): Promise<DocumentClient.QueryOutput> {
