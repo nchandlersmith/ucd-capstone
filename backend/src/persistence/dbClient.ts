@@ -54,7 +54,7 @@ export async function insertPhoto(item: PhotoDao) {
   }).promise().catch(error => logger.error(`Error adding item to Dynamo: ${JSON.stringify(error)}`))
 }
 
-export async function getPhotosByUser(userId: string): Promise<PhotoDao[] | undefined> {
+export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   const dynamoClient = createDynamoDBClient()
   const params = {
     TableName: capstoneAccountsTableName,
@@ -63,5 +63,5 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[] | unde
   }
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Number of photos returned from DynamoDB: ${dbResult.Items?.length}`)
-  return dbResult?.Items as PhotoDao[]
+  return dbResult.Items as PhotoDao[]
 }
