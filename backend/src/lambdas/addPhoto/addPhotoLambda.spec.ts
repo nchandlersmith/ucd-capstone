@@ -92,4 +92,16 @@ describe("add photo lambda responses", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(expectedErrorMessage)
   })
+
+  it("should reject unauthorized users", async () => {
+    const userId = "Unauthorized user"
+    const unauthorizedUserHeader = {Authorization: `Bearer invalid-${userId}`}
+    const expectedErrorMessage = JSON.stringify({error: "Unauthorized user"})
+
+    const result = await handler(buildEvent({headers: unauthorizedUserHeader, body: JSON.stringify(request)}))
+
+    expect(result.statusCode).toEqual(403)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toStrictEqual(expectedErrorMessage)
+  })
 })
