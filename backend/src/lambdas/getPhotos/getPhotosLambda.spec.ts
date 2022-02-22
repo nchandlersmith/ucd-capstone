@@ -37,8 +37,12 @@ describe("getPhotosLambda", () => {
   })
 
   it("should reject requests missing the auth header", async () => {
+    const expectedErrorMessage = "Unauthorized user"
+
     const result =  await handler(buildEvent())
 
     expect(result.statusCode).toEqual(403)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toStrictEqual(JSON.stringify({error: expectedErrorMessage}))
   })
 })
