@@ -7,6 +7,7 @@ describe("get photos persistence", () => {
   const photosUrl = "http://localhost:3000/dev/photos"
   const userId = "Integration Test User"
   const otherUserId = "Ghost Rider"
+
   const myPhoto: PhotoDao = {
     addedOn: DateTime.now().toISO(),
     getPhotoUrl: "https://getMyPhoto.net",
@@ -17,6 +18,7 @@ describe("get photos persistence", () => {
     vendorId: "my vendor",
     vendorService: "my service selection"
   }
+
   const yourPhoto: PhotoDao = {
     addedOn: DateTime.now().toISO(),
     getPhotoUrl: "https://getYourPhoto.biz",
@@ -29,31 +31,13 @@ describe("get photos persistence", () => {
   }
 
   beforeAll(async () => {
-    const dynamoResponse = await findAllPhotosByUserId(userId)
-    for (const item of dynamoResponse.Items) {
-      await deletePhotosByUserAndPhotoIds(item.photoId, userId)
-        .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
-    }
-
-    const dynamoResponse2 = await findAllPhotosByUserId(otherUserId)
-    for (const item of dynamoResponse2.Items) {
-      await deletePhotosByUserAndPhotoIds(item.photoId, otherUserId)
-        .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
-    }
+    await deleteAllPhotosByUser(userId);
+    await deleteAllPhotosByUser(otherUserId)
   })
 
   afterEach(async () => {
-    const dynamoResponse = await findAllPhotosByUserId(userId)
-    for (const item of dynamoResponse.Items) {
-      await deletePhotosByUserAndPhotoIds(item.photoId, userId)
-        .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
-    }
-
-    const dynamoResponse2 = await findAllPhotosByUserId(otherUserId)
-    for (const item of dynamoResponse2.Items) {
-      await deletePhotosByUserAndPhotoIds(item.photoId, otherUserId)
-        .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
-    }
+    await deleteAllPhotosByUser(userId);
+    await deleteAllPhotosByUser(otherUserId)
   })
 
   it("should return photos owned by specified user", async () => {
@@ -92,3 +76,11 @@ describe("get photos persistence", () => {
     expect(result.response.data).toEqual({error: "Unauthorized user"})
   })
 })
+
+async function deleteAllPhotosByUser(userId: string) {
+  const dynamoResponse = await findAllPhotosByUserId(userId)
+  for (const item of dynamoResponse.Items) {
+    await deletePhotosByUserAndPhotoIds(item.photoId, userId)
+      .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
+  }
+}
