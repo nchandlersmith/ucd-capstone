@@ -5,7 +5,7 @@ import {DateTime} from "luxon"
 const axios = require("axios")
 
 describe("add photo persistence", () => {
-  const userId = "Ghost Rider"
+  const userId = "Integration Test User"
   const headers = {Authorization: `Bearer blarg-${userId}`}
   const photosUrl = "http://localhost:3000/dev/photos"
   const request: AddPhotoRequest = {
