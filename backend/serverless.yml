@@ -88,6 +88,7 @@ functions:
       - http:
           method: get
           path: photos
+          cors: true
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: "Allow"
