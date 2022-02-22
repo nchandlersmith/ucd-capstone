@@ -6,7 +6,8 @@ import {createDynamoDBClient} from "../utils/dynamoUtils";
 
 const logger = createLogger('dbClient')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
-const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
+// const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
+const photosTableName = "Whammy!"
 
 export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   logger.info(`Adding item to ${capstoneAccountsTableName}`)
@@ -33,7 +34,7 @@ export async function insertPhoto(item: PhotoDao) {
   await createDynamoDBClient().put({
     TableName: photosTableName,
     Item: item
-  }).promise().catch(error => logger.error(`Error adding item to Dynamo: ${JSON.stringify(error)}`))
+  }).promise()
 }
 
 export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
