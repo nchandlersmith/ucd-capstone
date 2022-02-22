@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {deleteAccountByUserAndAccountIds, putAccountInDynamo} from '../utils/dynamoUtils';
+import {deleteAccountByUserAndAccountIds, putAccount} from '../utils/dynamoUtils';
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 
 const userId = 'Ghost Rider'
@@ -22,8 +22,8 @@ describe('get account ', () => {
       balance: 24000,
       createdOn: 'ancient times'
     }
-    await putAccountInDynamo(userAccount);
-    await putAccountInDynamo(alienAccount);
+    await putAccount(userAccount);
+    await putAccount(alienAccount);
 
     const result = await axios.get(accountsUrl, {headers})
 

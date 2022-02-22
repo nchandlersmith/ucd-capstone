@@ -82,6 +82,23 @@ functions:
         Resource: "*"
     environment:
       SIGNED_URL_EXPIRATION_IN_SECONDS: 300
+  GetPhotos:
+    handler: src/lambdas/getPhotos/getPhotosLambda.handler
+    events:
+      - http:
+          method: get
+          path: photos
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: !GetAtt PhotosTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
   GetAccounts:
     handler: src/lambdas/getAccountsLambda.handler
     events:

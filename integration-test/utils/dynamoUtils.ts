@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
+import { PhotoDao } from '../../backend/src/models/photosModels'
 
 const accountsTableName = 'CapstoneAccounts-dev'
 const photosTableName = "Photos-dev"
@@ -44,8 +45,12 @@ export function findAllAccountsForUserId(userId: string){
   }).promise()
 }
 
-export function putAccountInDynamo(account: CapstoneAccount) {
+export function putAccount(account: CapstoneAccount) {
   createDocumentClient().put({TableName: accountsTableName, Item: account}).promise()
+}
+
+export async function putPhoto(photo: PhotoDao) {
+  await createDocumentClient().put({TableName: photosTableName, Item: photo}).promise()
 }
 
 function createDocumentClient() {

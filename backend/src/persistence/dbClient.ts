@@ -37,13 +37,13 @@ export async function insertPhoto(item: PhotoDao) {
 }
 
 export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
+  logger.info(`Getting photos for: ${userId}`)
   const dynamoClient = createDynamoDBClient()
   const params = {
-    TableName: capstoneAccountsTableName,
+    TableName: photosTableName,
     ExpressionAttributeValues: {":userId": userId},
     KeyConditionExpression: "userId = :userId"
   }
   const dbResult = await dynamoClient.query(params).promise()
-  logger.info(`Number of photos returned from DynamoDB: ${dbResult.Items?.length}`)
   return dbResult.Items as PhotoDao[]
 }
