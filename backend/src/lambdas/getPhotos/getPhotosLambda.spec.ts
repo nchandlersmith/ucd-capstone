@@ -35,4 +35,10 @@ describe("getPhotosLambda", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(JSON.stringify({photos: expectedPhotos}))
   })
+
+  it("should reject requests missing the auth header", async () => {
+    const result =  await handler(buildEvent())
+
+    expect(result.statusCode).toEqual(403)
+  })
 })
