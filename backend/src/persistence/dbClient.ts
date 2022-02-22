@@ -45,5 +45,6 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
     KeyConditionExpression: "userId = :userId"
   }
   const dbResult = await dynamoClient.query(params).promise()
+  logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
   return dbResult.Items as PhotoDao[]
 }

@@ -12,7 +12,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const user = authorize(event.headers.Authorization)
     logger.info(`Received request to get photos for ${user}`)
     photos = await getPhotos(user)
-    logger.info(`Found ${photos.length} photos`)
+    logger.info("Returning photos to user.")
   } catch (err) {
     const error  = err as Error
     return errorResponseBuilder(error)
