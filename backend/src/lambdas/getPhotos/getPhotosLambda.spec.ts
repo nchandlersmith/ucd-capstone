@@ -13,8 +13,9 @@ jest.mock("../../persistence/dbClient", () => {
 
 describe("getPhotosLambda", () => {
   const userId = "unit test user"
-  const headers = {Authorization: `Bearer blarg-${userId}`}
+  const authHeader = {Authorization: `Bearer blarg-${userId}`}
   const requiredHeaders = {"access-control-allow-origin": "*"}
+
   it("should return photo data", async () => {
     const expectedPhotos: PhotoPackage[] = [{
       addedOn: DateTime.now().toISO(),
@@ -28,7 +29,7 @@ describe("getPhotosLambda", () => {
     }];
     (getPhotosByUser as jest.Mock).mockImplementation(() => expectedPhotos)
 
-    const result = await handler(buildEvent({headers}))
+    const result = await handler(buildEvent({headers: authHeader}))
 
     expect(result.statusCode).toStrictEqual(201)
     expect(result.headers).toStrictEqual(requiredHeaders)
