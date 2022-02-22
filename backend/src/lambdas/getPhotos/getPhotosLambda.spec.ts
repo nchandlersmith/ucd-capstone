@@ -45,4 +45,16 @@ describe("getPhotosLambda", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(JSON.stringify({error: expectedErrorMessage}))
   })
+
+  it("should reject requests from unauthorized users", async () => {
+    const unauthorizedUser = "Unauthorized user"
+    const invalidAuthHeader = {Authorization: `Bearer invalid-${unauthorizedUser}`}
+    const expectedErrorMessage = "Unauthorized user"
+
+    const result = await handler(buildEvent({headers: invalidAuthHeader}))
+
+    expect(result.statusCode).toEqual(403)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toStrictEqual(JSON.stringify({error: expectedErrorMessage}))
+  })
 })
