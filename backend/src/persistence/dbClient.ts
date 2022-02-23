@@ -1,12 +1,14 @@
-import {createLogger} from "../utils/logger";
-import {CreateCapstoneAccountDao} from "../models/createAccountModels";
-import {DocumentClient} from "aws-sdk/clients/dynamodb";
-import {PhotoDao} from "../models/photosModels";
-import {createDynamoDBClient} from "../utils/dynamoUtils";
+import {createLogger} from "../utils/logger"
+import {CreateCapstoneAccountDao} from "../models/createAccountModels"
+import {DocumentClient} from "aws-sdk/clients/dynamodb"
+import {PhotoDao} from "../models/photosModels"
+import {createDynamoDBClient} from "../utils/dynamoUtils"
+import {VendorDao} from "../models/vendorModels"
 
 const logger = createLogger('dbClient')
-const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
-const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
+const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ""
+const photosTableName = process.env.PHOTOS_TABLE_NAME || ""
+const vendorTableName = process.env.VENDOR_TABLE_NAME || ""
 
 export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   logger.info(`Adding item to ${capstoneAccountsTableName}`)
@@ -47,4 +49,12 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
   return dbResult.Items as PhotoDao[]
+}
+
+export async function insertVendor(item: VendorDao): Promise<void> {
+  logger.info(`Creating vendor: ${JSON.stringify(item)}`)
+  await createDynamoDBClient().put({
+    TableName: vendorTableName,
+    Item: item
+  }).promise()
 }
