@@ -6,8 +6,7 @@ import {createDynamoDBClient} from "../utils/dynamoUtils";
 
 const logger = createLogger('dbClient')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ''
-// const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
-const photosTableName = "Whammy!"
+const photosTableName = process.env.PHOTOS_TABLE_NAME || ''
 
 export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   logger.info(`Adding item to ${capstoneAccountsTableName}`)
