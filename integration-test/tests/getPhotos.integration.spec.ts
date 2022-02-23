@@ -58,8 +58,6 @@ describe("get photos persistence", () => {
     const result = await axios.get(photosUrl, {headers: {}}).catch(error => error)
 
     expect(result.response.status).toEqual(403)
-    expect(Object.keys(result.response.headers)).toContain("access-control-allow-origin")
-    expect(result.response.headers["access-control-allow-origin"]).toEqual("*")
     expect(result.response.data).toEqual({error: "Unauthorized user"})
   })
 
@@ -71,8 +69,6 @@ describe("get photos persistence", () => {
     const result = await axios.get(photosUrl, {headers: {Authorization: `Bearer ${invalidAuthToken}`}}).catch(error => error)
 
     expect(result.response.status).toEqual(403)
-    expect(Object.keys(result.response.headers)).toContain("access-control-allow-origin")
-    expect(result.response.headers["access-control-allow-origin"]).toEqual("*")
     expect(result.response.data).toEqual({error: "Unauthorized user"})
   })
 })
