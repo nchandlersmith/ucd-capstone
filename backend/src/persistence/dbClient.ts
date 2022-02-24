@@ -52,9 +52,5 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
 }
 
 export async function insertVendor(item: VendorDao): Promise<void> {
-  logger.info(`Creating vendor: ${JSON.stringify(item)}`)
-  await createDynamoDBClient().put({
-    TableName: vendorTableName,
-    Item: item
-  }).promise()
+  logger.info("Called insertVendor no-op.")
 }

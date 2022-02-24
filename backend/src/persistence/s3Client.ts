@@ -31,3 +31,7 @@ export function createGetSignedUrl(photoId: string): string {
     Expires: urlExpirationInSeconds
   })
 }
+
+export async function addVendorToList(vendorName: string): Promise<void> {
+  logger.info("Called addVendorToList no-op.")
+}

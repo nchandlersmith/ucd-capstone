@@ -1,4 +1,10 @@
 export interface VendorDao {
-  vendor: string,
-  services: string[]
+  region: string,
+  vendorName: string,
+  vendorServices: string[]
+}
+
+export interface CreateVendorRequest {
+  vendorName: string,
+  vendorServices: string[]
 }
