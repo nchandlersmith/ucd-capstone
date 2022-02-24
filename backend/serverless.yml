@@ -17,6 +17,7 @@ provider:
   environment:
     CAPSTONE_ACCOUNTS_TABLE_NAME: CapstoneAccounts-${self:provider.stage}
     PHOTOS_TABLE_NAME: Photos-${self:provider.stage}
+    VENDORS_TABLE_NAME: Vendors-${self:provider.stage}
     PHOTOS_S3_BUCKET_NAME: photos-707863247739-${self:provider.stage}
   logs:
     restApi: true
@@ -82,6 +83,24 @@ functions:
         Resource: "*"
     environment:
       SIGNED_URL_EXPIRATION_IN_SECONDS: 300
+  CreateVendor:
+    handler: src/lambdas/createVendor/createVendorLambda.handler
+    events:
+      - http:
+          method: post
+          path: vendors
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: !GetAtt VendorsTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
   GetPhotos:
     handler: src/lambdas/getPhotos/getPhotosLambda.handler
     events:
@@ -149,6 +168,21 @@ resources:
         - AttributeName: userId
           KeyType: HASH
         - AttributeName: photoId
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+  VendorsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.VENDORS_TABLE_NAME}
+      AttributeDefinitions:
+        - AttributeName: region
+          AttributeType: S
+        - AttributeName: vendorName
+          AttributeType: S
+      KeySchema:
+        - AttributeName: region
+          KeyType: HASH
+        - AttributeName: vendorName
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
   PhotosBucket:
