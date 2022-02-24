@@ -2,10 +2,17 @@ import {CreateVendorRequest} from "../../models/vendorModels";
 import {buildEvent} from "../../testUtils/eventUtils";
 import {handler} from "./createVendorLambda";
 
+jest.mock("../../persistence/dbClient", () => {
+  return {
+    insertVendor: jest.fn()
+  }
+})
+
 describe("createVendorLambda", () => {
   const requiredHeaders = {
     "access-control-allow-origin": "*"
   }
+
   it("should return success", async () => {
     const request: CreateVendorRequest = {
       vendorName: "unit test vendor",

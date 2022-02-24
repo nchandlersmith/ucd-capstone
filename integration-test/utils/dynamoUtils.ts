@@ -4,6 +4,18 @@ import { PhotoDao } from '../../backend/src/models/photosModels'
 
 const accountsTableName = 'CapstoneAccounts-dev'
 const photosTableName = "Photos-dev"
+const vendorsTableName = "Vendors-dev"
+
+export async function findAllVendors() {
+  return createDocumentClient().query({
+    TableName: vendorsTableName,
+    ExpressionAttributeValues: {
+      ":country": "United States",
+      ":vendorName": " "
+    },
+    KeyConditionExpression: "country = :country AND vendorName > :vendorName"
+  }).promise()
+}
 
 export async function findAllPhotosByUserId(userId: string) {
   return createDocumentClient().query({
@@ -12,6 +24,16 @@ export async function findAllPhotosByUserId(userId: string) {
       ":userId": userId
     },
     KeyConditionExpression: "userId = :userId"
+  }).promise()
+}
+
+export async function deleteVendorByVendorName(vendorName: string) {
+  return createDocumentClient().delete({
+    TableName: vendorsTableName,
+    Key: {
+      "country": "United States",
+      "vendorName": vendorName
+    }
   }).promise()
 }
 

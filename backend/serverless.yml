@@ -26,7 +26,7 @@ provider:
     lambda: true
 
 package:
-  individually: true
+  individually: false
   exclude:
     - node_modules/**/*
 
@@ -175,12 +175,12 @@ resources:
     Properties:
       TableName: ${self:provider.environment.VENDORS_TABLE_NAME}
       AttributeDefinitions:
-        - AttributeName: region
+        - AttributeName: country
           AttributeType: S
         - AttributeName: vendorName
           AttributeType: S
       KeySchema:
-        - AttributeName: region
+        - AttributeName: country
           KeyType: HASH
         - AttributeName: vendorName
           KeyType: RANGE

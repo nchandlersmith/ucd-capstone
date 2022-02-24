@@ -8,7 +8,7 @@ import {VendorDao} from "../models/vendorModels"
 const logger = createLogger('dbClient')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ""
 const photosTableName = process.env.PHOTOS_TABLE_NAME || ""
-const vendorTableName = process.env.VENDOR_TABLE_NAME || ""
+const vendorTableName = process.env.VENDORS_TABLE_NAME || ""
 
 export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   logger.info(`Adding item to ${capstoneAccountsTableName}`)
@@ -52,5 +52,11 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
 }
 
 export async function insertVendor(item: VendorDao): Promise<void> {
-  logger.info("Called insertVendor no-op.")
+  logger.info(`Inserting vendor item: ${JSON.stringify(item)}`)
+  const dbClient = createDynamoDBClient()
+  const params = {
+    TableName: vendorTableName,
+    Item: item
+  }
+  await dbClient.put(params).promise()
 }

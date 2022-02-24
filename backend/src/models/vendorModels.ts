@@ -1,5 +1,5 @@
 export interface VendorDao {
-  region: string,
+  country: string,
   vendorName: string,
   vendorServices: string[]
 }
