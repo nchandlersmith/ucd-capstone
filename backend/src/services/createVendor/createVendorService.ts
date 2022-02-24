@@ -4,17 +4,20 @@ import {createLogger} from "../../utils/logger";
 import {ModelValidationError} from "../../exceptions/exceptions";
 
 const logger = createLogger("createVendorService")
+const requiredFields = ["vendorName", "vendorServices"] as (keyof CreateVendorRequest)[]
 
 export async function createVendor(request: CreateVendorRequest): Promise<void> {
   logger.info(`Received request to create vendor ${JSON.stringify(request)}`)
-
-  if (!Object.keys(request).includes("vendorName")) {
-    throw new ModelValidationError("Create vendor request is missing vendorName. Request denied.")
-  }
-  if (!Object.keys(request).includes("vendorServices")) {
-    throw new ModelValidationError("Create vendor request is missing vendorServices. Request denied.")
-  }
+  validateRequestFields(request);
 
   const vendor: VendorDao = {...request, country: "United States"}
   await insertVendor(vendor)
+}
+
+function validateRequestFields(request: CreateVendorRequest) {
+  requiredFields.forEach((field) => {
+    if (!Object.keys(request).includes(field)) {
+      throw new ModelValidationError(`Create vendor request is missing ${field}. Request denied.`)
+    }
+  })
 }
