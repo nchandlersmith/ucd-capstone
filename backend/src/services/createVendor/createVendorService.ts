@@ -10,6 +10,10 @@ export async function createVendor(request: CreateVendorRequest): Promise<void> 
   logger.info(`Received request to create vendor ${JSON.stringify(request)}`)
   validateRequestFields(request);
 
+  if (!request.vendorName) {
+    throw new ModelValidationError('Create vendor request contains an invalid vendorName. Request denied.')
+  }
+
   const vendor: VendorDao = {...request, country: "United States"}
   await insertVendor(vendor)
 }
