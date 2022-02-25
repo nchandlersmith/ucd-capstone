@@ -58,4 +58,34 @@ describe("createVendorService", () => {
     // @ts-ignore
     await expect(async () => await createVendor(request)).rejects.toThrow(errorMessageRegEx)
   })
+
+  it("should reject requests with null vendorServices", async () => {
+    const request = {vendorName: "Test Vendor", vendorServices: null}
+    const errorMessageRegEx = /^Create vendor request contains an invalid vendorServices. Request denied.$/
+
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(ModelValidationError)
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(errorMessageRegEx)
+  })
+
+  it("should reject requests with undefined vendorServices", async () => {
+    const request = {vendorName: "Test Vendor", vendorServices: undefined}
+    const errorMessageRegEx = /^Create vendor request contains an invalid vendorServices. Request denied.$/
+
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(ModelValidationError)
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(errorMessageRegEx)
+  })
+
+  it("should reject requests with empty vendorServices", async () => {
+    const request = {vendorName: "Test Vendor", vendorServices: []}
+    const errorMessageRegEx = /^Create vendor request contains an invalid vendorServices. Request denied.$/
+
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(ModelValidationError)
+    // @ts-ignore
+    await expect(async () => await createVendor(request)).rejects.toThrow(errorMessageRegEx)
+  })
 })
