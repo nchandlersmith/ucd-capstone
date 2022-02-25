@@ -26,4 +26,16 @@ describe("createVendorLambda", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(JSON.stringify(expectedBody))
   })
+
+  it("should return 400 when the vendorName is invalid", async () => {
+    // @ts-ignore
+    const request: CreateVendorRequest = {vendorServices: ["some services"]}
+    const expectedResponseBody = {error: "Create vendor request is missing vendorName. Request denied."}
+
+    const result = await handler(buildEvent({body: JSON.stringify(request)}))
+
+    expect(result.statusCode).toEqual(400)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toStrictEqual(JSON.stringify(expectedResponseBody))
+  })
 })
