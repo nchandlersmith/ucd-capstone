@@ -27,4 +27,22 @@ describe("getVendorsLambda", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toEqual(JSON.stringify(vendors))
   })
+
+  it("should reject requests missing auth header", async () => {
+    const result = await handler(buildEvent({headers: {}}))
+    const expectedErrorMessage = JSON.stringify({error: "Unauthorized user"})
+
+    expect(result.statusCode).toEqual(403)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toEqual(expectedErrorMessage)
+  })
+
+  it("should reject requests from unauthorized users", async () => {
+    const result = await handler(buildEvent({headers: {Authorization: "Bearer invalid"}}))
+    const expectedErrorMessage = JSON.stringify({error: "Unauthorized user"})
+
+    expect(result.statusCode).toStrictEqual(403)
+    expect(result.headers).toStrictEqual(requiredHeaders)
+    expect(result.body).toEqual(expectedErrorMessage)
+  })
 });
