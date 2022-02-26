@@ -46,7 +46,7 @@ describe("get photos persistence", () => {
 
     const result = await axios.get(photosUrl, {headers: {Authorization: `Bearer blarg-${userId}`}})
 
-    expect(result.status).toEqual(201)
+    expect(result.status).toEqual(200)
     expect(result.data.photos.length).toEqual(1)
     expect(result.data.photos[0]).toStrictEqual(myPhoto)
   })

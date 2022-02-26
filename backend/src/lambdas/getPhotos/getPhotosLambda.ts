@@ -17,5 +17,5 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const error  = err as Error
     return errorResponseBuilder(error)
   }
-  return responseBuilder(201, {photos})
+  return responseBuilder(200, {photos})
 }

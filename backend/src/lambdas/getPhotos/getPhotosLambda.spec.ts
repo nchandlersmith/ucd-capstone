@@ -31,7 +31,7 @@ describe("getPhotosLambda", () => {
 
     const result = await handler(buildEvent({headers: authHeader}))
 
-    expect(result.statusCode).toStrictEqual(201)
+    expect(result.statusCode).toEqual(200)
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(JSON.stringify({photos: expectedPhotos}))
   })
