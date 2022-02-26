@@ -1,6 +1,6 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from "aws-lambda";
 import {errorResponseBuilder, responseBuilder} from "../../utils/responseUtils";
-import {createVendor} from "../../services/createVendor/createVendorService";
+import {createVendor} from "../../services/vendorService/vendorService";
 import {createLogger} from "../../utils/logger";
 import {CreateVendorRequest} from "../../models/vendorModels";
 import {authorize} from "../../utils/authUtils";

@@ -1,10 +1,13 @@
-import {createVendor} from "./createVendorService";
+import {createVendor, getVendors} from "./vendorService";
 import {ModelValidationError} from "../../exceptions/exceptions";
+import {VendorDao} from "../../models/vendorModels";
+import {getAllVendors} from "../../persistence/dbClient";
 
 
 jest.mock("../../persistence/dbClient", () => {
   return {
-    insertVendor: jest.fn()
+    insertVendor: jest.fn(),
+    getAllVendors: jest.fn()
   }
 })
 
@@ -87,5 +90,20 @@ describe("createVendorService", () => {
     await expect(async () => await createVendor(request)).rejects.toThrow(ModelValidationError)
     // @ts-ignore
     await expect(async () => await createVendor(request)).rejects.toThrow(errorMessageRegEx)
+  })
+})
+
+describe("getVendorsService", () => {
+  it("should return all vendors", async () => {
+    const expectedVendors: VendorDao[] = [{
+      country: "United States",
+      vendorName: "Test Vendor",
+      vendorServices: ["Test Service"]
+    }];
+    (getAllVendors as jest.Mock).mockImplementation(() => expectedVendors)
+
+    const result = await getVendors()
+
+    expect(result).toStrictEqual(expectedVendors)
   })
 })
