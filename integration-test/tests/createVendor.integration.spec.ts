@@ -36,4 +36,28 @@ describe("create vendor db integration", () => {
     expect(result.status).toEqual(201)
     expect(result.data).toStrictEqual({message: "Success"})
   })
+
+  it("should reject requests missing vendorName", async () => {
+    const result = await axios.post(vendorUrl,
+      {vendorServices: ["Test Service"]},
+      {headers: authHeader})
+      .catch(error => error)
+
+    const dbResult = await findAllVendors()
+    expect(dbResult.Items.length).toEqual(0)
+    expect(result.response.status).toEqual(400)
+    expect(result.response.data).toEqual({"error": "Create vendor request is missing vendorName. Request denied."})
+  })
+
+    it("should reject requests missing vendorServices", async () => {
+      const result = await axios.post(vendorUrl,
+        {vendorName: "Integration Vendor"},
+        {headers: authHeader})
+        .catch(error => error)
+
+      const dbResult = await findAllVendors()
+      expect(dbResult.Items.length).toEqual(0)
+      expect(result.response.status).toEqual(400)
+      expect(result.response.data).toEqual({"error": "Create vendor request is missing vendorServices. Request denied."})
+  })
 })
