@@ -60,3 +60,13 @@ export async function insertVendor(item: VendorDao): Promise<void> {
   }
   await dbClient.put(params).promise()
 }
+
+export async function getAllVendors(): Promise<VendorDao[]> {
+  logger.info("Getting all vendors from db")
+  const stub: VendorDao[] = [{
+    country: "United States",
+    vendorName: "",
+    vendorServices: [""]
+  }]
+  return Promise.resolve(stub)
+}
