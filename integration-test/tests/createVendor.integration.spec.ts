@@ -60,4 +60,28 @@ describe("create vendor db integration", () => {
       expect(result.response.status).toEqual(400)
       expect(result.response.data).toEqual({"error": "Create vendor request is missing vendorServices. Request denied."})
   })
+
+  it("should reject requests missing authHeader", async () => {
+    const result = await axios.post(vendorUrl,
+      {vendorName: "Integration Vendor", vendorServices: ["Some Great Service"]},
+      {headers: {}})
+      .catch(error => error)
+
+    const dbResult = await findAllVendors()
+    expect(dbResult.Items.length).toEqual(0)
+    expect(result.response.status).toEqual(403)
+    expect(result.response.data).toEqual({"error": "Unauthorized user"})
+  })
+
+  it("should reject requests for unauthorized user", async () => {
+    const result = await axios.post(vendorUrl,
+      {vendorName: "Integration Vendor", vendorServices: ["Some Great Service"]},
+      {headers: {Authorization: "Bearer unauthorized user"}})
+      .catch(error => error)
+
+    const dbResult = await findAllVendors()
+    expect(dbResult.Items.length).toEqual(0)
+    expect(result.response.status).toEqual(403)
+    expect(result.response.data).toEqual({"error": "Unauthorized user"})
+  })
 })
