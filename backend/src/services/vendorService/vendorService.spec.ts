@@ -1,7 +1,7 @@
 import {createVendor, getVendors} from "./vendorService";
 import {ModelValidationError} from "../../exceptions/exceptions";
-import {VendorDao} from "../../models/vendorModels";
-import {getAllVendors} from "../../persistence/dbClient";
+import {CreateVendorRequest, VendorDao} from "../../models/vendorModels";
+import {getAllVendors, insertVendor} from "../../persistence/dbClient";
 
 
 jest.mock("../../persistence/dbClient", () => {
@@ -12,6 +12,18 @@ jest.mock("../../persistence/dbClient", () => {
 })
 
 describe("createVendorService", () => {
+  it("should add country to the db call", async () => {
+    const request: CreateVendorRequest = {
+      vendorName: "Test Vendor",
+      vendorServices: ["Test Service"]
+    };
+    const expectedDao: VendorDao = {...request, country: "United States"}
+
+    await createVendor(request)
+
+    expect(insertVendor).toHaveBeenCalledWith(expectedDao)
+  })
+
   it("should reject requests without a vendorName", async () => {
     const requestWithoutVendorName = {vendorServices: ["Service One"]}
     const errorMessageRegEx = /^Create vendor request is missing vendorName. Request denied.$/
