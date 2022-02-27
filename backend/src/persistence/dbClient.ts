@@ -63,10 +63,13 @@ export async function insertVendor(item: VendorDao): Promise<void> {
 
 export async function getAllVendors(): Promise<VendorDao[]> {
   logger.info("Getting all vendors from db")
-  const stub: VendorDao[] = [{
-    country: "United States",
-    vendorName: "",
-    vendorServices: [""]
-  }]
-  return Promise.resolve(stub)
+  const dbClient = createDynamoDBClient()
+  const params = {
+    TableName: vendorTableName,
+    ExpressionAttributeValues: {":country": "United States"},
+    KeyConditionExpression: "country = :country"
+  }
+  const dbResult = await dbClient.query(params).promise()
+  logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
+  return dbResult.Items as VendorDao[]
 }

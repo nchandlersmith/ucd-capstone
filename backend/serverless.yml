@@ -119,6 +119,24 @@ functions:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
+  GetVendors:
+    handler: src/lambdas/getVendors/getVendorsLambda.handler
+    events:
+      - http:
+          method: get
+          path: vendors
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: !GetAtt VendorsTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
   GetAccounts:
     handler: src/lambdas/getAccountsLambda.handler
     events:
