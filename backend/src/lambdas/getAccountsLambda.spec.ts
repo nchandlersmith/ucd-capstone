@@ -12,7 +12,7 @@ describe('getAccounts.handler', function() {
   const unauthorizedUserErrorMessage = "Unauthorized user"
 
   beforeEach(function() {
-    AWSMock.setSDKInstance(AWS)
+    AWSMock.setSDKInstance(AWS) // TODO: replace AWS mock with jest
   })
 
   afterEach(function() {
