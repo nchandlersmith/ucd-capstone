@@ -28,4 +28,18 @@ describe("getVendors", () => {
     expect(result.status).toEqual(200)
     expect(result.data).toStrictEqual([vendor])
   })
+
+  it("should reject requests missing authHeader", async () => {
+    const result = await axios.get(vendorUrl, {headers: {}}).catch(error => error)
+
+    expect(result.response.status).toEqual(403)
+    expect(result.response.data).toEqual({"error": "Unauthorized user"})
+  })
+
+  it("should reject requests for unauthorized user", async () => {
+    const result = await axios.get(vendorUrl, {headers: {Authorization: "Bearer invalid"}}).catch(error => error)
+
+    expect(result.response.status).toEqual(403)
+    expect(result.response.data).toEqual({"error": "Unauthorized user"})
+  })
 })
