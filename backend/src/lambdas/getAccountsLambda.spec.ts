@@ -1,8 +1,13 @@
-import AWS from 'aws-sdk'
-import AWSMock from 'aws-sdk-mock'
 import { handler } from './getAccountsLambda'
 import { CapstoneAccount, GetCapstoneAccountsResponse } from '../models/getAccountsModels'
 import { buildEvent } from '../testUtils/eventUtils'
+import {getUserAccounts} from "../services/getAccountsService";
+
+jest.mock("../services/getAccountsService", () => {
+  return {
+    getUserAccounts: jest.fn()
+  }
+})
 
 describe('getAccounts.handler', function() {
   const expectedHeaders = {
@@ -11,14 +16,6 @@ describe('getAccounts.handler', function() {
   const userId = 'Authorized Unit Test User'
   const unauthorizedUserErrorMessage = "Unauthorized user"
 
-  beforeEach(function() {
-    AWSMock.setSDKInstance(AWS) // TODO: replace AWS mock with jest
-  })
-
-  afterEach(function() {
-    AWSMock.restore('DynamoDB.DocumentClient')
-  })
-
   it('should return all accounts for the given userId', async function() {
     const expectedAccount: CapstoneAccount = {
       userId,
@@ -26,11 +23,8 @@ describe('getAccounts.handler', function() {
       accountType: 'Test Savings',
       balance: 1000,
       createdOn: 'some time date stamp'
-    }
-
-    AWSMock.mock('DynamoDB.DocumentClient', 'query', (params: any, callback: Function) => {
-      callback(null, {Items: [expectedAccount]})
-    })
+    };
+    (getUserAccounts as jest.Mock).mockImplementation(() => Promise.resolve([expectedAccount]))
 
     const response = await handler(buildEvent({headers: {Authorization: `Bearer blarg-${userId}`}}))
 

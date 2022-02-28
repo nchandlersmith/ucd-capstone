@@ -18,6 +18,7 @@ export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
   })
 }
 
+// TODO: make this return a list of Capstone Accounts
 export async function getAccountsByUser(userId: string): Promise<DocumentClient.QueryOutput> {
   const dynamoClient = createDynamoDBClient()
   const params = {
