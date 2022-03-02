@@ -25,7 +25,7 @@ function UserPhotos({userId}: Props): JSX.Element {
    }
    console.log(photos)
   return (
-    photoCard(photos[0])
+    <>{photos.map(photo => photoCard(photo))}</>
   )
 }
 
