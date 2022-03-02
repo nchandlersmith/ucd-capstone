@@ -1,13 +1,13 @@
 import UserPhotos from "./UserPhotos";
-import {getByLabelText, render, screen} from "@testing-library/react";
-import axios, * as others from "axios";
+import {render, screen} from "@testing-library/react";
+import axios from "axios";
 import {PhotoDao} from "../../../../backend/src/models/photosModels"
 import {act} from "react-dom/test-utils";
 
 jest.mock("axios")
 
 describe("<UserPhotos/>", () => {
-  it("should display the user's photos", async () => {
+  it("should display photo data", async () => {
     const userId = "user@test.com"
     const photosFromDb: PhotoDao[] = [{
       vendorService: "Test Service",
@@ -30,5 +30,8 @@ describe("<UserPhotos/>", () => {
     })
 
     expect(screen.getByText(photosFromDb[0].photoLabel)).toBeInTheDocument()
+    expect(screen.getByText(photosFromDb[0].vendorId)).toBeInTheDocument()
+    expect(screen.getByText(photosFromDb[0].vendorService)).toBeInTheDocument()
+    expect(screen.getByText(`Added: ${photosFromDb[0].addedOn}`))
   })
 })
