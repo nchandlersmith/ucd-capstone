@@ -1,4 +1,4 @@
-import Photos from "./components/Photos";
+import AddPhotoForm from "./components/AddPhotoForm";
 import {Accordion} from "react-bootstrap";
 import AccordionItem from "react-bootstrap/AccordionItem";
 
@@ -11,7 +11,7 @@ function App() {
       </AccordionItem>
       <AccordionItem eventKey="1">
         <Accordion.Header>Add Photo</Accordion.Header>
-        <Accordion.Body>{<Photos/>}</Accordion.Body>
+        <Accordion.Body>{<AddPhotoForm/>}</Accordion.Body>
       </AccordionItem>
     </Accordion>
   )

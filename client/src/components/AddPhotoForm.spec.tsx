@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import Photos from "./Photos"
+import AddPhotoForm from "./AddPhotoForm"
 import MockAdapter from "axios-mock-adapter"
 import axios from "axios"
 
@@ -9,7 +9,7 @@ const axiosMock = new MockAdapter(axios)
 describe(`<Photos/>`, function() {
   describe("upload photo", function () {
     it("should not allow submission until form is complete", function () {
-      render(<Photos/>)
+      render(<AddPhotoForm/>)
       const emailAddress = "user@test.io"
       const label = "My great photo"
       const vendor = "Great Pho-toes"

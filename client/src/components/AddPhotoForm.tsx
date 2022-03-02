@@ -3,7 +3,7 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button'
 import {Form} from 'react-bootstrap';
 
-function Photos() {
+function AddPhotoForm() {
   const [user, setUser] = useState("")
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
@@ -72,4 +72,4 @@ function Photos() {
   }
 }
 
-export default Photos;
+export default AddPhotoForm;
