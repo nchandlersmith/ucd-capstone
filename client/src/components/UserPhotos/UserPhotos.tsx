@@ -25,14 +25,20 @@ function UserPhotos({userId}: Props): JSX.Element {
    }
    console.log(photos)
   return (
+    photoCard(photos[0])
+  )
+}
+
+function photoCard(photo: PhotoDao): JSX.Element {
+  return (
     <Card>
       <Card.Body>
-        <Card.Title>{photos[0].photoLabel}</Card.Title>
+        <Card.Title>{photo.photoLabel}</Card.Title>
       </Card.Body>
       <ListGroup>
-        <ListGroupItem>{photos[0].vendorId}</ListGroupItem>
-        <ListGroupItem>{photos[0].vendorService}</ListGroupItem>
-        <ListGroupItem>Added: {photos[0].addedOn}</ListGroupItem>
+        <ListGroupItem>{photo.vendorId}</ListGroupItem>
+        <ListGroupItem>{photo.vendorService}</ListGroupItem>
+        <ListGroupItem>Added: {photo.addedOn}</ListGroupItem>
       </ListGroup>
     </Card>
   )
