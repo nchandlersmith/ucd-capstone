@@ -62,4 +62,16 @@ describe("<UserPhotos/>", () => {
     expect(screen.getByText(photosFromDb[1].vendorService)).toBeInTheDocument()
     expect(screen.getByText(`Added: ${photosFromDb[1].addedOn}`))
   })
+
+  it("should have a refresh button", async () => {
+    const photosFromDb: PhotoDao[] = [userFirstPhoto]
+    const getPhotosResponse = {data: {photos:photosFromDb}};
+
+    await act(async () => {
+      await (axios.get as jest.Mock).mockImplementation(() => Promise.resolve(getPhotosResponse))
+      render(<UserPhotos userId={userId}/>)
+    })
+
+    expect(screen.getByRole("button", {name: "Refresh"})).toBeInTheDocument()
+  })
 })
