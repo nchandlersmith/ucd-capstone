@@ -5,7 +5,8 @@ export interface AddPhotoRequest {
   emailAddress: string
 }
 
-// TODO: add fields: status, startedProcessing, finished, shipped ...
+// TODO: add fields: status, updatedOn, filename
+// TODO: split Dao and response
 export interface PhotoDao {
   userId: string,
   photoId: string,

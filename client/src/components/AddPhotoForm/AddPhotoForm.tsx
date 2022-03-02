@@ -3,7 +3,11 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button'
 import {Form} from 'react-bootstrap';
 
-function AddPhotoForm() {
+interface Props {
+  userId: string
+}
+
+function AddPhotoForm({userId}: Props): JSX.Element {
   const [user, setUser] = useState("")
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
@@ -43,7 +47,10 @@ function AddPhotoForm() {
           onChange={(event) => setService(event.currentTarget.value)}/>
         <Form.Text>Enter the service that you want the vendor to perform on your photo.</Form.Text>
       </Form.Group>
-      <Button variant='primary' type='reset' onSubmit={addPhoto} disabled={disableAddPhoto()}>
+      <Button variant='primary' type='reset' onClick={async () => {
+        console.log(userId)
+        await addPhoto()
+      }} disabled={disableAddPhoto()}>
         Submit
       </Button>
     </Form>
@@ -53,12 +60,13 @@ function AddPhotoForm() {
     const url = 'https://yjpyr240cj.execute-api.us-east-1.amazonaws.com/dev/photos'
     console.log(url)
     const data = {
-      emailAddress: user,
+      emailAddress: userId,
       label,
       vendor,
       service
     }
-    axios.post(url, data, {headers: {Authorization: `Bearer blarg-${user}`}})
+    console.log(`photo data: ${JSON.stringify(data)}`)
+    axios.post(url, data, {headers: {Authorization: `Bearer blarg-${userId}`}})
       .then(response => {
         console.log(`response: JSON.stringify(response)`)
       })
