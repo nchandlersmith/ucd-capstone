@@ -11,6 +11,8 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
   const [service, setService] = useState("")
+  const [photoFile, setPhotoFile] = useState("")
+  const [photoType, setPhotoType] = useState("")
 
   return (
     <Form>
@@ -37,7 +39,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       </Form.Group>
       <Form.Group controlId="photo">
         <Form.Label>Photo</Form.Label>
-        <Form.Control type="file" onChange={(event: React.ChangeEvent<HTMLInputElement>) => console.log(event.target.files)}/>
+        <Form.Control type="file" onChange={(event) => handlePhotoChange(event)}/>
       </Form.Group>
       <Button variant='primary' type='reset' onClick={async () => {
         console.log(userId)
@@ -67,8 +69,16 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       })
   }
 
+  function handlePhotoChange(event: any) {
+    const file = event.target.files[0]
+    if (file) {
+      setPhotoFile(file.name)
+      setPhotoType(file.type)
+    }
+  }
+
   function disableAddPhoto() {
-    return !vendor || !service || !label
+    return !vendor || !service || !label || !photoFile || !photoType
   }
 }
 
