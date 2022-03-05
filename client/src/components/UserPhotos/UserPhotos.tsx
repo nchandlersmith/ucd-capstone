@@ -29,14 +29,14 @@ function UserPhotos({userId}: Props): JSX.Element {
   return (
     <>
       <Button onClick={() => setRefreshTrigger(!refreshTrigger)}>Refresh</Button>
-      <div>{photos.map(photo => photoCard(photo))}</div>
+      <div>{photos.map((photo, index) => photoCard(photo, index))}</div>
     </>
   )
 }
 
-function photoCard(photo: PhotoDao): JSX.Element {
+function photoCard(photo: PhotoDao, index: number): JSX.Element {
   return (
-    <Card>
+    <Card key={index}>
       <Card.Body>
         <Card.Title>{photo.photoLabel}</Card.Title>
       </Card.Body>

@@ -9,9 +9,11 @@ describe(`<Photos/>`, function() {
       const label = "My great photo"
       const vendor = "Great Pho-toes"
       const service = "8x10 Glossy"
+      const photoFile = ""
       const photoLabelInput = screen.getByLabelText("Photo Label")
       const vendorInput = screen.getByLabelText("Vendor")
       const serviceInput = screen.getByLabelText("Service")
+      const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"})
 
       expect(addPhotoButton).not.toBeEnabled()
@@ -19,6 +21,7 @@ describe(`<Photos/>`, function() {
       fireEvent.change(photoLabelInput, {target: {value: label}})
       fireEvent.change(vendorInput, {target: {value: vendor}})
       fireEvent.change(serviceInput, {target: {value: service}})
+      fireEvent.change(photoFileInput, {target: {value: photoFile}})
 
       expect(addPhotoButton).toBeEnabled()
     })

@@ -35,6 +35,10 @@ function AddPhotoForm({userId}: Props): JSX.Element {
           placeholder="Service goes here"
           onChange={(event) => setService(event.currentTarget.value)}/>
       </Form.Group>
+      <Form.Group controlId="photo">
+        <Form.Label>Photo</Form.Label>
+        <Form.Control type="file" onChange={(event: React.ChangeEvent<HTMLInputElement>) => console.log(event.target.files)}/>
+      </Form.Group>
       <Button variant='primary' type='reset' onClick={async () => {
         console.log(userId)
         await addPhoto()
