@@ -2,6 +2,7 @@ import AddPhotoForm from "./components/AddPhotoForm/AddPhotoForm";
 import UserPhotos from "./components/UserPhotos/UserPhotos"
 import {Accordion, Alert} from "react-bootstrap";
 import AccordionItem from "react-bootstrap/AccordionItem";
+import AddVendorForm from "./components/AddVendorForm/AddVendorForm";
 
 const userId = "user@hardcoded.com"
 
@@ -19,6 +20,10 @@ function App() {
         <AccordionItem eventKey="1">
           <Accordion.Header>Add Photo</Accordion.Header>
           <Accordion.Body>{<AddPhotoForm userId={userId}/>}</Accordion.Body>
+        </AccordionItem>
+        <AccordionItem eventKey="2">
+          <Accordion.Header>Add Vendor</Accordion.Header>
+          <Accordion.Body><AddVendorForm/></Accordion.Body>
         </AccordionItem>
       </Accordion>
     </>
