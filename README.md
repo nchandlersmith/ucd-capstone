@@ -55,13 +55,19 @@ don't have to notify them directly.
 
 ## User stories
 
-- __Upload:__ As a user, I want to upload a photo, so that a vendor can work on it.
+### Backlog
+
 - __Download:__ As a vendor, I want to download a photo, so that I can process the photo.
 - __Select Vendor:__ As a user, I want to select the vendor to work on my photo, so that I get the vendor I like.
 - __Select Service:__ As a user, I want to select the service from a vendor, so that I get the package that I want.
-- __Vendor Sign Up:__ As a vendor, I want to sign up for Capstone Photos, so that my customers can upload their photos for me to process.
 - __User Sign Up:__ As a user, I want to sign up for Capstone Photos, so that I can get my photos processed conveniently.
 - __New Photo Notification:__ As a vendor, I want to be notified when I have new photos to be processed.
 - __Processing Begins Notification:__ As a user, I want to be notified when I have new photos to be processed.
 - __Processing Complete Notification:__ As a user, I want to be notified when my photos are done processing, so that I can pick them up or look to them to be delivered.
+
+### In Progress
+- __Vendor Sign Up:__ As a vendor, I want to sign up for Capstone Photos, so that I can process photos from my customers.
+
+### Done
+- __Upload:__ As a user, I want to upload a photo, so that a vendor can work on it.
 
