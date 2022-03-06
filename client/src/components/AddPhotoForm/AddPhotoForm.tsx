@@ -11,8 +11,8 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
   const [service, setService] = useState("")
-  const [photoFile, setPhotoFile] = useState("")
-  const [photoType, setPhotoType] = useState("")
+  const [putPhotoUrl, setPutPhotoUrl] = useState("")
+  const [photoFormData, setPhotoFormData] = useState<FormData | null>(null)
 
   return (
     <Form>
@@ -63,22 +63,28 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     axios.post(url, data, {headers: {Authorization: `Bearer blarg-${userId}`}})
       .then(response => {
         console.log(`response: ${JSON.stringify(response)}`)
+        setPutPhotoUrl(response.data.putPhotoSignedUrl)
       })
       .catch(error => {
         console.error(`error: ${JSON.stringify(error)}`)
       })
+
+    axios.put(putPhotoUrl, photoFormData,{headers: {"Accept": "multipart/form-data"}})
+      .then(response => console.log(`Response from s3: ${JSON.stringify(response)}`))
+      .catch(error => console.error(error))
   }
 
   function handlePhotoChange(event: any) {
     const file = event.target.files[0]
     if (file) {
-      setPhotoFile(file.name)
-      setPhotoType(file.type)
+      const formData = new FormData()
+      formData.append("image", file)
+      setPhotoFormData(formData)
     }
   }
 
   function disableAddPhoto() {
-    return !vendor || !service || !label || !photoFile || !photoType
+    return !vendor || !service || !label || !photoFormData
   }
 }
 
