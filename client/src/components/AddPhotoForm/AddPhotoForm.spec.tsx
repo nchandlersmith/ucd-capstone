@@ -2,6 +2,7 @@ import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import AddPhotoForm from "./AddPhotoForm"
 import axios from "axios";
+import {act} from "react-dom/test-utils";
 
 jest.mock("axios")
 
@@ -52,13 +53,16 @@ describe(`<Photos/>`, function() {
       const addPhotoButton = screen.getByRole("button", {name: "Submit"});
 
       (axios.post as jest.Mock).mockImplementation(() => Promise.resolve({data: {putPhotoSignedUrl: "putPhoto"}}));
-      (axios.put as jest.Mock).mockImplementation(() => jest.fn())
+      (axios.put as jest.Mock).mockImplementation(() => Promise.resolve())
 
       fireEvent.change(photoLabelInput, {target: {value: label}})
       fireEvent.change(vendorInput, {target: {value: vendor}})
       fireEvent.change(serviceInput, {target: {value: service}})
       fireEvent.change(photoFileInput, {target: {files: [photoFile]}})
-      fireEvent.click(addPhotoButton)
+
+      await act(async () => {
+        await fireEvent.click(addPhotoButton)
+      })
 
       expect(axios.post).toHaveBeenCalled()
       expect(axios.put).toHaveBeenCalled()

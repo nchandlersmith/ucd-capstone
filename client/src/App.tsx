@@ -23,7 +23,7 @@ function App() {
         </AccordionItem>
         <AccordionItem eventKey="2">
           <Accordion.Header>Add Vendor</Accordion.Header>
-          <Accordion.Body><AddVendorForm/></Accordion.Body>
+          <Accordion.Body><AddVendorForm userId={userId}/></Accordion.Body>
         </AccordionItem>
       </Accordion>
     </>
