@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button'
 import {DropdownButton, Form, InputGroup, Dropdown} from 'react-bootstrap';
+import {Vendor} from "../../../../backend/src/models/vendorModels"
 
 interface Props {
   userId: string
@@ -24,8 +25,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     axios.get(url, {headers})
       .then(response => {
         console.log(response)
-        // TODO: fix the any
-        const vendorNames = response.data.map((vendor: any) => vendor.vendorName)
+        const vendorNames = response.data.map((vendor: Vendor) => vendor.vendorName)
         setVendors(vendorNames)
       })
       .catch(error => console.log(error))
