@@ -37,9 +37,9 @@ describe(`<Photos/>`, function() {
 
   describe("vendors dropdown", () => {
     it("should display signed-up vendors in dropdown", () => {
-      const vendorButton = screen.getByRole("button", {name: "Vendor"})
+      const vendorDropdown = screen.getByRole("button", {name: "Vendor"})
 
-      fireEvent.click(vendorButton)
+      fireEvent.click(vendorDropdown)
 
       expect(screen.getByRole("button", {name: vendors[0].vendorName})).toBeInTheDocument()
       expect(screen.getByRole("button", {name: vendors[1].vendorName})).toBeInTheDocument()
@@ -58,11 +58,29 @@ describe(`<Photos/>`, function() {
     })
   })
 
+  describe("services dropdown", () => {
+    it("should have a services dropdown button", () => {
+      expect(screen.getByRole("button", {name: "Service"})).toBeInTheDocument()
+    })
+
+    it("should display the services for the selected vendor", () => {
+      const vendorDropdown = screen.getByRole("button", {name: "Vendor"})
+      const selectedVendor = screen.getByRole("button", {name: vendors[1].vendorName})
+      const serviceDropdown = screen.getByRole("button", {name: "Service"})
+
+      fireEvent.click(vendorDropdown)
+      fireEvent.click(selectedVendor)
+      fireEvent.click(serviceDropdown)
+
+      expect(screen.getByRole("button",{name: vendors[1].vendorServices[0]}))
+      expect(screen.getByRole("button",{name: vendors[1].vendorServices[1]}))
+    })
+  })
+
   describe("upload photo", function () {
 
-    it("should not allow submission until form is complete", function () {
+    it("should not allow submission until form is complete", async () => {
       const label = "My great photo"
-      const service = "8x10 Glossy"
       const photoFile = {
         name: "some photo.png",
         type: "image/png"
@@ -70,7 +88,7 @@ describe(`<Photos/>`, function() {
       const photoLabelInput = screen.getByLabelText("Photo Label")
       const vendorDropdown = screen.getByRole("button", {name: "Vendor"})
       const vendorSelection = screen.getByRole("button", {name: vendors[0].vendorName})
-      const serviceInput = screen.getByLabelText("Service")
+      const serviceDropdown = screen.getByRole("button", {name: "Service"})
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"})
 
@@ -79,16 +97,19 @@ describe(`<Photos/>`, function() {
       fireEvent.click(vendorDropdown)
       fireEvent.click(vendorSelection)
       expect(addPhotoButton).not.toBeEnabled()
-      fireEvent.change(serviceInput, {target: {value: service}})
+      fireEvent.click(serviceDropdown)
+      expect(addPhotoButton).not.toBeEnabled()
+      fireEvent.click(screen.getByRole("button", {name: vendors[0].vendorServices[0]}))
       expect(addPhotoButton).not.toBeEnabled()
       fireEvent.change(photoFileInput, {target: {files: [photoFile]}})
+
+      console.log("delete me")
 
       expect(addPhotoButton).toBeEnabled()
     })
 
     it("should upload photo to s3", async () => {
       const label = "My great photo"
-      const service = "8x10 Glossy"
       const photoFile = {
         name: "some photo.png",
         type: "image/png"
@@ -96,7 +117,7 @@ describe(`<Photos/>`, function() {
       const photoLabelInput = screen.getByLabelText("Photo Label")
       const vendorDropdown = screen.getByRole("button", {name: "Vendor"})
       const vendorSelection = screen.getByRole("button", {name: vendors[0].vendorName})
-      const serviceInput = screen.getByLabelText("Service")
+      const serviceDropdown = screen.getByRole("button", {name: "Service"})
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"});
 
@@ -106,7 +127,8 @@ describe(`<Photos/>`, function() {
       fireEvent.change(photoLabelInput, {target: {value: label}})
       fireEvent.click(vendorDropdown)
       fireEvent.click(vendorSelection)
-      fireEvent.change(serviceInput, {target: {value: service}})
+      fireEvent.click(serviceDropdown)
+      fireEvent.click(screen.getByRole("button", {name: vendors[0].vendorServices[0]}))
       fireEvent.change(photoFileInput, {target: {files: [photoFile]}})
 
       await act(async () => {

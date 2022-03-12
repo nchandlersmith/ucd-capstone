@@ -15,6 +15,8 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [putPhotoUrl, setPutPhotoUrl] = useState("")
   const [photoFormData, setPhotoFormData] = useState<FormData | null>(null)
   const [vendors, setVendors] = useState<string[]>([])
+  const [serviceOptions, setServiceOptions] = useState<string[]>([])
+  const [allOptions, setAllOptions] = useState<Vendor[]>([])
 
   useEffect(() => {
     const url = "https://yjpyr240cj.execute-api.us-east-1.amazonaws.com/dev/vendors"
@@ -25,11 +27,18 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     axios.get(url, {headers})
       .then(response => {
         console.log(response)
+        setAllOptions(response.data)
         const vendorNames = response.data.map((vendor: Vendor) => vendor.vendorName)
         setVendors(vendorNames)
       })
       .catch(error => console.log(error))
   }, [])
+
+  useEffect(() => {
+    const servicesFromSelectedVendor: string[] = allOptions.find((vendorOption) => vendorOption.vendorName === vendor)?.vendorServices || []
+    setServiceOptions(servicesFromSelectedVendor)
+  }, [vendor])
+
 
   return (
     <Form>
@@ -43,7 +52,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       <Form.Group controlId="vendor">
         <InputGroup>
           <DropdownButton title="Vendor" onSelect={(eventKey: string | null) => handleVendorSelect(eventKey)}>
-            {vendors.length > 0 && vendors.map(vendor => (<Dropdown.Item eventKey={vendor}>{vendor}</Dropdown.Item> ))}
+            {vendors.length > 0 && vendors.map((vendor, index) => (<Dropdown.Item eventKey={vendor} key={`vendor-${index}`}>{vendor}</Dropdown.Item> ))}
           </DropdownButton>
           <Form.Control
             type='text'
@@ -53,11 +62,16 @@ function AddPhotoForm({userId}: Props): JSX.Element {
         </InputGroup>
       </Form.Group>
       <Form.Group controlId="service">
-        <Form.Label>Service</Form.Label>
+        <InputGroup>
+          <DropdownButton title={"Service"} onSelect={(eventKey: string | null) => handleServiceSelect(eventKey)}>
+            {serviceOptions.length > 0 && serviceOptions.map((service, index) => (<Dropdown.Item eventKey={service} key={`service-${index}`}>{service}</Dropdown.Item> ))}
+          </DropdownButton>
         <Form.Control
           type='text'
-          placeholder="Service goes here"
-          onChange={(event) => setService(event.currentTarget.value)}/>
+          placeholder="Select from dropdown"
+          value={service}
+          readOnly/>
+        </InputGroup>
       </Form.Group>
       <Form.Group controlId="photo">
         <Form.Label>Photo</Form.Label>
@@ -106,8 +120,12 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   }
 
   function handleVendorSelect(eventKey: string | null) {
-    console.log(eventKey)
     setVendor(eventKey || "")
+    setService("")
+  }
+
+  function handleServiceSelect(eventKey: string | null) {
+    setService(eventKey || "")
   }
 
   function disableAddPhoto() {
