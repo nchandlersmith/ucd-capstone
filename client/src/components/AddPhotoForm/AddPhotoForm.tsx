@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button'
 import {DropdownButton, Form, InputGroup, Dropdown} from 'react-bootstrap';
@@ -13,6 +13,23 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [service, setService] = useState("")
   const [putPhotoUrl, setPutPhotoUrl] = useState("")
   const [photoFormData, setPhotoFormData] = useState<FormData | null>(null)
+  const [vendors, setVendors] = useState<string[]>([])
+
+  useEffect(() => {
+    const url = "https://yjpyr240cj.execute-api.us-east-1.amazonaws.com/dev/vendors"
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer blarg-${userId}`
+    }
+    axios.get(url, {headers})
+      .then(response => {
+        console.log(response)
+        // TODO: fix the any
+        const vendorNames = response.data.map((vendor: any) => vendor.vendorName)
+        setVendors(vendorNames)
+      })
+      .catch(error => console.log(error))
+  }, [])
 
   return (
     <Form>
@@ -26,9 +43,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       <Form.Group controlId="vendor">
         <InputGroup>
           <DropdownButton title="Vendor" onSelect={(eventKey: string | null) => handleVendorSelect(eventKey)}>
-            <Dropdown.Item eventKey="item-1">Item 1</Dropdown.Item>
-            <Dropdown.Item eventKey="item-2">Item 2</Dropdown.Item>
-            <Dropdown.Item eventKey="Great Pho-toes">Great Pho-toes</Dropdown.Item>
+            {vendors.length > 0 && vendors.map(vendor => (<Dropdown.Item eventKey={vendor}>{vendor}</Dropdown.Item> ))}
           </DropdownButton>
           <Form.Control
             type='text'

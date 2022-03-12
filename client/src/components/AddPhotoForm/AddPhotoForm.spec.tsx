@@ -7,15 +7,35 @@ import {act} from "react-dom/test-utils";
 jest.mock("axios")
 
 describe(`<Photos/>`, function() {
+  const vendors = [
+    {
+      vendorName: "Extreme Photo Finishing",
+      vendorServices: [
+        "Mega Pack",
+        "Supreme Pack",
+        "Extreme Pack",
+        "Mega-Supreme-Extreme Pack"
+      ],
+      country: "United States"
+    },
+    {
+      vendorName: "Great Photo Prints",
+      vendorServices: [
+        "Premium",
+        "Value"
+      ],
+      country: "United States"
+    }
+  ];
 
   beforeEach(() => {
+    (axios.get as jest.Mock).mockImplementation(() => Promise.resolve({data: vendors}))
     render(<AddPhotoForm userId={"hard-coded@user.com"}/>)
   })
 
   describe("upload photo", function () {
     it("should not allow submission until form is complete", function () {
       const label = "My great photo"
-      const vendor = "Great Pho-toes"
       const service = "8x10 Glossy"
       const photoFile = {
         name: "some photo.png",
@@ -23,7 +43,7 @@ describe(`<Photos/>`, function() {
       }
       const photoLabelInput = screen.getByLabelText("Photo Label")
       const vendorInput = screen.getByRole("button", {name: "Vendor"})
-      const vendorSelection = screen.getByRole("button", {name: vendor})
+      const vendorSelection = screen.getByRole("button", {name: vendors[0].vendorName})
       const serviceInput = screen.getByLabelText("Service")
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"})
@@ -42,7 +62,6 @@ describe(`<Photos/>`, function() {
 
     it("should upload photo to s3", async () => {
       const label = "My great photo"
-      const vendor = "Great Pho-toes"
       const service = "8x10 Glossy"
       const photoFile = {
         name: "some photo.png",
@@ -50,7 +69,7 @@ describe(`<Photos/>`, function() {
       }
       const photoLabelInput = screen.getByLabelText("Photo Label")
       const vendorInput = screen.getByRole("button", {name: "Vendor"})
-      const vendorSelection = screen.getByRole("button", {name: vendor})
+      const vendorSelection = screen.getByRole("button", {name: vendors[0].vendorName})
       const serviceInput = screen.getByLabelText("Service")
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"});
@@ -70,6 +89,9 @@ describe(`<Photos/>`, function() {
 
       expect(axios.post).toHaveBeenCalled()
       expect(axios.put).toHaveBeenCalled()
+    })
+
+    it("should display signed-up vendors in dropdown", () => {
     })
   })
 })
