@@ -35,7 +35,7 @@ describe(`<Photos/>`, function() {
     wrapper = render(<AddPhotoForm userId={"hard-coded@user.com"}/>)
   })
 
-  describe("upload photo", function () {
+  describe("vendors dropdown", () => {
     it("should display signed-up vendors in dropdown", () => {
       const vendorButton = screen.getByRole("button", {name: "Vendor"})
 
@@ -56,6 +56,9 @@ describe(`<Photos/>`, function() {
 
       expect(vendorInput).toHaveAttribute("value", expectedVendorName)
     })
+  })
+
+  describe("upload photo", function () {
 
     it("should not allow submission until form is complete", function () {
       const label = "My great photo"
