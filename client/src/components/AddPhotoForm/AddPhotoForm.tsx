@@ -56,7 +56,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
           </DropdownButton>
           <Form.Control
             type='text'
-            placeholder="Select from dropdown"
+            placeholder="Select vendor from dropdown"
             value={vendor}
             readOnly/>
         </InputGroup>
@@ -68,7 +68,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
           </DropdownButton>
         <Form.Control
           type='text'
-          placeholder="Select from dropdown"
+          placeholder="Select service from dropdown"
           value={service}
           readOnly/>
         </InputGroup>

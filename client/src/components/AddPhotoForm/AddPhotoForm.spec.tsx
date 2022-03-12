@@ -75,6 +75,24 @@ describe(`<Photos/>`, function() {
       expect(screen.getByRole("button",{name: vendors[1].vendorServices[0]}))
       expect(screen.getByRole("button",{name: vendors[1].vendorServices[1]}))
     })
+
+    it("should clear the selected service when the vendor changes", () => {
+      const vendorDropdown = screen.getByRole("button", {name: "Vendor"})
+      const selectedVendor = screen.getByRole("button", {name: vendors[1].vendorName})
+      const serviceDropdown = screen.getByRole("button", {name: "Service"})
+
+      // Select a vendor and service
+      fireEvent.click(vendorDropdown)
+      fireEvent.click(selectedVendor)
+      fireEvent.click(serviceDropdown)
+      fireEvent.click(screen.getByRole("button", {name: vendors[1].vendorServices[0]}))
+
+      // Select a different vendor and service
+      fireEvent.click(vendorDropdown)
+      fireEvent.click(screen.getByRole("button", {name: vendors[0].vendorName}))
+
+      expect(wrapper.container.querySelector("#service")).toHaveAttribute("value", "")
+    })
   })
 
   describe("upload photo", function () {
