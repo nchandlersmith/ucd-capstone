@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button'
-import {Form} from 'react-bootstrap';
+import {DropdownButton, Form, InputGroup, Dropdown} from 'react-bootstrap';
 
 interface Props {
   userId: string
@@ -24,11 +24,18 @@ function AddPhotoForm({userId}: Props): JSX.Element {
           onChange={(event) => setLabel(event.currentTarget.value)}/>
       </Form.Group>
       <Form.Group controlId="vendor">
-        <Form.Label>Vendor</Form.Label>
-        <Form.Control
-          type='text'
-          placeholder="Vendor goes here"
-          onChange={(event) => setVendor(event.currentTarget.value)}/>
+        <InputGroup>
+          <DropdownButton title="Vendor" onSelect={(eventKey: string | null) => handleVendorSelect(eventKey)}>
+            <Dropdown.Item eventKey="item-1">Item 1</Dropdown.Item>
+            <Dropdown.Item eventKey="item-2">Item 2</Dropdown.Item>
+            <Dropdown.Item eventKey="Great Pho-toes">Great Pho-toes</Dropdown.Item>
+          </DropdownButton>
+          <Form.Control
+            type='text'
+            placeholder="Select from dropdown"
+            value={vendor}
+            readOnly/>
+        </InputGroup>
       </Form.Group>
       <Form.Group controlId="service">
         <Form.Label>Service</Form.Label>
@@ -81,6 +88,11 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       formData.append("image", file)
       setPhotoFormData(formData)
     }
+  }
+
+  function handleVendorSelect(eventKey: string | null) {
+    console.log(eventKey)
+    setVendor(eventKey || "")
   }
 
   function disableAddPhoto() {

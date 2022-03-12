@@ -22,14 +22,16 @@ describe(`<Photos/>`, function() {
         type: "image/png"
       }
       const photoLabelInput = screen.getByLabelText("Photo Label")
-      const vendorInput = screen.getByLabelText("Vendor")
+      const vendorInput = screen.getByRole("button", {name: "Vendor"})
+      const vendorSelection = screen.getByRole("button", {name: vendor})
       const serviceInput = screen.getByLabelText("Service")
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"})
 
       fireEvent.change(photoLabelInput, {target: {value: label}})
       expect(addPhotoButton).not.toBeEnabled()
-      fireEvent.change(vendorInput, {target: {value: vendor}})
+      fireEvent.click(vendorInput)
+      fireEvent.click(vendorSelection)
       expect(addPhotoButton).not.toBeEnabled()
       fireEvent.change(serviceInput, {target: {value: service}})
       expect(addPhotoButton).not.toBeEnabled()
@@ -47,7 +49,8 @@ describe(`<Photos/>`, function() {
         type: "image/png"
       }
       const photoLabelInput = screen.getByLabelText("Photo Label")
-      const vendorInput = screen.getByLabelText("Vendor")
+      const vendorInput = screen.getByRole("button", {name: "Vendor"})
+      const vendorSelection = screen.getByRole("button", {name: vendor})
       const serviceInput = screen.getByLabelText("Service")
       const photoFileInput = screen.getByLabelText("Photo")
       const addPhotoButton = screen.getByRole("button", {name: "Submit"});
@@ -56,7 +59,8 @@ describe(`<Photos/>`, function() {
       (axios.put as jest.Mock).mockImplementation(() => Promise.resolve())
 
       fireEvent.change(photoLabelInput, {target: {value: label}})
-      fireEvent.change(vendorInput, {target: {value: vendor}})
+      fireEvent.click(vendorInput)
+      fireEvent.click(vendorSelection)
       fireEvent.change(serviceInput, {target: {value: service}})
       fireEvent.change(photoFileInput, {target: {files: [photoFile]}})
 
