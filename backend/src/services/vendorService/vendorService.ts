@@ -1,4 +1,4 @@
-import {CreateVendorRequest, VendorDao} from "../../models/vendorModels";
+import {CreateVendorRequest, Vendor} from "../../models/vendorModels";
 import {getAllVendors, insertVendor} from "../../persistence/dbClient";
 import {createLogger} from "../../utils/logger";
 import {ModelValidationError} from "../../exceptions/exceptions";
@@ -12,11 +12,11 @@ export async function createVendor(request: CreateVendorRequest): Promise<void> 
   validateRequestFields(request);
   validateFieldsPopulated(request)
 
-  const vendor: VendorDao = {...request, country}
+  const vendor: Vendor = {...request, country}
   await insertVendor(vendor)
 }
 
-export async function getVendors(): Promise<VendorDao[]> {
+export async function getVendors(): Promise<Vendor[]> {
   return await getAllVendors()
 }
 

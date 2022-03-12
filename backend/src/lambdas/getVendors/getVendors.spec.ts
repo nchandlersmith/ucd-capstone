@@ -1,4 +1,4 @@
-import {VendorDao} from "../../models/vendorModels";
+import {Vendor} from "../../models/vendorModels";
 import {getAllVendors} from "../../persistence/dbClient";
 import {handler} from "./getVendorsLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
@@ -13,7 +13,7 @@ describe("getVendorsLambda", () => {
   const requiredHeaders = {"access-control-allow-origin": "*"}
 
   it("should return vendors", async () => {
-    const vendors: VendorDao[] = [{
+    const vendors: Vendor[] = [{
       country: "United States",
       vendorName: "Test Vendor",
       vendorServices: ["Test Vendor Service"]

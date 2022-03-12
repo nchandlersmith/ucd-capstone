@@ -1,4 +1,4 @@
-import {VendorDao} from "../../backend/src/models/vendorModels"
+import {Vendor} from "../../backend/src/models/vendorModels"
 import {deleteVendorByVendorName, putVendor} from "../utils/dynamoUtils";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ describe("getVendors", () => {
   })
 
   it("should return all the vendors", async () => {
-    const vendor: VendorDao = {
+    const vendor: Vendor = {
       country: "United States",
       vendorName,
       vendorServices: ["The One Package"]

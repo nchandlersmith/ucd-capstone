@@ -3,7 +3,7 @@ import {CreateCapstoneAccountDao} from "../models/createAccountModels"
 import {DocumentClient} from "aws-sdk/clients/dynamodb"
 import {PhotoDao} from "../models/photosModels"
 import {createDynamoDBClient} from "../utils/dynamoUtils"
-import {VendorDao} from "../models/vendorModels"
+import {Vendor} from "../models/vendorModels"
 
 const logger = createLogger('dbClient')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ""
@@ -52,7 +52,7 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   return dbResult.Items as PhotoDao[]
 }
 
-export async function insertVendor(item: VendorDao): Promise<void> {
+export async function insertVendor(item: Vendor): Promise<void> {
   logger.info(`Inserting vendor item: ${JSON.stringify(item)}`)
   const dbClient = createDynamoDBClient()
   const params = {
@@ -62,7 +62,7 @@ export async function insertVendor(item: VendorDao): Promise<void> {
   await dbClient.put(params).promise()
 }
 
-export async function getAllVendors(): Promise<VendorDao[]> {
+export async function getAllVendors(): Promise<Vendor[]> {
   logger.info("Getting all vendors from db")
   const dbClient = createDynamoDBClient()
   const params = {
@@ -72,5 +72,5 @@ export async function getAllVendors(): Promise<VendorDao[]> {
   }
   const dbResult = await dbClient.query(params).promise()
   logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
-  return dbResult.Items as VendorDao[]
+  return dbResult.Items as Vendor[]
 }

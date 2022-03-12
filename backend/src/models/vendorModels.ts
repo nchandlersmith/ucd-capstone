@@ -1,4 +1,4 @@
-export interface VendorDao {
+export interface Vendor  {
   country: string,
   vendorName: string,
   vendorServices: string[]

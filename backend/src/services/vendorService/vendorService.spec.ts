@@ -1,6 +1,6 @@
 import {createVendor, getVendors} from "./vendorService";
 import {ModelValidationError} from "../../exceptions/exceptions";
-import {CreateVendorRequest, VendorDao} from "../../models/vendorModels";
+import {CreateVendorRequest, Vendor} from "../../models/vendorModels";
 import {getAllVendors, insertVendor} from "../../persistence/dbClient";
 
 
@@ -17,7 +17,7 @@ describe("createVendorService", () => {
       vendorName: "Test Vendor",
       vendorServices: ["Test Service"]
     };
-    const expectedDao: VendorDao = {...request, country: "United States"}
+    const expectedDao: Vendor = {...request, country: "United States"}
 
     await createVendor(request)
 
@@ -107,7 +107,7 @@ describe("createVendorService", () => {
 
 describe("getVendorsService", () => {
   it("should return all vendors", async () => {
-    const expectedVendors: VendorDao[] = [{
+    const expectedVendors: Vendor[] = [{
       country: "United States",
       vendorName: "Test Vendor",
       vendorServices: ["Test Service"]

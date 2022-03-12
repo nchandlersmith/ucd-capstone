@@ -3,13 +3,13 @@ import {fireEvent, render, RenderResult, screen} from '@testing-library/react'
 import AddPhotoForm from "./AddPhotoForm"
 import axios from "axios";
 import {act} from "react-dom/test-utils";
-import {VendorDao} from "../../../../backend/src/models/vendorModels"
+import {Vendor} from "../../../../backend/src/models/vendorModels"
 
 jest.mock("axios")
 
 describe(`<Photos/>`, function() {
   let wrapper: RenderResult
-  const vendors: VendorDao[] = [
+  const vendors: Vendor[] = [
     {
       vendorName: "Extreme Photo Finishing",
       vendorServices: [

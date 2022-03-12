@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
 import { PhotoDao } from '../../backend/src/models/photosModels'
-import { VendorDao } from "../../backend/src/models/vendorModels"
+import { Vendor } from "../../backend/src/models/vendorModels"
 
 const accountsTableName = 'CapstoneAccounts-dev'
 const photosTableName = "Photos-dev"
@@ -76,7 +76,7 @@ export async function putPhoto(photo: PhotoDao) {
   await createDocumentClient().put({TableName: photosTableName, Item: photo}).promise()
 }
 
-export async function putVendor(vendor: VendorDao) {
+export async function putVendor(vendor: Vendor) {
   await createDocumentClient().put({TableName: vendorsTableName, Item: vendor}).promise()
 }
 

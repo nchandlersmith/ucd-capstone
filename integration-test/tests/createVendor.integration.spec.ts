@@ -1,4 +1,4 @@
-import {CreateVendorRequest, VendorDao} from "../../backend/src/models/vendorModels"
+import {CreateVendorRequest, Vendor} from "../../backend/src/models/vendorModels"
 import axios from "axios";
 import {deleteVendorByVendorName, findAllVendors} from "../utils/dynamoUtils";
 
@@ -22,7 +22,7 @@ describe("create vendor db integration", () => {
       vendorServices: ["Premium", "Value"]
     }
 
-    const expectedVendorItem: VendorDao = {
+    const expectedVendorItem: Vendor = {
       country: "United States",
       vendorName: request.vendorName,
       vendorServices: request.vendorServices
