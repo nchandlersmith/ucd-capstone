@@ -3,11 +3,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import AddPhotoForm from "./AddPhotoForm"
 import axios from "axios";
 import {act} from "react-dom/test-utils";
+import {VendorDao} from "../../../../backend/src/models/vendorModels"
 
 jest.mock("axios")
 
 describe(`<Photos/>`, function() {
-  const vendors = [
+  const vendors: VendorDao[] = [
     {
       vendorName: "Extreme Photo Finishing",
       vendorServices: [
@@ -34,6 +35,15 @@ describe(`<Photos/>`, function() {
   })
 
   describe("upload photo", function () {
+    it("should display signed-up vendors in dropdown", () => {
+      const vendorButton = screen.getByRole("button", {name: "Vendor"})
+
+      fireEvent.click(vendorButton)
+
+      expect(screen.getByRole("button", {name: vendors[0].vendorName})).toBeInTheDocument()
+      expect(screen.getByRole("button", {name: vendors[1].vendorName})).toBeInTheDocument()
+    })
+
     it("should not allow submission until form is complete", function () {
       const label = "My great photo"
       const service = "8x10 Glossy"
@@ -89,9 +99,6 @@ describe(`<Photos/>`, function() {
 
       expect(axios.post).toHaveBeenCalled()
       expect(axios.put).toHaveBeenCalled()
-    })
-
-    it("should display signed-up vendors in dropdown", () => {
     })
   })
 })
