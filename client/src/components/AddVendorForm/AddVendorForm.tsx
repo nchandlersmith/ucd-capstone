@@ -58,7 +58,7 @@ function AddVendorForm({userId}: Props): JSX.Element {
       vendorServices: services
     })
     axios.post(url, body, {headers})
-      .then((response) => {
+      .then(() => {
         setVendorName("")
         setServiceToAdd("")
         setServices([])
