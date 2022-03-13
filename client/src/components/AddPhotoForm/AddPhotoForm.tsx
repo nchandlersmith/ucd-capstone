@@ -12,7 +12,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
   const [service, setService] = useState("")
-  const [photoFormData, setPhotoFormData] = useState<FormData | null | undefined>(null)
+  const [file, setFile] = useState<any | null | undefined>(null)
   const [vendors, setVendors] = useState<string[]>([])
   const [serviceOptions, setServiceOptions] = useState<string[]>([])
   const [allOptions, setAllOptions] = useState<Vendor[]>([])
@@ -25,7 +25,6 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     }
     axios.get(url, {headers})
       .then(response => {
-        console.log(response)
         setAllOptions(response.data)
         const vendorNames = response.data.map((vendor: Vendor) => vendor.vendorName)
         setVendors(vendorNames)
@@ -37,7 +36,6 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     const servicesFromSelectedVendor: string[] = allOptions.find((vendorOption) => vendorOption.vendorName === vendor)?.vendorServices || []
     setServiceOptions(servicesFromSelectedVendor)
   }, [vendor])
-
 
   return (
     <Form>
@@ -80,7 +78,6 @@ function AddPhotoForm({userId}: Props): JSX.Element {
           onChange={(event) => handlePhotoChange(event)}/>
       </Form.Group>
       <Button variant='primary' type='reset' onClick={async () => {
-        console.log(userId)
         await addPhoto()
       }} disabled={disableAddPhoto()}>
         Submit
@@ -90,36 +87,27 @@ function AddPhotoForm({userId}: Props): JSX.Element {
 
   async function addPhoto() {
     const url = 'https://yjpyr240cj.execute-api.us-east-1.amazonaws.com/dev/photos'
-    console.log(url)
     const data = {
       emailAddress: userId,
       label,
       vendor,
       service
     }
-    console.log(`photo data: ${JSON.stringify(data)}`)
     axios.post(url, data, {headers: {Authorization: `Bearer blarg-${userId}`}})
       .then(response => {
-        console.log(`response: ${JSON.stringify(response)}`)
         return response.data.putPhotoSignedUrl
       })
       .then((url) => {
-        console.log(`put photo url ${url}`)
-        axios.put(url, photoFormData,{headers: {"Content-Type": "image/jpeg"}})
+        axios.put(url, file,{headers: {"Content-Type": file.type}})
       })
-      .then(response => console.log(`Response from s3: ${JSON.stringify(response)}`))
+      .then(() => {})
       .catch(error => {
         console.error(`error: ${JSON.stringify(error)}`)
       })
   }
 
   function handlePhotoChange(event: any) {
-    const file = event.target.files[0]
-    if (file) {
-      const formData = new FormData()
-      formData.append("image", file)
-      setPhotoFormData(formData)
-    }
+    setFile(event.target.files[0])
   }
 
   function handleVendorSelect(eventKey: string | null) {
@@ -132,7 +120,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   }
 
   function disableAddPhoto() {
-    return !vendor || !service || !label || !photoFormData
+    return !vendor || !service || !label || !file
   }
 }
 
