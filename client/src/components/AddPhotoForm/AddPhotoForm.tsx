@@ -12,8 +12,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
   const [label, setLabel] = useState("")
   const [vendor, setVendor] = useState("")
   const [service, setService] = useState("")
-  const [putPhotoUrl, setPutPhotoUrl] = useState("")
-  const [photoFormData, setPhotoFormData] = useState<FormData | null>(null)
+  const [photoFormData, setPhotoFormData] = useState<FormData | null | undefined>(null)
   const [vendors, setVendors] = useState<string[]>([])
   const [serviceOptions, setServiceOptions] = useState<string[]>([])
   const [allOptions, setAllOptions] = useState<Vendor[]>([])
@@ -47,6 +46,7 @@ function AddPhotoForm({userId}: Props): JSX.Element {
         <Form.Control
           type='text'
           placeholder="Label your photo"
+          value={label}
           onChange={(event) => setLabel(event.currentTarget.value)}/>
       </Form.Group>
       <Form.Group controlId="vendor">
@@ -75,7 +75,9 @@ function AddPhotoForm({userId}: Props): JSX.Element {
       </Form.Group>
       <Form.Group controlId="photo">
         <Form.Label>Photo</Form.Label>
-        <Form.Control type="file" onChange={(event) => handlePhotoChange(event)}/>
+        <Form.Control
+          type="file"
+          onChange={(event) => handlePhotoChange(event)}/>
       </Form.Group>
       <Button variant='primary' type='reset' onClick={async () => {
         console.log(userId)
@@ -99,15 +101,16 @@ function AddPhotoForm({userId}: Props): JSX.Element {
     axios.post(url, data, {headers: {Authorization: `Bearer blarg-${userId}`}})
       .then(response => {
         console.log(`response: ${JSON.stringify(response)}`)
-        setPutPhotoUrl(response.data.putPhotoSignedUrl)
+        return response.data.putPhotoSignedUrl
       })
+      .then((url) => {
+        console.log(`put photo url ${url}`)
+        axios.put(url, photoFormData,{headers: {"Content-Type": "image/jpeg"}})
+      })
+      .then(response => console.log(`Response from s3: ${JSON.stringify(response)}`))
       .catch(error => {
         console.error(`error: ${JSON.stringify(error)}`)
       })
-
-    axios.put(putPhotoUrl, photoFormData,{headers: {"Accept": "multipart/form-data"}})
-      .then(response => console.log(`Response from s3: ${JSON.stringify(response)}`))
-      .catch(error => console.error(error))
   }
 
   function handlePhotoChange(event: any) {
