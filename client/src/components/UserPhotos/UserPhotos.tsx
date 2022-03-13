@@ -16,7 +16,6 @@ function UserPhotos({userId}: Props): JSX.Element {
   useEffect(() => {
     axios.get(getUserPhotosUrl, {headers: {Authorization: `Bearer blarg-${userId}`}})
       .then(response => {
-        console.log(`Response from backend: ${JSON.stringify(response)}`)
         setPhotos(response.data.photos)
       })
       .catch(err => console.error(err))
@@ -25,7 +24,6 @@ function UserPhotos({userId}: Props): JSX.Element {
    if (photos.length === 0) {
      return <></>
    }
-   console.log(photos)
   return (
     <>
       <Button onClick={() => setRefreshTrigger(!refreshTrigger)}>Refresh</Button>
