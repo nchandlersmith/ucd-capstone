@@ -57,8 +57,6 @@ don't have to notify them directly.
 
 ### Backlog
 - __Download:__ As a vendor, I want to download a photo, so that I can process the photo.
-- __Select Vendor:__ As a user, I want to select the vendor to work on my photo, so that I get the vendor I like.
-- __Select Service:__ As a user, I want to select the service from a vendor, so that I get the package that I want.
 - __Authorization:__ Use Auth0 for authorization
 - __Role-Based Access:__ Users access their photos. Vendors access their shop. Admin?
 - __User Sign Up:__ As a user, I want to sign up for Capstone Photos, so that I can get my photos processed conveniently.
@@ -71,4 +69,6 @@ don't have to notify them directly.
 ### Done
 - __Upload:__ As a user, I want to upload a photo, so that a vendor can work on it.
 - __Vendor Sign Up:__ As a vendor, I want to sign up for Capstone Photos, so that I can process photos from my customers.
+- __Select Vendor:__ As a user, I want to select the vendor to work on my photo, so that I get the vendor I like.
+- __Select Service:__ As a user, I want to select the service from a vendor, so that I get the package that I want.
 
