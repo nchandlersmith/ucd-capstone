@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {PhotoDao} from "../../../../backend/src/models/photosModels"
 import axios from "axios";
-import {Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Card, ListGroup, ListGroupItem, Image} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 interface Props {
@@ -43,6 +43,7 @@ function photoCard(photo: PhotoDao, index: number): JSX.Element {
         <ListGroupItem>{photo.vendorService}</ListGroupItem>
         <ListGroupItem>Added: {photo.addedOn}</ListGroupItem>
       </ListGroup>
+      <Image src={photo.getPhotoUrl}/>
     </Card>
   )
 }
