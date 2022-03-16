@@ -56,7 +56,6 @@ don't have to notify them directly.
 ## User stories
 
 ### Backlog
-- __Download:__ As a vendor, I want to download a photo, so that I can process the photo.
 - __Authorization:__ Use Auth0 for authorization
 - __Role-Based Access:__ Users access their photos. Vendors access their shop. Admin?
 - __User Sign Up:__ As a user, I want to sign up for Capstone Photos, so that I can get my photos processed conveniently.
@@ -65,6 +64,7 @@ don't have to notify them directly.
 - __Processing Complete Notification:__ As a user, I want to be notified when my photos are done processing, so that I can pick them up or look to them to be delivered.
 
 ### In Progress
+- __Download:__ As a vendor, I want to download a photo, so that I can process the photo.
 
 ### Done
 - __Upload:__ As a user, I want to upload a photo, so that a vendor can work on it.

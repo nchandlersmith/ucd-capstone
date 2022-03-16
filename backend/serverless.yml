@@ -119,6 +119,28 @@ functions:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
+  GetPhotosByVendor:
+    handler: src/lambdas/getPhotosByVendor/getPhotosByVendorLambda.handler
+    events:
+      - http:
+          method: get
+          path: photos/{vendorName}
+          request:
+            parameters:
+              paths:
+                vendorName: true
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: !GetAtt PhotosTable.Arn
+      - Effect: "Allow"
+        Action:
+          - xray:PutTelemetryRecords
+          - xray:PutTraceSegments
+        Resource: "*"
   GetVendors:
     handler: src/lambdas/getVendors/getVendorsLambda.handler
     events:
@@ -182,11 +204,29 @@ resources:
           AttributeType: S
         - AttributeName: photoId
           AttributeType: S
+        - AttributeName: vendorName
+          AttributeType: S
+        - AttributeName: putPhotoUrl
+          AttributeType: S
+        - AttributeName: vendorService
+          AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH
         - AttributeName: photoId
           KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: PhotosbyVendor
+          KeySchema:
+            - AttributeName: vendorName
+              KeyType: HASH
+            - AttributeName: photoId
+              KeyType: RANGE
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - putPhotoUrl
+              - vendorServices
       BillingMode: PAY_PER_REQUEST
   VendorsTable:
     Type: AWS::DynamoDB::Table
