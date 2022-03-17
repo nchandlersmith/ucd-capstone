@@ -216,7 +216,7 @@ resources:
         - AttributeName: photoId
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: PhotosbyVendor
+        - IndexName: PhotosByVendor
           KeySchema:
             - AttributeName: vendorName
               KeyType: HASH
@@ -225,7 +225,7 @@ resources:
           Projection:
             ProjectionType: INCLUDE
             NonKeyAttributes:
-              - putPhotoUrl
+              - getPhotoUrl
               - vendorServices
       BillingMode: PAY_PER_REQUEST
   VendorsTable:
