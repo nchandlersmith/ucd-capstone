@@ -226,8 +226,9 @@ resources:
             ProjectionType: INCLUDE
             NonKeyAttributes:
               - getPhotoUrl
-              - vendorServices,
-              - addedOn
+              - vendorService,
+              - addedOn,
+              - photoLabel
       BillingMode: PAY_PER_REQUEST
   VendorsTable:
     Type: AWS::DynamoDB::Table
