@@ -1,7 +1,7 @@
 import {createLogger} from "../utils/logger"
 import {CreateCapstoneAccountDao} from "../models/createAccountModels"
 import {DocumentClient} from "aws-sdk/clients/dynamodb"
-import {PhotoDao} from "../models/photosModels"
+import {PhotoByVendor, PhotoDao} from "../models/photosModels"
 import {createDynamoDBClient} from "../utils/dynamoUtils"
 import {Vendor} from "../models/vendorModels"
 
@@ -50,6 +50,12 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
   return dbResult.Items as PhotoDao[]
+}
+
+export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor> {
+  return {
+    addedOn: "", getPhotoUrl: "", photoId: "", vendorName: "", vendorService: ""
+  }
 }
 
 export async function insertVendor(item: Vendor): Promise<void> {
