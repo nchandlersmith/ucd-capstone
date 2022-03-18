@@ -52,10 +52,10 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   return dbResult.Items as PhotoDao[]
 }
 
-export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor> {
-  return {
+export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor[]> {
+  return [{
     addedOn: "", getPhotoUrl: "", photoId: "", vendorName: "", vendorService: ""
-  }
+  }]
 }
 
 export async function insertVendor(item: Vendor): Promise<void> {
