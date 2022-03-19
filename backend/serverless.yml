@@ -206,10 +206,6 @@ resources:
           AttributeType: S
         - AttributeName: vendorName
           AttributeType: S
-        - AttributeName: putPhotoUrl
-          AttributeType: S
-        - AttributeName: vendorService
-          AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH
