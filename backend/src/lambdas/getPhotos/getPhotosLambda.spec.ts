@@ -12,7 +12,7 @@ jest.mock("../../persistence/dbClient", () => {
 
 
 describe("getPhotosLambda", () => {
-  const userId = "unit test user"
+  const userId = "test user"
   const authHeader = {Authorization: `Bearer blarg-${userId}`}
   const requiredHeaders = {"access-control-allow-origin": "*"}
 
