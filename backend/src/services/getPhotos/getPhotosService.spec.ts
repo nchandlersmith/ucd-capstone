@@ -1,10 +1,10 @@
-import {PhotoDao} from "../../models/photosModels"
+import {PhotoData} from "../../models/photosModels"
 import {DateTime} from "luxon"
 import {getPhotos} from "./getPhotosService"
 import {getPhotosByUser} from "../../persistence/dbClient";
 
 const userId = "some user id"
-const photos: PhotoDao[] = [{
+const photos: PhotoData[] = [{
   addedOn: DateTime.now().toISO(),
   getPhotoUrl: "https://getPhoto.io",
   photoId: "some photo id",

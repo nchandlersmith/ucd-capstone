@@ -1,7 +1,7 @@
 import {createLogger} from "../utils/logger"
 import {CreateCapstoneAccountDao} from "../models/createAccountModels"
 import {DocumentClient} from "aws-sdk/clients/dynamodb"
-import {PhotoByVendor, PhotoDao} from "../models/photosModels"
+import {PhotoByVendor, PhotoData} from "../models/photosModels"
 import {createDynamoDBClient} from "../utils/dynamoUtils"
 import {Vendor} from "../models/vendorModels"
 
@@ -31,7 +31,7 @@ export async function getAccountsByUser(userId: string): Promise<DocumentClient.
   return dbResult;
 }
 
-export async function insertPhoto(item: PhotoDao) {
+export async function insertPhoto(item: PhotoData) {
   logger.info(`Adding photo item: ${JSON.stringify(item)} to ${photosTableName}`)
   await createDynamoDBClient().put({
     TableName: photosTableName,
@@ -39,7 +39,7 @@ export async function insertPhoto(item: PhotoDao) {
   }).promise()
 }
 
-export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
+export async function getPhotosByUser(userId: string): Promise<PhotoData[]> {
   logger.info(`Getting photos for: ${userId}`)
   const dynamoClient = createDynamoDBClient()
   const params = {
@@ -49,7 +49,7 @@ export async function getPhotosByUser(userId: string): Promise<PhotoDao[]> {
   }
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
-  return dbResult.Items as PhotoDao[]
+  return dbResult.Items as PhotoData[]
 }
 
 export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor[]> {

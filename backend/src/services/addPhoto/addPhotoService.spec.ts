@@ -1,5 +1,5 @@
 import {addPhoto} from "./addPhotoService"
-import {PhotoDao, AddPhotoRequest} from "../../models/photosModels"
+import {PhotoData, AddPhotoRequest} from "../../models/photosModels"
 import {ModelValidationError} from "../../exceptions/exceptions"
 import {createGetSignedUrl, createPutSignedUrl} from "../../persistence/s3Client"
 import {insertPhoto} from "../../persistence/dbClient";
@@ -61,7 +61,7 @@ describe("addPhotosService", () => {
     })
 
     it("should insert photo item ", async () => {
-      const photoItem: PhotoDao = {
+      const photoItem: PhotoData = {
         addedOn: DateTime.now().toISO(),
         getPhotoUrl: getUrl,
         photoId: uuid,
