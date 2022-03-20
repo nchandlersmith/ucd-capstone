@@ -8,7 +8,7 @@ jest.mock("../../persistence/dbClient", () => {
 })
 
 describe("getPhotosByVendorService", () => {
-  it("should return PhotosByVendor typed objects",async () => {
+  it("should return some fields from PhotoData",async () => {
     const vendorName = "Some Vendor"
     const expectedPhotos = {
       vendorName,
