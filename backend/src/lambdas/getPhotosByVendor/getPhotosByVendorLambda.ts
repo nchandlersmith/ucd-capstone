@@ -9,10 +9,10 @@ const logger = createLogger("getPhotosByVendorLambda")
 export const handler = async  (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   let photos
   try {
-    const vendor = event.pathParameters?.vendorName
-    logger.info(`Getting photos for vendor ${vendor}`)
+    const vendorName = event.pathParameters?.vendorName || ""
+    logger.info(`Getting photos for vendor ${vendorName}`)
     authorize(event.headers.Authorization)
-    photos = await getPhotosByVendorService("")
+    photos = await getPhotosByVendorService(vendorName)
   } catch (error) {
     logger.error(error)
     return errorResponseBuilder(error as Error)
