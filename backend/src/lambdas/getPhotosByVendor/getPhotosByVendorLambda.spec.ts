@@ -3,10 +3,18 @@ import {PhotoByVendor} from "../../models/photosModels";
 import {handler} from "./getPhotosByVendorLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
 import {APIGatewayProxyEventPathParameters} from "aws-lambda";
+import {getVendors} from "../../services/vendorService/vendorService";
+import {Vendor} from "../../models/vendorModels";
 
 jest.mock("../../persistence/dbClient", () => {
   return {
     getPhotosByVendor: jest.fn()
+  }
+})
+
+jest.mock("../../services/vendorService/vendorService", () => {
+  return {
+    getVendors: jest.fn()
   }
 })
 
@@ -16,17 +24,24 @@ describe("getPhotosByVendorLambda", () => {
   }
 
   it("should return photos for specified vendor", async () => {
+    const vendorName = "some vendor"
+    const allVendors: Vendor[] = [{
+      vendorName,
+      vendorServices: ["does not matter"],
+      country: ""
+    }]
     const userId = "test user"
     const authHeader = {Authorization: `Bearer blarg-${userId}`}
-    const pathParameters: APIGatewayProxyEventPathParameters = {vendorName: "some vendor"}
+    const pathParameters: APIGatewayProxyEventPathParameters = {vendorName}
     const expectedPhotos:PhotoByVendor[] = [{
       vendorName: "Some Vendor",
       vendorService: "Some service",
       photoId: "some photo id",
       getPhotoUrl: "https://getMyPhoto.com",
       addedOn: "some date"
-    }];
-    (getPhotosByVendor as jest.Mock).mockImplementation(() => Promise.resolve(expectedPhotos))
+    }]
+    ;(getPhotosByVendor as jest.Mock).mockImplementation(() => Promise.resolve(expectedPhotos))
+    ;(getVendors as jest.Mock).mockImplementation(() => Promise.resolve(allVendors))
 
     const result = await handler(buildEvent({headers: authHeader, pathParameters}))
 
