@@ -17,6 +17,7 @@ provider:
   environment:
     CAPSTONE_ACCOUNTS_TABLE_NAME: CapstoneAccounts-${self:provider.stage}
     PHOTOS_TABLE_NAME: Photos-${self:provider.stage}
+    PHOTOS_BY_VENDOR_GSI_NAME: PhotosByVendor-${self:provider.stage}
     VENDORS_TABLE_NAME: Vendors-${self:provider.stage}
     PHOTOS_S3_BUCKET_NAME: photos-707863247739-${self:provider.stage}
   logs:
@@ -204,7 +205,7 @@ resources:
           AttributeType: S
         - AttributeName: photoId
           AttributeType: S
-        - AttributeName: vendorName
+        - AttributeName: vendorId
           AttributeType: S
       KeySchema:
         - AttributeName: userId
@@ -212,9 +213,9 @@ resources:
         - AttributeName: photoId
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: PhotosByVendor
+        - IndexName: ${self:provider.environment.PHOTOS_BY_VENDOR_GSI_NAME}
           KeySchema:
-            - AttributeName: vendorName
+            - AttributeName: vendorId
               KeyType: HASH
             - AttributeName: photoId
               KeyType: RANGE

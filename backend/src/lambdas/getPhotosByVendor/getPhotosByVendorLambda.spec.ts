@@ -70,4 +70,6 @@ describe("getPhotosByVendorLambda", () => {
     expect(result.headers).toStrictEqual(requiredHeaders)
     expect(result.body).toStrictEqual(JSON.stringify({error: expectedErrorMessage}))
   })
+
+  //TODO: returns 404 when the vendor is not found
 })

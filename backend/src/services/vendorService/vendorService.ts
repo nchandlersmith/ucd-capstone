@@ -17,6 +17,7 @@ export async function createVendor(request: CreateVendorRequest): Promise<void> 
 }
 
 export async function getVendors(): Promise<Vendor[]> {
+  logger.info("Getting all vendors.")
   return await getAllVendors()
 }
 

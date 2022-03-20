@@ -8,6 +8,7 @@ import {Vendor} from "../models/vendorModels"
 const logger = createLogger('dbClient')
 const capstoneAccountsTableName = process.env.CAPSTONE_ACCOUNTS_TABLE_NAME || ""
 const photosTableName = process.env.PHOTOS_TABLE_NAME || ""
+const photosByVendorGsiName = process.env.PHOTOS_BY_VENDOR_GSI_NAME || ""
 const vendorTableName = process.env.VENDORS_TABLE_NAME || ""
 
 export function insertCapstoneAccount(item: CreateCapstoneAccountDao) {
@@ -53,9 +54,17 @@ export async function getPhotosByUser(userId: string): Promise<PhotoData[]> {
 }
 
 export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor[]> {
-  return [{
-    addedOn: "", getPhotoUrl: "", photoId: "", vendorName: "", vendorService: ""
-  }]
+  logger.info(`Getting photos for vendor: ${vendorName}`)
+  const dynamoClient = createDynamoDBClient()
+  const params = {
+    TableName: photosTableName,
+    IndexName: photosByVendorGsiName,
+    ExpressionAttributeValues: {":vendorName": vendorName},
+    KeyConditionExpression: "vendorId =:vendorName"
+  }
+  const dbResult = await dynamoClient.query(params).promise()
+  logger.info(`Response from db: ${dbResult}`)
+  return dbResult.Items as PhotoByVendor[]
 }
 
 export async function insertVendor(item: Vendor): Promise<void> {
