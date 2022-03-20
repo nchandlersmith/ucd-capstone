@@ -2,6 +2,7 @@ import {getPhotosByVendor} from "../../persistence/dbClient";
 import {PhotoByVendor} from "../../models/photosModels";
 import {handler} from "./getPhotosByVendorLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
+import {APIGatewayProxyEventPathParameters} from "aws-lambda";
 
 jest.mock("../../persistence/dbClient", () => {
   return {
@@ -17,6 +18,7 @@ describe("getPhotosByVendorLambda", () => {
   it("should return photos for specified vendor", async () => {
     const userId = "test user"
     const authHeader = {Authorization: `Bearer blarg-${userId}`}
+    const pathParameters: APIGatewayProxyEventPathParameters = {vendorName: "some vendor"}
     const expectedPhotos:PhotoByVendor[] = [{
       vendorName: "Some Vendor",
       vendorService: "Some service",
@@ -26,7 +28,7 @@ describe("getPhotosByVendorLambda", () => {
     }];
     (getPhotosByVendor as jest.Mock).mockImplementation(() => Promise.resolve(expectedPhotos))
 
-    const result = await handler(buildEvent({headers: authHeader}))
+    const result = await handler(buildEvent({headers: authHeader, pathParameters}))
 
     expect(result.statusCode).toEqual(200)
     expect(result.headers).toStrictEqual(requiredHeaders)
