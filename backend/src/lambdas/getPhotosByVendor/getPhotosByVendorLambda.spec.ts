@@ -30,11 +30,11 @@ describe("getPhotosByVendorLambda", () => {
 
     expect(result.statusCode).toEqual(200)
     expect(result.headers).toStrictEqual(requiredHeaders)
-    expect(result.body).toStrictEqual(JSON.stringify(expectedPhotos))
+    expect(result.body).toStrictEqual(JSON.stringify({photos: expectedPhotos}))
   })
 
   it("should reject requests missing auth header", async () => {
-    const expectedErrorMessage = "Unauthorized User"
+    const expectedErrorMessage = "Unauthorized user"
 
     const result = await handler(buildEvent())
 
@@ -44,7 +44,7 @@ describe("getPhotosByVendorLambda", () => {
   })
 
   it("should reject request from unauthorized user", async () => {
-    const expectedErrorMessage = "Unauthorized User"
+    const expectedErrorMessage = "Unauthorized user"
     const authHeader = {Authorization: "Bearer invalid user"}
 
     const result = await handler(buildEvent({headers: authHeader}))
