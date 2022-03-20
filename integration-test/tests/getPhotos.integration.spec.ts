@@ -1,5 +1,5 @@
-import {deletePhotosByUserAndPhotoIds, findAllPhotosByUserId, putPhoto} from "../utils/dynamoUtils";
-import {PhotoDao} from "../../backend/src/models/photosModels"
+import {deleteAllPhotosByUser, putPhoto} from "../utils/dynamoUtils";
+import {PhotoData} from "../../backend/src/models/photosModels"
 import {DateTime} from "luxon";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ describe("get photos persistence", () => {
   const userId = "Integration Test User"
   const otherUserId = "Ghost Rider"
 
-  const myPhoto: PhotoDao = {
+  const myPhoto: PhotoData = {
     addedOn: DateTime.now().toISO(),
     getPhotoUrl: "https://getMyPhoto.net",
     photoId: "my photo id",
@@ -19,7 +19,7 @@ describe("get photos persistence", () => {
     vendorService: "my service selection"
   }
 
-  const yourPhoto: PhotoDao = {
+  const yourPhoto: PhotoData = {
     addedOn: DateTime.now().toISO(),
     getPhotoUrl: "https://getYourPhoto.biz",
     photoId: "your photo id",
@@ -72,11 +72,3 @@ describe("get photos persistence", () => {
     expect(result.response.data).toEqual({error: "Unauthorized user"})
   })
 })
-
-async function deleteAllPhotosByUser(userId: string) {
-  const dynamoResponse = await findAllPhotosByUserId(userId)
-  for (const item of dynamoResponse.Items) {
-    await deletePhotosByUserAndPhotoIds(item.photoId, userId)
-      .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
-  }
-}

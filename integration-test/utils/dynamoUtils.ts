@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk')
 import { CapstoneAccount } from '../../backend/src/models/getAccountsModels'
-import { PhotoDao } from '../../backend/src/models/photosModels'
+import { PhotoData } from '../../backend/src/models/photosModels'
 import { Vendor } from "../../backend/src/models/vendorModels"
 
 const accountsTableName = 'CapstoneAccounts-dev'
@@ -48,6 +48,14 @@ export async function deletePhotosByUserAndPhotoIds(photoId: string, userId: str
   }).promise()
 }
 
+export async function deleteAllPhotosByUser(userId: string) {
+  const dynamoResponse = await findAllPhotosByUserId(userId)
+  for (const item of dynamoResponse.Items) {
+    await deletePhotosByUserAndPhotoIds(item.photoId, userId)
+      .catch((error: any) => console.error(`Error occurred while cleaning up dynamo${error.message}`))
+  }
+}
+
 export function deleteAccountByUserAndAccountIds(accountId: string, userId: string) {
   return createDocumentClient().delete({
     TableName: accountsTableName,
@@ -72,7 +80,7 @@ export function putAccount(account: CapstoneAccount) {
   createDocumentClient().put({TableName: accountsTableName, Item: account}).promise()
 }
 
-export async function putPhoto(photo: PhotoDao) {
+export async function putPhoto(photo: PhotoData) {
   await createDocumentClient().put({TableName: photosTableName, Item: photo}).promise()
 }
 

@@ -1,5 +1,5 @@
 import {deletePhotosByUserAndPhotoIds, findAllPhotosByUserId} from "../utils/dynamoUtils";
-import {AddPhotoRequest, PhotoDao} from "../../backend/src/models/photosModels"
+import {AddPhotoRequest, PhotoData} from "../../backend/src/models/photosModels"
 import {DateTime} from "luxon"
 
 const axios = require("axios")
@@ -41,7 +41,7 @@ describe("add photo persistence", () => {
 
     const dynamoQueryResult = await findAllPhotosByUserId(userId)
     expect(dynamoQueryResult.Items?.length).toEqual(1)
-    const dbResult: PhotoDao = dynamoQueryResult.Items[0]
+    const dbResult: PhotoData = dynamoQueryResult.Items[0]
     const actualAddedOn = DateTime.fromISO(dbResult.addedOn).toMillis()
     const actualTimestampDelta = Math.abs(actualAddedOn - expectedAddedOn)
     expect(dbResult.userId).toEqual(userId)
