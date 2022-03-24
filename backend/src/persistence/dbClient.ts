@@ -54,16 +54,16 @@ export async function getPhotosByUser(userId: string): Promise<PhotoData[]> {
 }
 
 export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVendor[]> {
-  logger.info(`Getting photos for vendor: ${vendorName}`)
+  logger.info(`Getting photos from db for vendor: ${vendorName}`)
   const dynamoClient = createDynamoDBClient()
   const params = {
     TableName: photosTableName,
     IndexName: photosByVendorGsiName,
     ExpressionAttributeValues: {":vendorName": vendorName},
-    KeyConditionExpression: "vendorId =:vendorName"
+    KeyConditionExpression: "vendorId = :vendorName"
   }
   const dbResult = await dynamoClient.query(params).promise()
-  logger.info(`Response from db: ${dbResult}`)
+  logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
   return dbResult.Items as PhotoByVendor[]
 }
 
