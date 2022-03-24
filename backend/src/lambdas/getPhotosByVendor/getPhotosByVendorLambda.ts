@@ -9,6 +9,7 @@ const logger = createLogger("getPhotosByVendorLambda")
 export const handler = async  (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   let photos
   try {
+    logger.info(`Path params: ${JSON.stringify(event.pathParameters)}`)
     const vendorName = event.pathParameters?.vendorName || ""
     logger.info(`Getting photos for vendor ${vendorName}`)
     authorize(event.headers.Authorization)
