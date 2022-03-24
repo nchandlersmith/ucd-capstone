@@ -139,6 +139,18 @@ functions:
         Resource: !GetAtt PhotosTable.Arn
       - Effect: "Allow"
         Action:
+          - dynamodb:Query
+        Resource: !Join
+                    - "/"
+                    - - !GetAtt PhotosTable.Arn
+                      - "index"
+                      - ${self:provider.environment.PHOTOS_BY_VENDOR_GSI_NAME}
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: !GetAtt VendorsTable.Arn
+      - Effect: "Allow"
+        Action:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
