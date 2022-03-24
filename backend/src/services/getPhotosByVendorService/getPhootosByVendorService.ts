@@ -24,6 +24,6 @@ function validateVendorName(vendorName: string) {
 function verifyVendorExists(vendors: Vendor[], vendorName: string) {
   if (!(vendors.map(vendor => vendor.vendorName).includes(vendorName))) {
     logger.error(`Vendor not found by name ${vendorName}. Request rejected.`)
-    throw new EntityNotFoundError("Vendor not found by that name. Request rejected.")
+    throw new EntityNotFoundError(`Vendor not found with name ${vendorName}. Request rejected.`)
   }
 }

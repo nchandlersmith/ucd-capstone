@@ -68,6 +68,6 @@ describe("getPhotosByVendorService", () => {
     // @ts-ignore
     await (expect(async () => await getPhotosByVendorService(vendorName))).rejects.toThrow(EntityNotFoundError)
     // @ts-ignore
-    await (expect(async () => await getPhotosByVendorService(vendorName))).rejects.toThrow("Vendor not found by that name. Request rejected.")
+    await (expect(async () => await getPhotosByVendorService(vendorName))).rejects.toThrow(`Vendor not found with name ${vendorName}. Request rejected.`)
   })
 })
