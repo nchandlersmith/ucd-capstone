@@ -10,7 +10,7 @@ export const handler = async  (event: APIGatewayProxyEvent): Promise<APIGatewayP
   let photos
   try {
     logger.info(`Path params: ${JSON.stringify(event.pathParameters)}`)
-    const vendorName = event.pathParameters?.vendorName || ""
+    const vendorName = decodeURI(event.pathParameters?.vendorName || "")
     logger.info(`Getting photos for vendor ${vendorName}`)
     authorize(event.headers.Authorization)
     photos = await getPhotosByVendorService(vendorName)
