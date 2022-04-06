@@ -33,6 +33,7 @@ export interface PhotoPackage {
 }
 
 export interface PhotoByVendor {
+  userId: string,
   vendorId: string,
   photoId: string,
   getPhotoUrl: string

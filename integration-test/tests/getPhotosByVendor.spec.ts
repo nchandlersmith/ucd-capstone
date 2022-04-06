@@ -35,6 +35,7 @@ describe("get photos by vendor", () => {
     vendorServices: ["Premium", "Value"]
   }
   const expectedPhoto: PhotoByVendor = {
+    userId,
     vendorId: vendorName,
     photoId,
     getPhotoUrl,
