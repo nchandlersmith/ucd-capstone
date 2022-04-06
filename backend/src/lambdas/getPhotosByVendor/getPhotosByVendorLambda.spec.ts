@@ -34,11 +34,12 @@ describe("getPhotosByVendorLambda", () => {
     const authHeader = {Authorization: `Bearer blarg-${userId}`}
     const pathParameters: APIGatewayProxyEventPathParameters = {vendorName}
     const expectedPhotos:PhotoByVendor[] = [{
-      vendorName: "Some Vendor",
+      vendorId: "Some Vendor",
       vendorService: "Some service",
       photoId: "some photo id",
       getPhotoUrl: "https://getMyPhoto.com",
-      addedOn: "some date"
+      addedOn: "some date",
+      photoLabel: "some label"
     }]
     ;(getPhotosByVendor as jest.Mock).mockImplementation(() => Promise.resolve(expectedPhotos))
     ;(getVendors as jest.Mock).mockImplementation(() => Promise.resolve(allVendors))
