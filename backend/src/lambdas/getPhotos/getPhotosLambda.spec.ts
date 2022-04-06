@@ -1,6 +1,6 @@
 import {handler} from "./getPhotosLambda";
 import {buildEvent} from "../../testUtils/eventUtils";
-import {PhotoPackage} from "../../models/photosModels";
+import {PhotoData} from "../../models/photosModels";
 import {DateTime} from "luxon";
 import {getPhotosByUser} from "../../persistence/dbClient";
 
@@ -17,7 +17,7 @@ describe("getPhotosLambda", () => {
   const requiredHeaders = {"access-control-allow-origin": "*"}
 
   it("should return photo data", async () => {
-    const expectedPhotos: PhotoPackage[] = [{
+    const expectedPhotos: PhotoData[] = [{
       addedOn: DateTime.now().toISO(),
       getPhotoUrl: "https://getPhotos.io",
       photoId: "photo id",

@@ -34,6 +34,7 @@ describe("getPhotosByVendorLambda", () => {
     const authHeader = {Authorization: `Bearer blarg-${userId}`}
     const pathParameters: APIGatewayProxyEventPathParameters = {vendorName}
     const expectedPhotos:PhotoByVendor[] = [{
+      userId: "Some User",
       vendorId: "Some Vendor",
       vendorService: "Some service",
       photoId: "some photo id",

@@ -15,12 +15,12 @@ export interface PhotoData {
   getPhotoUrl: string,
   putPhotoUrl: string
 }
-
+// TODO delete me
 export interface AddPhotoResponse {
   putPhotoUrl: string,
   addedOn: string
 }
-
+// TODO: delete me
 export interface PhotoPackage {
   userId: string,
   photoId: string,
@@ -33,8 +33,9 @@ export interface PhotoPackage {
 }
 
 export interface PhotoByVendor {
-  vendorId: string,
+  userId: string,
   photoId: string,
+  vendorId: string,
   getPhotoUrl: string
   vendorService: string,
   addedOn: string,
