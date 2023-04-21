@@ -60,7 +60,8 @@ export async function getPhotosByVendor(vendorName: string): Promise<PhotoByVend
     TableName: photosTableName,
     IndexName: photosByVendorGsiName,
     ExpressionAttributeValues: {":vendorName": vendorName},
-    KeyConditionExpression: "vendorId = :vendorName"
+    KeyConditionExpression: "vendorId = :vendorName",
+    ProjectionExpression: "addedOn, getPhotoUrl, photoLabel, vendorService"
   }
   const dbResult = await dynamoClient.query(params).promise()
   logger.info(`Response from db: ${JSON.stringify(dbResult)}`)
